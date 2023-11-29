@@ -6,11 +6,14 @@ using UnityEngine;
 
 namespace Gameplay.GameplayObjects.Character._common
 {
-    public class AnimableCharacterController : MonoBehaviour
+    public abstract class AnimableCharacterController : MonoBehaviour
     {
         #region Inspector Variables
 
-        [SerializeField] protected Animator m_animator;
+        [Header("Animation")] [SerializeField] protected Animator m_animator;
+        [SerializeField] protected float transitionVelocity = 1f;
+
+        Vector3 smoothedAnimationVelocity = Vector3.zero;
 
         #endregion
 
@@ -48,6 +51,31 @@ namespace Gameplay.GameplayObjects.Character._common
             m_animIDBackwardVelocity = Animator.StringToHash("BackwardVelocity");
             m_animIDNormalizedVerticalVelocity = Animator.StringToHash("NormalizedVerticalVelocity");
             m_animIDIsGrounded = Animator.StringToHash("IsGrounded");
+        }
+
+        protected virtual void UpdateAnimation(Vector3 lastVelocity, float verticalVelocity, float jumpSpeed,
+            bool isGrounded)
+        {
+            if (!m_hasAnimator)
+            {
+                return;
+            }
+
+            Vector3 velocityDistance = lastVelocity - smoothedAnimationVelocity;
+            float transitionVelocityToApply = transitionVelocity * Time.deltaTime;
+            transitionVelocityToApply = Mathf.Min(transitionVelocityToApply, velocityDistance.magnitude);
+
+            smoothedAnimationVelocity += velocityDistance.normalized * transitionVelocityToApply;
+
+            Vector3 localSmoothedAnimationVelocity = transform.InverseTransformDirection(lastVelocity);
+            m_animator.SetFloat("SidewardVelocity", localSmoothedAnimationVelocity.x);
+            m_animator.SetFloat("ForwardVelocity", localSmoothedAnimationVelocity.z);
+
+            float clampedVerticalVelocity = Mathf.Clamp(verticalVelocity, -jumpSpeed, jumpSpeed);
+            float normalizedVerticalVelocity = Mathf.InverseLerp(-jumpSpeed, jumpSpeed, clampedVerticalVelocity);
+
+            m_animator.SetFloat("NormalizedVerticalVelocity", normalizedVerticalVelocity);
+            m_animator.SetBool("IsGrounded", isGrounded);
         }
 
         #endregion
