@@ -12,11 +12,11 @@ namespace Gameplay.GameplayObjects.Character._common
     {
         #region Inspector Variables
 
-        [Header("Character Controller")] [Tooltip("Movement speed of the player")] [SerializeField]
-        protected float _speed = 6f;
+        [Header("Movement Settings")] [Tooltip("Movement speed of the player")] [SerializeField]
+        protected float Speed = 6f;
 
         [Tooltip("Sprint speed of the player")] [SerializeField]
-        protected float _sprintSpeed = 12f;
+        protected float SprintSpeed = 12f;
 
         [Tooltip("How fast the character turns to face movement direction")] [Range(0.0f, 0.3f)]
         public float RotationSmoothTime = 0.12f;
@@ -35,11 +35,44 @@ namespace Gameplay.GameplayObjects.Character._common
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float GroundedRadius = 0.28f;
 
+        [Tooltip("Jump Height")] public float JumpHeight = 1.2f;
+
+        [Space(10)]
+        [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
+        public float JumpTimeout = 0.50f;
+
         #endregion
 
         #region Member Variables
 
         protected UnityEngine.CharacterController m_controller;
+
+        #endregion
+
+        #region Init Data
+
+        protected override void GetComponentReferences()
+        {
+            base.GetComponentReferences();
+            m_controller = GetComponent<UnityEngine.CharacterController>();
+        }
+
+        #endregion
+
+        #region Logic
+
+        protected void GroundCheck()
+        {
+            // set sphere position, with offset
+            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - GroundedOffset,
+                transform.position.z);
+            m_isGrounded = Physics.CheckSphere(spherePosition, GroundedRadius, GroundLayers,
+                QueryTriggerInteraction.Ignore);
+            if (HasAnimator)
+            {
+                m_animator.SetBool(m_animIDIsGrounded, m_isGrounded);
+            }
+        }
 
         #endregion
     }

@@ -10,23 +10,33 @@ namespace Gameplay.GameplayObjects.Character._common
     {
         #region Inspector Variables
 
-        [SerializeField] Animator m_animator;
+        [SerializeField] protected Animator m_animator;
 
         #endregion
 
         #region Member Variables
 
-        private bool m_isGrounded;
+        protected bool m_isGrounded;
 
-        private bool m_hasAnimator;
+        protected bool m_hasAnimator;
 
-        private int m_animIDForwardVelocity;
+        protected int m_animIDForwardVelocity;
 
-        private int m_animIDBackwardVelocity;
+        protected int m_animIDBackwardVelocity;
 
-        private int m_animIDNormalizedVerticalVelocity;
+        protected int m_animIDNormalizedVerticalVelocity;
 
-        private int m_animIDIsGrounded;
+        protected int m_animIDIsGrounded;
+
+        #endregion
+
+        #region Init Data
+
+        protected virtual void GetComponentReferences()
+        {
+            TryGetComponent(out m_animator);
+            m_hasAnimator = m_animator != null;
+        }
 
         #endregion
 
