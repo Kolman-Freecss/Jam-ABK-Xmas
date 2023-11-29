@@ -47,13 +47,8 @@ namespace Player
 
         #region Member Variables
 
-        private float m_verticalVelocity = 0f;
-        private float m_rotationVelocity = 0f;
-        Vector3 m_currentHorizontalSpeed = Vector3.zero;
-
-        private float m_jumpTimeoutDelta;
-        private float m_fallTimeoutDelta;
-        private float m_terminalVelocity = 53.0f;
+        private float verticalVelocity = 0f;
+        private Vector3 velocityToApply = Vector3.zero; // World
 
         #endregion
 
@@ -84,159 +79,86 @@ namespace Player
 
         void Update()
         {
-            Jump();
+            velocityToApply = Vector3.zero;
+            UpdateMovementOnPlane();
+            UpdateVerticalMovement();
+            m_characterController.Move(velocityToApply * Time.deltaTime);
+            UpdateOrientation();
+            UpdatePlayerAnimation();
             GroundCheck();
-            Move();
-            UpdateRotation(m_currentHorizontalSpeed);
         }
 
         #endregion
 
         #region Logic
 
-        void Jump()
+        private void UpdatePlayerAnimation()
         {
-            bool mustJump = jump.action.WasPerformedThisFrame();
+            base.UpdateAnimation(velocityToApply, verticalVelocity, jumpSpeed, m_isGrounded);
+        }
+
+        private void UpdateMovementOnPlane()
+        {
+            Vector2 rawMoveValue = move.action.ReadValue<Vector2>();
+            Vector3 xzMoveValue = (Vector3.right * rawMoveValue.x) + (Vector3.forward * rawMoveValue.y);
+
+            switch (movementMode)
+            {
+                case MovementMode.RelativeToCharacter:
+                    UpdateMovementRelativeToCharacter(xzMoveValue);
+                    break;
+                case MovementMode.RelativeToCamera:
+                    UpdateMovementRelativeToCamera(xzMoveValue);
+                    break;
+            }
+
+            void UpdateMovementRelativeToCamera(Vector3 xzMoveValue)
+            {
+                Transform cameraTransform = Camera.main.transform;
+                Vector3 xzMoveValueFromCamera = cameraTransform.TransformDirection(xzMoveValue);
+                float originalMagnitude = xzMoveValueFromCamera.magnitude;
+                xzMoveValueFromCamera = Vector3.ProjectOnPlane(xzMoveValueFromCamera, Vector3.up).normalized *
+                                        originalMagnitude;
+                Vector3 velocity = xzMoveValueFromCamera * planeSpeed;
+                velocityToApply += velocity;
+            }
+
+            void UpdateMovementRelativeToCharacter(Vector3 xzMoveValue)
+            {
+                Vector3 velocity = xzMoveValue * planeSpeed;
+                velocityToApply += velocity;
+            }
+        }
+
+        private void UpdateVerticalMovement()
+        {
             if (m_isGrounded)
             {
-                // reset the fall timeout timer
-                m_fallTimeoutDelta = FallTimeout;
-
-                // if (_hasAnimator)
-                // {
-                //     _animator.SetBool(_animIDJump, false);
-                // }
-
-                // stop our velocity dropping infinitely when grounded
-                if (m_verticalVelocity < 0.0f)
-                {
-                    m_verticalVelocity = -2f;
-                }
-
-                // Jump
-                if (mustJump && m_jumpTimeoutDelta <= 0.0f)
-                {
-                    // the square root of H * -2 * G = how much velocity needed to reach desired height
-                    m_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-
-                    // update animator if using character
-                    // if (_hasAnimator)
-                    // {
-                    //     _animator.SetBool(_animIDJump, true);
-                    // }
-                }
-
-                // jump timeout
-                if (m_jumpTimeoutDelta >= 0.0f)
-                {
-                    m_jumpTimeoutDelta -= Time.deltaTime;
-                }
+                verticalVelocity = 0f;
             }
-            else
+
+            bool mustJump = jump.action.WasPerformedThisFrame();
+
+            if (!m_isGrounded)
             {
-                // reset the jump timeout timer
-                m_jumpTimeoutDelta = JumpTimeout;
-
-                // fall timeout
-                if (m_fallTimeoutDelta >= 0.0f)
-                {
-                    m_fallTimeoutDelta -= Time.deltaTime;
-                }
-                // else
-                // {
-                //     // update animator if using character
-                //     if (m_hasAnimator)
-                //     {
-                //         m_animator.SetBool(m_animIDFreeFall, true);
-                //     }
-                // }
-
-                // if we are not grounded, do not jump
-                mustJump = false;
+                verticalVelocity += gravity * Time.deltaTime;
             }
 
-            // apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-            if (m_verticalVelocity < m_terminalVelocity)
+            if (mustJump && m_isGrounded)
             {
-                // if (_hasAnimator)
-                // {
-                //     _animator.SetFloat(_animIDJumpVelocity, _verticalVelocity);
-                // }
-                m_verticalVelocity += Gravity * Time.deltaTime;
+                verticalVelocity = jumpSpeed;
             }
 
-            if (HasAnimator)
-            {
-                Animator.SetFloat(AnimIDNormalizedVerticalVelocity, m_verticalVelocity / JumpHeight);
-            }
+            velocityToApply += Vector3.up * verticalVelocity;
         }
 
-        void Move()
+        private void UpdateOrientation()
         {
-            bool mustCrouch = crouch.action.WasPerformedThisFrame();
-            bool mustSprint = false;
-            if (mustCrouch)
+            if (velocityToApply.sqrMagnitude == 0f)
             {
-                mustSprint = false;
-            }
-            else
-            {
-                mustSprint = sprint.action.WasPerformedThisFrame();
+                return;
             }
 
-            float targetSpeed = mustSprint ? SprintSpeed : Speed;
-
-            Vector2 rawMoveValue = move.action.ReadValue<Vector2>();
-
-            if (rawMoveValue == Vector2.zero) targetSpeed = 0.0f;
-
-            m_currentHorizontalSpeed =
-                new Vector3(rawMoveValue.x, 0.0f, rawMoveValue.y);
-
-            m_currentHorizontalSpeed = GetVelocityToApply(m_currentHorizontalSpeed);
-
-            m_controller.Move(m_currentHorizontalSpeed + new Vector3(0.0f, m_verticalVelocity, 0.0f) * Time.deltaTime);
-
-            if (HasAnimator)
-            {
-                Vector3 localSmoothedAnimationVelocity = transform.InverseTransformDirection(m_currentHorizontalSpeed);
-                Animator.SetFloat(AnimIDForwardVelocity, localSmoothedAnimationVelocity.z);
-                Animator.SetFloat(AnimIDBackwardVelocity, localSmoothedAnimationVelocity.x);
-            }
-
-            Vector3 GetVelocityToApply(Vector3 xzMoveValue)
-            {
-                switch (movementMode)
-                {
-                    case MovementMode.RelativeToCharacter:
-                        return UpdateMovementRelativeToCharacter(xzMoveValue);
-                    case MovementMode.RelativeToCamera:
-                        return UpdateMovementRelativeToCamera(xzMoveValue);
-                    default:
-                        return Vector3.zero;
-                }
-
-                Vector3 UpdateMovementRelativeToCamera(Vector3 xzMoveValue)
-                {
-                    Transform cameraTransform = Camera.main.transform;
-                    Vector3 xzMoveValueFromCamera = cameraTransform.TransformDirection(xzMoveValue);
-                    float originalMagnitude = xzMoveValueFromCamera.magnitude;
-                    xzMoveValueFromCamera = Vector3.ProjectOnPlane(xzMoveValueFromCamera, Vector3.up).normalized *
-                                            originalMagnitude;
-                    Vector3 velocity = xzMoveValueFromCamera * targetSpeed;
-                    return velocity;
-                }
-
-                Vector3 UpdateMovementRelativeToCharacter(Vector3 xzMoveValue)
-                {
-                    Vector3 velocity = xzMoveValue * targetSpeed;
-                    return velocity;
-                }
-            }
-        }
-
-        void UpdateRotation(Vector3 currentHorizontalSpeed)
-        {
             Vector3 desiredDirection = Vector3.zero;
             switch (orientationMode)
             {
@@ -244,9 +166,9 @@ namespace Player
                     desiredDirection = Camera.main.transform.forward;
                     break;
                 case OrientationMode.OrientateToMovementForward:
-                    if (currentHorizontalSpeed.sqrMagnitude > 0f)
+                    if (velocityToApply.sqrMagnitude > 0f)
                     {
-                        desiredDirection = currentHorizontalSpeed.normalized;
+                        desiredDirection = velocityToApply.normalized;
                     }
 
                     break;
