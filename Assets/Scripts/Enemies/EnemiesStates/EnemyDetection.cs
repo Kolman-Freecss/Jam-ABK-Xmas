@@ -4,18 +4,28 @@ using UnityEngine;
 
 public class EnemyDetection : MonoBehaviour
 {
+    [Header("Detection")]
     [SerializeField] float viewRadius;
+    [Tooltip("Must be higher value than viewRadius")]
+    [SerializeField] float leaveRadius;
     [SerializeField] float viewAngle;
     float distanceToTarget;
 
     [SerializeField] LayerMask isPlayer, isObstacle;
     Transform player;
+    
 
-    private bool hasBeenSeen;
+    [Header("Timer")]
+    private bool hasBeenSeen = false;
     private float chaseTimer;
     [SerializeField] float chaseTimerMax = 3f;
 
-    //check if player is being detected, called in EnemyIdleState
+    private void Update() 
+    {
+        Timer();
+    }
+
+    //check whether player is being detected, called in EnemyIdleState
     public bool OnPlayerDetection()
     {
         Vector3 playerTarget = (player.position - transform.position).normalized;
@@ -49,11 +59,18 @@ public class EnemyDetection : MonoBehaviour
         }
     }
 
-    void u()
+    void Timer()
     {
-        if (distanceToTarget > viewRadius && hasBeenSeen && chaseTimer < chaseTimerMax)
+        if (distanceToTarget > leaveRadius && hasBeenSeen)
         {
-            
+            if (chaseTimer < chaseTimerMax)
+            {
+                chaseTimer += Time.deltaTime;
+            }
+            else
+            {
+                hasBeenSeen = false;
+            }
         }
     }
 }
