@@ -31,6 +31,6 @@ public class EnemyChaseState : EnemyState
 
     private void ChaseLogic()
     {
-        
+        agent.SetDestination(player.position);
     }
 }

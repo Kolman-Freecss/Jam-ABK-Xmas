@@ -35,20 +35,4 @@ public class EnemyStateManager : MonoBehaviour
     {
         currentState = nextState;
     }
-
-    private void HandleStates()
-    {
-        if (currentState == enemyIdleState)
-        {
-            
-        }
-        else if (currentState == enemyChaseState)
-        {
-            
-        }
-        else if (currentState == enemyAttackState)
-        {
-            
-        }
-    }
 }
