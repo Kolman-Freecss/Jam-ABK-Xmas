@@ -12,20 +12,26 @@ namespace Gameplay.GameplayObjects.Character.Stealth._impl
 
         public override void Enter()
         {
-            m_characterStealthBehaviour.CharacterController.ReduceSpeed(m_characterStealthBehaviour
+            m_characterStealthBehaviour.CharacterController.Stealth(true, m_characterStealthBehaviour
                 .StealthReductionSpeed);
         }
 
         public override void Exit()
         {
-            m_characterStealthBehaviour.CharacterController.ResetSpeed();
+            m_characterStealthBehaviour.CharacterController.Stealth(false);
         }
 
         #region Logic Virtual methods
 
         public override void OnDetected()
         {
-            m_characterStealthBehaviour.ChangeState(new StealthState(m_characterStealthBehaviour));
+            //TODO: Add some animation to show that the character is detected
+            m_characterStealthBehaviour.ChangeState(new NormalState(m_characterStealthBehaviour));
+        }
+
+        public override void OnStealth()
+        {
+            m_characterStealthBehaviour.ChangeState(new NormalState(m_characterStealthBehaviour));
         }
 
         #endregion
