@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8121333605680163890}
   - component: {fileID: 1790854290669667632}
   - component: {fileID: 8724825963438480976}
+  - component: {fileID: 6632778424213629407}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -120,6 +121,7 @@ MonoBehaviour:
   jumpHeight: 1.2
   jumpSpeed: 8
   jumpTimeout: 0.5
+  m_currentSpeed: 0
   move: {fileID: 3419674912524375949, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
   jump: {fileID: 430602232194890270, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
   sprint: {fileID: 3068135507506969858, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
@@ -128,6 +130,24 @@ MonoBehaviour:
   orientationTarget: {fileID: 0}
   orientationMode: 0
   movementMode: 1
+--- !u!114 &6632778424213629407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6606721612878497296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d501473c9b244957b477e3f08666cde7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onStealthStatusChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  stealthReductionSpeed: 2
+  stealth: {fileID: -6629475735297350218, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
+  hide: {fileID: 2513230095581254889, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
 --- !u!1001 &2728433216586483887
 PrefabInstance:
   m_ObjectHideFlags: 0
