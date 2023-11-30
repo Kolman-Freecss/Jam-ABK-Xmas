@@ -51,10 +51,16 @@ namespace Gameplay.GameplayObjects.Character._common
         #region Member Variables
 
         protected UnityEngine.CharacterController m_characterController;
+        [HideInInspector] public float m_currentSpeed;
 
         #endregion
 
         #region Init Data
+
+        protected void Start()
+        {
+            m_currentSpeed = planeSpeed;
+        }
 
         protected override void GetComponentReferences()
         {
@@ -77,6 +83,21 @@ namespace Gameplay.GameplayObjects.Character._common
             {
                 Animator.SetBool(AnimIDIsGrounded, m_isGrounded);
             }
+        }
+
+        public void ReduceSpeed(float reduction)
+        {
+            m_currentSpeed -= reduction;
+        }
+
+        public void ResetSpeed()
+        {
+            m_currentSpeed = planeSpeed;
+        }
+
+        public void StopMovement()
+        {
+            m_currentSpeed = 0f;
         }
 
         #endregion
