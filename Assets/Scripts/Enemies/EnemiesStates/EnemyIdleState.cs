@@ -16,12 +16,15 @@ public class EnemyIdleState : EnemyState
     //if player seen, change to chase, otherwise just returns idle
     public override EnemyState RunCurrentState()
     {
-        if (enemyDetection.OnPlayerDetection())
+        if (uwu())
             return enemyChaseState;
 
         else    
             return this;
     }
 
-    
+    private bool uwu()
+    {
+        return true;
+    }
 }

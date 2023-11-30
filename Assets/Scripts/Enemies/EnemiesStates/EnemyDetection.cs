@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class EnemyDetection : MonoBehaviour
 {
@@ -13,6 +14,8 @@ public class EnemyDetection : MonoBehaviour
 
     [SerializeField] LayerMask isPlayer, isObstacle;
     Transform player;
+
+    [SerializeField] UnityEvent onStartFollowing;
     
 
     [Header("Timer")]
@@ -20,13 +23,24 @@ public class EnemyDetection : MonoBehaviour
     private float chaseTimer;
     [SerializeField] float chaseTimerMax = 3f;
 
+    float visionTimer;
+    [SerializeField] float maxVisionTimer = 2f;
+
     private void Update() 
     {
         Timer();
+        if (!hasBeenSeen)
+        {
+            if (chaseTimer != 0f || visionTimer != 0f)
+            {
+                chaseTimer = 0f;
+                visionTimer = 0f;
+            }
+        }
     }
 
     //check whether player is being detected, called in EnemyIdleState
-    public bool OnPlayerDetection()
+    public void OnPlayerDetection()
     {
         Vector3 playerTarget = (player.position - transform.position).normalized;
 
@@ -34,42 +48,45 @@ public class EnemyDetection : MonoBehaviour
         {
             Debug.Log("inside vision angle");
             distanceToTarget = Vector3.Distance(transform.position, player.position);
-            if(distanceToTarget <= viewRadius || hasBeenSeen)
+
+            if (distanceToTarget <= viewRadius || hasBeenSeen)
             {
-                hasBeenSeen = true;
                 Debug.Log("inside vision range");
                 if (Physics2D.Raycast(transform.position, playerTarget, distanceToTarget, isObstacle) == false)
                 {
                     Debug.Log("seen");
-                    return true;
-                }
-                else
-                {
-                    return false;
+                    hasBeenSeen = true;
+
+                    if (visionTimer >= maxVisionTimer)
+                        onStartFollowing?.Invoke();
                 }
             }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
         }
     }
 
     void Timer()
     {
+        //some time after leaving its radius before leaving the chase
         if (distanceToTarget > leaveRadius && hasBeenSeen)
         {
             if (chaseTimer < chaseTimerMax)
-            {
                 chaseTimer += Time.deltaTime;
-            }
             else
-            {
                 hasBeenSeen = false;
+        }
+
+        else if (distanceToTarget < viewRadius && hasBeenSeen)
+        {
+            //timer so they dont get the agro instantly, they gotta keep watching you for some time
+            if (visionTimer < maxVisionTimer)
+                    visionTimer += Time.deltaTime;
+
+            //reseting the timer when entering back again
+            else if (visionTimer >= maxVisionTimer)
+            {
+                hasBeenSeen = true;
+                if (chaseTimer != 0f)
+                    chaseTimer = 0f;
             }
         }
     }
