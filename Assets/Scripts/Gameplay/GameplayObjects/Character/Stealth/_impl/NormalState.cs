@@ -17,6 +17,21 @@
 
         #region Logic Virtual methods
 
+        public override void OnDetected()
+        {
+            //Alert the character (enemy or player)
+        }
+
+        public override void OnStealth()
+        {
+            m_characterStealthBehaviour.ChangeState(new StealthState(m_characterStealthBehaviour));
+        }
+
+        public override void OnHide()
+        {
+            m_characterStealthBehaviour.ChangeState(new HideState(m_characterStealthBehaviour));
+        }
+
         #endregion
     }
 }

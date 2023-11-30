@@ -33,7 +33,7 @@ namespace Gameplay.GameplayObjects.Character
 
         #region Logic
 
-        private void Start()
+        protected void Start()
         {
             m_currentStealthStatus = new NormalState(this);
             m_characterController = GetComponent<CharacterController>();
@@ -63,7 +63,7 @@ namespace Gameplay.GameplayObjects.Character
 
         protected virtual void OnHide()
         {
-            m_currentStealthStatus.OnStealth();
+            m_currentStealthStatus.OnHide();
         }
 
         protected virtual void OnStealth()

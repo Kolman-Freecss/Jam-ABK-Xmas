@@ -32,8 +32,9 @@ namespace Player
             hide.action.Enable();
         }
 
-        private void Start()
+        protected new void Start()
         {
+            base.Start();
             m_playerController = GetComponent<PlayerController>();
             // Assign events
             stealth.action.performed += ctx => OnStealth();
