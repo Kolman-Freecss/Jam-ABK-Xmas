@@ -85,6 +85,33 @@ namespace Gameplay.GameplayObjects.Character._common
             }
         }
 
+        public void Hide(bool hide)
+        {
+            if (hide)
+                StopMovement();
+            else
+                ResetSpeed();
+            //TODO: Animation here 
+            // if (HasAnimator)
+            // {
+            //     Animator.SetBool(AnimIDHide, hide);
+            // }
+        }
+
+        public void Stealth(bool stealth, float speedReduction = 0f)
+        {
+            if (stealth)
+                ReduceSpeed(speedReduction);
+            else
+                ResetSpeed();
+
+            //TODO: Animation here 
+            // if (HasAnimator)
+            // {
+            //     Animator.SetBool(AnimIDHide, hide);
+            // }
+        }
+
         public void ReduceSpeed(float reduction)
         {
             m_currentSpeed -= reduction;
