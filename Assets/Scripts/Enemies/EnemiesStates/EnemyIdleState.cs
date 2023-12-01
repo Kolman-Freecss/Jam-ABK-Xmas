@@ -1,12 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyIdleState : EnemyState
 {
     EnemyDetection enemyDetection;
     EnemyChaseState enemyChaseState;
+
+    bool playerDetected;
+
+    [Header("Debug")]
+    [SerializeField] bool debugChangeState;
+
+    private void OnValidate() 
+    {
+        if (debugChangeState)
+        {
+            debugChangeState = false;
+            playerDetected = true;
+        }
+    }
 
     private void Start() 
     {
@@ -17,10 +30,19 @@ public class EnemyIdleState : EnemyState
     //if player seen, change to chase, otherwise just returns idle
     public override EnemyState RunCurrentState()
     {
-        if (enemyDetection.OnPlayerDetection())
+        if (playerDetected)
             return enemyChaseState;
 
-        else    
+        else
+            enemyDetection.OnPlayerDetection();
             return this;
+    }
+
+    public void OnPlayerDetected()
+    {
+        if (!playerDetected)
+            playerDetected = true;
+        else
+            playerDetected = false;
     }
 }

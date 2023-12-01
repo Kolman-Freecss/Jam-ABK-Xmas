@@ -1,9 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PatrolAI : MonoBehaviour
 {
+    NavMeshAgent agent;
+
     [SerializeField] float speed = 5f;
     [SerializeField] float waitTime = 1f;
     bool isWaiting;
@@ -11,12 +14,16 @@ public class PatrolAI : MonoBehaviour
 
     int currentWaypoint = 0;
 
+    private void Start() 
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
     public void PatrolLogic()
     {
         if(transform.position != waypoints[currentWaypoint].position)
         {
-            transform.position = Vector3.MoveTowards(transform.position, 
-            waypoints[currentWaypoint].position, speed * Time.deltaTime);
+            agent.SetDestination(waypoints[currentWaypoint].position * Time.deltaTime);
 
         }
         else if(!isWaiting)
@@ -36,17 +43,5 @@ public class PatrolAI : MonoBehaviour
         currentWaypoint = 0;
 
         isWaiting = false;
-    }
-
-    void Flip()
-    {
-        if (transform.position.x > waypoints[currentWaypoint].position.x)
-        {
-            transform.rotation = Quaternion.Euler(0f, 180f, 0f);
-        }
-        else
-        {
-            transform.rotation = Quaternion.Euler(0f, 0f, 0f);
-        }
     }
 }

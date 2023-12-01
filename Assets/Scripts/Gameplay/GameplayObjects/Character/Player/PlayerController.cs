@@ -6,7 +6,7 @@ using CharacterController = Gameplay.GameplayObjects.Character._common.Character
 
 #endregion
 
-namespace Player
+namespace Gameplay.GameplayObjects.Character.Player
 {
     public class PlayerController : CharacterController
     {
@@ -119,13 +119,13 @@ namespace Player
                 float originalMagnitude = xzMoveValueFromCamera.magnitude;
                 xzMoveValueFromCamera = Vector3.ProjectOnPlane(xzMoveValueFromCamera, Vector3.up).normalized *
                                         originalMagnitude;
-                Vector3 velocity = xzMoveValueFromCamera * planeSpeed;
+                Vector3 velocity = xzMoveValueFromCamera * m_currentSpeed;
                 velocityToApply += velocity;
             }
 
             void UpdateMovementRelativeToCharacter(Vector3 xzMoveValue)
             {
-                Vector3 velocity = xzMoveValue * planeSpeed;
+                Vector3 velocity = xzMoveValue * m_currentSpeed;
                 velocityToApply += velocity;
             }
         }
