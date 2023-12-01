@@ -15,7 +15,7 @@ namespace Gameplay.GameplayObjects.Interactables
         #region Member Variables
 
         [SerializeField]
-        UnityEvent<object> m_OnInteraction;
+        protected UnityEvent<object> m_OnInteraction;
 
         #endregion
 
