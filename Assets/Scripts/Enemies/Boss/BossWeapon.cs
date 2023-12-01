@@ -1,6 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
+using Gameplay.GameplayObjects.Character.Player;
 using UnityEngine;
+
+#endregion
 
 public class BossWeapon : MonoBehaviour
 {

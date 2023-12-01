@@ -6,7 +6,7 @@ using CharacterController = Gameplay.GameplayObjects.Character._common.Character
 
 #endregion
 
-namespace Player
+namespace Gameplay.GameplayObjects.Character.Player
 {
     public class PlayerController : CharacterController
     {
