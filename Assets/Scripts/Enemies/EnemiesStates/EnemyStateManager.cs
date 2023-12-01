@@ -1,15 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyStateManager : MonoBehaviour
 {
     EnemyState currentState;
+
+    EnemyIdleState enemyIdleState;
+    EnemyChaseState enemyChaseState;
+    EnemyAttackState enemyAttackState;
+
+    private void Start() 
+    {
+        enemyIdleState = GetComponent<EnemyIdleState>();
+        enemyChaseState = GetComponent<EnemyChaseState>();
+        enemyAttackState = GetComponent<EnemyAttackState>();
+
+        currentState = enemyIdleState;
+    }
     
     private void Update() 
     {
         RunStateMachine();
+        Debug.Log(currentState);
     }
 
     private void RunStateMachine()
