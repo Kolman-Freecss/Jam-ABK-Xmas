@@ -1,12 +1,11 @@
 ﻿#region
 
-using Gameplay.GameplayObjects.Character;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 #endregion
 
-namespace Player
+namespace Gameplay.GameplayObjects.Character.Player
 {
     public class PlayerStealthBehaviour : CharacterStealthBehaviour
     {
