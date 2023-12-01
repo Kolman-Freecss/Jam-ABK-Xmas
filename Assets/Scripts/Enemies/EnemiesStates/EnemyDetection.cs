@@ -26,6 +26,11 @@ public class EnemyDetection : MonoBehaviour
     float visionTimer;
     [SerializeField] float maxVisionTimer = 2f;
 
+    private void Start() 
+    {
+        player = GameObject.FindGameObjectWithTag("Player").transform;
+    }
+
     private void Update() 
     {
         Timer();
@@ -33,8 +38,10 @@ public class EnemyDetection : MonoBehaviour
         {
             if (chaseTimer != 0f || visionTimer != 0f)
             {
+                //if not seen but has been, as the timers are not zero
                 chaseTimer = 0f;
                 visionTimer = 0f;
+                onStartFollowing?.Invoke();
             }
         }
     }

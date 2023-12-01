@@ -4,10 +4,21 @@ using UnityEngine;
 
 public class EnemyAttackState : EnemyState
 {
+    EnemyCatchRange enemyCatchRange;
+    EnemyChaseState enemyChaseState;
+
+    private void Start() 
+    {
+        enemyCatchRange = GetComponent<EnemyCatchRange>();
+    }
+
     public override EnemyState RunCurrentState()
     {
-        //catch player
         Debug.Log("attack");
-        return this;
+        if (enemyCatchRange.IsInCatchRange())
+            //attack
+            return this;
+        else
+            return enemyChaseState;
     }
 }

@@ -15,6 +15,8 @@ public class EnemyStateManager : MonoBehaviour
         enemyIdleState = GetComponent<EnemyIdleState>();
         enemyChaseState = GetComponent<EnemyChaseState>();
         enemyAttackState = GetComponent<EnemyAttackState>();
+
+        currentState = enemyIdleState;
     }
     
     private void Update() 

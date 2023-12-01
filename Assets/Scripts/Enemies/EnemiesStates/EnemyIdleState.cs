@@ -7,6 +7,20 @@ public class EnemyIdleState : EnemyState
     EnemyDetection enemyDetection;
     EnemyChaseState enemyChaseState;
 
+    bool playerDetected;
+
+    [Header("Debug")]
+    [SerializeField] bool debugChangeState;
+
+    private void OnValidate() 
+    {
+        if (debugChangeState)
+        {
+            debugChangeState = false;
+            playerDetected = true;
+        }
+    }
+
     private void Start() 
     {
         enemyChaseState = GetComponent<EnemyChaseState>();
@@ -16,15 +30,19 @@ public class EnemyIdleState : EnemyState
     //if player seen, change to chase, otherwise just returns idle
     public override EnemyState RunCurrentState()
     {
-        if (uwu())
+        if (playerDetected)
             return enemyChaseState;
 
-        else    
+        else
+            enemyDetection.OnPlayerDetection();
             return this;
     }
 
-    private bool uwu()
+    public void OnPlayerDetected()
     {
-        return true;
+        if (!playerDetected)
+            playerDetected = true;
+        else
+            playerDetected = false;
     }
 }
