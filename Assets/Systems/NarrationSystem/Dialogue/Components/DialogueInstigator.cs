@@ -1,5 +1,6 @@
 #region
 
+using Gameplay.GameplayObjects.Character.Player;
 using Systems.NarrationSystem.Dialogue.Logic;
 using Systems.NarrationSystem.Flow;
 using UnityEngine;
@@ -8,6 +9,12 @@ using UnityEngine;
 
 namespace Systems.NarrationSystem.Dialogue.Components
 {
+    /// <summary>
+    /// Instigates a dialogue when a dialogue request is received.
+    /// Component for player.
+    /// </summary>
+    [RequireComponent(typeof(FlowListener))]
+    [RequireComponent(typeof(PlayerController))]
     public class DialogueInstigator : MonoBehaviour
     {
         [SerializeField]
