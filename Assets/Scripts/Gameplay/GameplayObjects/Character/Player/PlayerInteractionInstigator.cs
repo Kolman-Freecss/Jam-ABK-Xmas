@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Gameplay.GameplayObjects.Interactables;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,6 +20,10 @@ namespace Gameplay.GameplayObjects.Character.Player
         [SerializeField]
         private InputActionReference m_InteractAction;
 
+        [Header("UI References")]
+        [SerializeField]
+        private TextMeshProUGUI m_InteractText;
+
         #endregion
 
         #region Member Variables
@@ -32,11 +37,13 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private void OnEnable()
         {
-            m_InteractAction.action.performed += ctx => OnInteract();
+            m_InteractAction.action.Enable();
         }
 
         private void Start()
         {
+            m_InteractText.enabled = false;
+            m_InteractAction.action.performed += ctx => OnInteract();
             m_OnDiscoverInteractable += OnDiscoverInteractable;
         }
 
@@ -50,6 +57,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             {
                 //Ideally, we'd want to find the best possible interaction (ex: by distance & orientation).
                 m_NearbyInteractables[0].DoInteraction(m_NearbyInteractables[0]);
+                m_InteractText.enabled = false;
             }
         }
 
@@ -66,6 +74,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             IInteractable interactable = other.GetComponent<IInteractable>();
             if (interactable != null)
             {
+                m_InteractText.enabled = true;
                 m_NearbyInteractables.Add(interactable);
                 m_OnDiscoverInteractable?.Invoke(interactable);
             }
@@ -77,6 +86,10 @@ namespace Gameplay.GameplayObjects.Character.Player
             if (interactable != null)
             {
                 m_NearbyInteractables.Remove(interactable);
+                if (!HasNearbyInteractables())
+                {
+                    m_InteractText.enabled = false;
+                }
             }
         }
 
