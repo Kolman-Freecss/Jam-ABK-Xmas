@@ -22,9 +22,29 @@ namespace Gameplay.Config
 
         private RoundState m_CurrentRoundState;
 
+        public static RoundManager Instance { get; private set; }
+
         #endregion
 
         #region InitData
+
+        private void Awake()
+        {
+            ManageSingleton();
+        }
+
+        private void ManageSingleton()
+        {
+            if (Instance != null)
+            {
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+            }
+        }
 
         private void Start()
         {
