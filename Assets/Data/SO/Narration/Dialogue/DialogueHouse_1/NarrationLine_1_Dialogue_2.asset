@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: NarrationLine_1_Dialogue_2
   m_EditorClassIdentifier: 
   m_Speaker: {fileID: 11400000, guid: fe4619e07918e394db6d92e43262b8fe, type: 2}
-  m_Text: Good bye!
+  m_Text: Hello! Node2
