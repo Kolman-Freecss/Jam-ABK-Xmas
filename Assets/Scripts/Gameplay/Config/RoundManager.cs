@@ -1,5 +1,6 @@
 ﻿#region
 
+using System.Collections.Generic;
 using UnityEngine;
 
 #endregion
@@ -17,6 +18,8 @@ namespace Gameplay.Config
             Started,
             Ended
         }
+
+        public List<EnemyStateManager> enemiesInScene = new List<EnemyStateManager>();
 
         #region Member Variables
 
