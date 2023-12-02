@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay.Config;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -11,6 +12,11 @@ public class EnemyStateManager : MonoBehaviour
     EnemyIdleState enemyIdleState;
     EnemyChaseState enemyChaseState;
     EnemyAttackState enemyAttackState;
+
+    private void Awake() 
+    {
+        RoundManager.Instance.enemiesInScene.Add(this);
+    }
 
     private void Start() 
     {
