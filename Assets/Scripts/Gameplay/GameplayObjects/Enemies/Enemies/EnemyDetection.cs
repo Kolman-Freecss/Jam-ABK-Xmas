@@ -92,10 +92,8 @@ public class EnemyDetection : MonoBehaviour
 
     void PlayerStateChange(StealthStatus newState)
     {
-
         switch (newState)
         {
-            
             default:
             case NormalState:
             chaseTimerMax = 3f;
