@@ -32,11 +32,12 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private void OnEnable()
         {
-            m_InteractAction.action.performed += ctx => OnInteract();
+            m_InteractAction.action.Enable();
         }
 
         private void Start()
         {
+            m_InteractAction.action.performed += ctx => OnInteract();
             m_OnDiscoverInteractable += OnDiscoverInteractable;
         }
 
