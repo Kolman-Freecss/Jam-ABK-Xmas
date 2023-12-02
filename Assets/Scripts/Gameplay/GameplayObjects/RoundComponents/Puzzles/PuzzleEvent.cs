@@ -1,24 +1,32 @@
+#region
+
+using System;
+
+#endregion
+
 namespace Puzzle
 {
-    class PuzzleEvent : PuzzleState
+    public class PuzzleEvent : PuzzleState
     {
-        PuzzleEvent();
+        public PuzzleEvent(PuzzleStates state)
+            : base(state) { }
 
         public event Action OnPuzzleInit;
         public event Action OnPuzzleSolved;
         public event Action OnPuzzleFailed;
 
-
         public void InitPuzzle()
         {
-            OnPuzzleInit?.Invoke();s
+            OnPuzzleInit?.Invoke();
+        }
 
         public void PuzzleSolved()
         {
             OnPuzzleSolved?.Invoke();
         }
 
-        public void PuzzleFailed(){
+        public void PuzzleFailed()
+        {
             OnPuzzleFailed?.Invoke();
         }
     }
