@@ -18,3 +18,5 @@ MonoBehaviour:
     m_ChoiceNode: {fileID: 11400000, guid: b451cd183999b6d4d9aacc359176c1cb, type: 2}
   - m_ChoicePreview: Number 2
     m_ChoiceNode: {fileID: 11400000, guid: 61c54e6a430ccaa49ae51d3a9f6029fa, type: 2}
+  - m_ChoicePreview: Number 3
+    m_ChoiceNode: {fileID: 11400000, guid: 61c54e6a430ccaa49ae51d3a9f6029fa, type: 2}

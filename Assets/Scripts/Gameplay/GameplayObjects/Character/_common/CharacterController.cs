@@ -1,7 +1,7 @@
 #region
 
 using UnityEngine;
-
+using UnityEngine.UI;
 #endregion
 
 namespace Gameplay.GameplayObjects.Character._common
@@ -20,6 +20,21 @@ namespace Gameplay.GameplayObjects.Character._common
 
         [Tooltip("Speed crouch of the Character")] [SerializeField]
         protected float crouchSpeed = 3f;
+
+        [Tooltip ("Maximun stamina of the player")] [SerializeField] 
+        protected float maxStamina = 100f;
+
+        [Tooltip("Maximun stamina of the player")] [SerializeField]
+        protected float currentStamina;
+
+        [Tooltip("Stamina cost when sprinting")] [SerializeField] 
+        protected float sprintStaminaCost = 20f;
+
+        [Tooltip("Stamina recovery speed")] [SerializeField] 
+        protected float staminaRecoveryRate = 2f;
+
+        [Tooltip("Stamina recovery speed")] [SerializeField] 
+        protected Slider staminaSlider;
 
         [Tooltip("How fast the character turns to face movement direction")] [Range(0.0f, 0.3f)]
         public float rotationSmoothTime = 0.12f;
@@ -60,6 +75,14 @@ namespace Gameplay.GameplayObjects.Character._common
         protected void Start()
         {
             m_currentSpeed = planeSpeed;
+
+            currentStamina = maxStamina;
+
+            if (staminaSlider != null)
+            {
+                staminaSlider.maxValue = maxStamina;
+                staminaSlider.value = currentStamina;
+            }
         }
 
         protected override void GetComponentReferences()
