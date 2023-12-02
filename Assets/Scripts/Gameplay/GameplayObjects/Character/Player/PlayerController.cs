@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using CharacterController = Gameplay.GameplayObjects.Character._common.CharacterController;
 
 #endregion
@@ -21,6 +22,11 @@ namespace Gameplay.GameplayObjects.Character.Player
             OrientateToCameraForward,
             OrientateToMovementForward,
             OrientateToTarget
+        };
+        public enum PlayerState
+        {
+            Walking,
+            Sprinting
         };
 
         #region Inspector Variables
@@ -42,6 +48,9 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         [Header("Movement Settings")] [SerializeField]
         private MovementMode movementMode = MovementMode.RelativeToCamera;
+
+        [Header("Stamina Settings")] [SerializeField]       
+        private PlayerState currentPlayerState = PlayerState.Walking;
 
         #endregion
 
@@ -91,7 +100,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         #endregion
 
         #region Logic
-
+        
         private void UpdatePlayerAnimation()
         {
             base.UpdateAnimation(velocityToApply, verticalVelocity, jumpSpeed, m_isGrounded);
@@ -101,6 +110,11 @@ namespace Gameplay.GameplayObjects.Character.Player
         {
             Vector2 rawMoveValue = move.action.ReadValue<Vector2>();
             Vector3 xzMoveValue = (Vector3.right * rawMoveValue.x) + (Vector3.forward * rawMoveValue.y);
+            bool shouldSprint = sprint.action.ReadValue<float>() > 0.5f;
+            if (shouldSprint && currentStamina > 1.5f)
+            { currentPlayerState = PlayerState.Sprinting; }
+            else if (shouldSprint && currentStamina < 0f) { currentPlayerState = PlayerState.Walking; }
+            else if (!shouldSprint) { currentPlayerState = PlayerState.Walking; }
 
             switch (movementMode)
             {
@@ -119,14 +133,28 @@ namespace Gameplay.GameplayObjects.Character.Player
                 float originalMagnitude = xzMoveValueFromCamera.magnitude;
                 xzMoveValueFromCamera = Vector3.ProjectOnPlane(xzMoveValueFromCamera, Vector3.up).normalized *
                                         originalMagnitude;
-                Vector3 velocity = xzMoveValueFromCamera * m_currentSpeed;
-                velocityToApply += velocity;
+                switch (currentPlayerState)
+                {
+                    case PlayerState.Sprinting:
+                        Sprintar(xzMoveValueFromCamera);
+                        break;
+                    case PlayerState.Walking:
+                        Walk(xzMoveValueFromCamera);
+                        break;
+                }
             }
 
             void UpdateMovementRelativeToCharacter(Vector3 xzMoveValue)
             {
-                Vector3 velocity = xzMoveValue * m_currentSpeed;
-                velocityToApply += velocity;
+                switch (currentPlayerState)
+                {
+                    case PlayerState.Sprinting:
+                        Sprintar(xzMoveValue);
+                        break;
+                    case PlayerState.Walking:
+                        Walk(xzMoveValue);
+                        break;
+                }
             }
         }
 
@@ -183,6 +211,39 @@ namespace Gameplay.GameplayObjects.Character.Player
             angleToApply *= Mathf.Sign(angularDistance);
             Quaternion rotationToApply = Quaternion.AngleAxis(angleToApply, Vector3.up);
             transform.rotation = transform.rotation * rotationToApply;
+        }
+        private void UpdateStamina()
+        {
+            if (currentPlayerState == PlayerState.Sprinting)
+            {
+                currentStamina -= sprintStaminaCost * Time.deltaTime;
+            }
+            else
+            {
+                currentStamina += staminaRecoveryRate * Time.deltaTime;
+                currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
+            }
+
+            UpdateStaminaUI();
+        }
+        private void UpdateStaminaUI()
+        {
+            if (staminaSlider != null)
+            {
+                staminaSlider.value = currentStamina;
+            }
+        }
+        private void Sprintar(Vector3 xzMovevValue)
+        {
+            Vector3 velocity = xzMovevValue * sprintSpeed;
+            velocityToApply += velocity;   
+            UpdateStamina();
+        }
+        private void Walk(Vector3 xzMovevValue)
+        {
+            Vector3 velocity = xzMovevValue * planeSpeed;
+            velocityToApply += velocity;
+            UpdateStamina();
         }
 
         #endregion
