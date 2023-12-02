@@ -1,10 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay.GameplayObjects.Character;
+using Gameplay.GameplayObjects.Character.Player;
+using Gameplay.GameplayObjects.Character.Stealth._impl;
 using UnityEngine;
 using UnityEngine.Events;
 
 public class EnemyDetection : MonoBehaviour
 {
+    [Header("References")]
+    CharacterStealthBehaviour characterStealthBehaviour;
+
     [Header("Detection")]
     [SerializeField] float viewRadius;
     [Tooltip("Must be higher value than viewRadius")]
@@ -26,9 +32,19 @@ public class EnemyDetection : MonoBehaviour
     float visionTimer;
     [SerializeField] float maxVisionTimer = 2f;
 
-    private void Start() 
+    [Header("Multipliers")]
+    [SerializeField] float stealthMultiplier = 1.25f;
+    [SerializeField] float hideMultiplier = 1.5f;
+
+    private void Awake() 
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
+        characterStealthBehaviour = player.GetComponent<PlayerStealthBehaviour>();
+    }
+
+    private void OnEnable() 
+    {
+        characterStealthBehaviour.onStealthStatusChanged.AddListener(PlayerStateChange);
     }
 
     private void Update() 
@@ -51,14 +67,17 @@ public class EnemyDetection : MonoBehaviour
     {
         Vector3 playerTarget = (player.position - transform.position).normalized;
 
+        //if player is inside the fov
         if(Vector3.Angle(transform.forward, playerTarget) < viewAngle / 2)
         {
             Debug.Log("inside vision angle");
             distanceToTarget = Vector3.Distance(transform.position, player.position);
 
+            //if player is near enough
             if (distanceToTarget <= viewRadius || hasBeenSeen)
             {
                 Debug.Log("inside vision range");
+                //if there isnt an obstacle between enemy vision and player, enemy is seeing the player
                 if (Physics2D.Raycast(transform.position, playerTarget, distanceToTarget, isObstacle) == false)
                 {
                     Debug.Log("seen");
@@ -68,6 +87,33 @@ public class EnemyDetection : MonoBehaviour
                         onStartFollowing?.Invoke();
                 }
             }
+        }
+    }
+
+    void PlayerStateChange(StealthStatus newState)
+    {
+
+        switch (newState)
+        {
+            
+            default:
+            case NormalState:
+            chaseTimerMax = 3f;
+            maxVisionTimer = 2f;
+
+            break;
+
+            case StealthState:
+            chaseTimerMax *= stealthMultiplier;
+            maxVisionTimer *= -stealthMultiplier;
+
+            break;
+
+            case HideState:
+            chaseTimerMax *= hideMultiplier;
+            maxVisionTimer *= -hideMultiplier;
+
+            break;
         }
     }
 
