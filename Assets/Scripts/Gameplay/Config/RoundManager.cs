@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using Gameplay.GameplayObjects.RoundComponents;
 using Systems.NarrationSystem.Dialogue.Components;
 using Systems.NarrationSystem.Dialogue.Data;
 using Systems.NarrationSystem.Flow;
@@ -38,7 +39,7 @@ namespace Gameplay.Config
         private RoundState m_CurrentRoundState;
 
         public Action OnRoundStarted;
-
+        private HouseController m_CurrentHouse;
         public static RoundManager Instance { get; private set; }
 
         #endregion
@@ -84,16 +85,55 @@ namespace Gameplay.Config
 
         private void InitNarrationRound()
         {
-            Time.timeScale = 0f;
-
-            DialogueInstigator.Instance.FlowChannel.OnFlowStateChanged += OnFlowStateChanged;
-            DialogueInstigator.Instance.DialogueChannel.RaiseRequestDialogue(m_RoundStartDialogue);
+            try
+            {
+                Time.timeScale = 0f;
+                DialogueInstigator.Instance.FlowChannel.OnFlowStateChanged += OnFlowStateChanged;
+                DialogueInstigator.Instance.DialogueChannel.RaiseRequestDialogue(m_RoundStartDialogue);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("RoundManager: Error while initializing narration round: " + e);
+            }
+            finally
+            {
+                Time.timeScale = 1f;
+            }
         }
 
         private void OnFlowStateChanged(FlowState state)
         {
             DialogueInstigator.Instance.FlowChannel.OnFlowStateChanged -= OnFlowStateChanged;
             OnStartRound();
+        }
+
+        public void OnPlayerEnterHouse(HouseController houseController)
+        {
+            m_CurrentHouse = houseController;
+            Debug.Log("Player entered house");
+        }
+
+        public void OnPlayerExitHouse(HouseController houseController)
+        {
+            m_CurrentHouse = null;
+            Debug.Log("Player exited house");
+        }
+
+        public void OnPlayerCompleteHouse(HouseController houseController)
+        {
+            //TODO: Trigger VFX.
+            Debug.Log("Player completed house");
+        }
+
+        public void OnPlayerFailHouse(HouseController houseController)
+        {
+            //TODO: Trigger VFX and sound.
+            Debug.Log("Player failed house");
+        }
+
+        public void OnParentKillers(HouseController houseController)
+        {
+            Debug.Log("Parent killers");
         }
 
         /// <summary>
@@ -130,6 +170,8 @@ namespace Gameplay.Config
         #region Getter & Setters
 
         public RoundState CurrentRoundState => m_CurrentRoundState;
+
+        public HouseController CurrentHouse => m_CurrentHouse;
 
         #endregion
     }
