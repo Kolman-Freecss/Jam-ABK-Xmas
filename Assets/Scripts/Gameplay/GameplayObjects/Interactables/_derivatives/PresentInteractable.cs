@@ -1,5 +1,6 @@
 ﻿#region
 
+using Gameplay.Config;
 using Gameplay.GameplayObjects.Interactables._common;
 using UnityEngine;
 
@@ -7,14 +8,15 @@ using UnityEngine;
 
 namespace Gameplay.GameplayObjects.Interactables._derivatives
 {
-    public class DoorInteractable : BaseInteractableObject
+    public class PresentInteractable : BaseInteractableObject
     {
         [SerializeField]
-        private AudioClip m_DoorOpenSound;
+        private AudioClip m_PresentReachedSound;
 
         public override void DoInteraction<TData>(TData obj)
         {
-            // Audio.PlaySound("door_open");
+            RoundManager.Instance.CurrentHouse.OnPresentCollected(obj as PresentInteractable);
+            // Audio.PlaySound("PresentReached");
             base.DoInteraction(obj);
         }
     }
