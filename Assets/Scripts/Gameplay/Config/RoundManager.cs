@@ -1,6 +1,10 @@
 ﻿#region
 
+using System;
 using System.Collections.Generic;
+using Systems.NarrationSystem.Dialogue.Components;
+using Systems.NarrationSystem.Dialogue.Data;
+using Systems.NarrationSystem.Flow;
 using UnityEngine;
 
 #endregion
@@ -15,15 +19,25 @@ namespace Gameplay.Config
         public enum RoundState
         {
             NotStarted,
+            Starting,
             Started,
             Ended
         }
 
+        #region Inspector Variables
+
         public List<EnemyStateManager> enemiesInScene = new List<EnemyStateManager>();
+
+        [SerializeField]
+        private Dialogue m_RoundStartDialogue;
+
+        #endregion
 
         #region Member Variables
 
         private RoundState m_CurrentRoundState;
+
+        public Action OnRoundStarted;
 
         public static RoundManager Instance { get; private set; }
 
@@ -33,6 +47,7 @@ namespace Gameplay.Config
 
         private void Awake()
         {
+            m_CurrentRoundState = RoundState.NotStarted;
             ManageSingleton();
         }
 
@@ -51,12 +66,43 @@ namespace Gameplay.Config
 
         private void Start()
         {
-            m_CurrentRoundState = RoundState.NotStarted;
+            m_CurrentRoundState = RoundState.Starting;
+            if (m_RoundStartDialogue != null)
+            {
+                InitNarrationRound();
+            }
+            else
+            {
+                Debug.LogError("RoundManager: No round start dialogue set");
+                StartRound();
+            }
         }
 
         #endregion
 
         #region Logic
+
+        private void InitNarrationRound()
+        {
+            Time.timeScale = 0f;
+
+            DialogueInstigator.Instance.FlowChannel.OnFlowStateChanged += OnFlowStateChanged;
+            DialogueInstigator.Instance.DialogueChannel.RaiseRequestDialogue(m_RoundStartDialogue);
+        }
+
+        private void OnFlowStateChanged(FlowState state)
+        {
+            DialogueInstigator.Instance.FlowChannel.OnFlowStateChanged -= OnFlowStateChanged;
+            OnStartRound();
+        }
+
+        /// <summary>
+        /// Is called by the RoundManagerUI when the player clicks on the start round button.
+        /// </summary>
+        public void OnStartRound()
+        {
+            StartRound();
+        }
 
         public void DialogueStarted()
         {
@@ -71,6 +117,7 @@ namespace Gameplay.Config
         public void StartRound()
         {
             m_CurrentRoundState = RoundState.Started;
+            OnRoundStarted?.Invoke();
         }
 
         public void EndRound()
