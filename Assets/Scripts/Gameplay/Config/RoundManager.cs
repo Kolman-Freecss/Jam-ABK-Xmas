@@ -165,6 +165,11 @@ namespace Gameplay.Config
             m_CurrentRoundState = RoundState.Ended;
         }
 
+        public void OnGameOver()
+        {
+            GameManager.Instance.EndGame();
+        }
+
         #endregion
 
         #region Getter & Setters

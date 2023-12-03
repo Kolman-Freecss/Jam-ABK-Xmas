@@ -60,13 +60,13 @@ namespace _Utils_
 
             foreach (TextMeshProUGUI textObject in textObjects)
             {
+                textObject.font = newFont;
+                textObject.color = textColor;
                 if (textObject.GetComponentInParent<Button>())
                 {
                     continue;
                 }
                 Undo.RecordObject(textObject, "Changed Font");
-                textObject.font = newFont;
-                textObject.color = textColor;
                 textObject.horizontalAlignment = HorizontalAlignmentOptions.Center;
                 textObject.verticalAlignment = VerticalAlignmentOptions.Middle;
                 textObject.fontSize = textFontSize;
