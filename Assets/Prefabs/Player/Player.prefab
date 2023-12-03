@@ -41,13 +41,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8121333605680163890}
-  - component: {fileID: 1790854290669667632}
-  - component: {fileID: 8724825963438480976}
-  - component: {fileID: 6632778424213629407}
-  - component: {fileID: 4559088949334786879}
+  - component: {fileID: 5950118225148719192}
+  - component: {fileID: 6788698238428899486}
+  - component: {fileID: 8046380175751787173}
+  - component: {fileID: 1269664541195189130}
+  - component: {fileID: 7621625198901092640}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -68,7 +69,7 @@ Transform:
   - {fileID: 2505925124505630217}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!143 &1790854290669667632
+--- !u!143 &5950118225148719192
 CharacterController:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,7 +95,7 @@ CharacterController:
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
   m_Center: {x: 0, y: 0.85, z: 0}
---- !u!114 &8724825963438480976
+--- !u!114 &6788698238428899486
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,9 +112,14 @@ MonoBehaviour:
   planeSpeed: 3
   sprintSpeed: 12
   crouchSpeed: 3
+  maxStamina: 100
+  currentStamina: 0
+  sprintStaminaCost: 20
+  staminaRecoveryRate: 2
+  staminaSlider: {fileID: 0}
   rotationSmoothTime: 0.12
   fallTimeout: 0.15
-  gravity: -15
+  gravity: -9.8
   groundLayers:
     serializedVersion: 2
     m_Bits: 8
@@ -129,9 +135,23 @@ MonoBehaviour:
   crouch: {fileID: 8507002688119904409, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
   angularSpeed: 360
   orientationTarget: {fileID: 0}
-  orientationMode: 0
+  orientationMode: 1
   movementMode: 1
---- !u!114 &6632778424213629407
+  currentPlayerState: 0
+--- !u!114 &8046380175751787173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6606721612878497296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4dd444440d586541b1bb509bf51e31d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  life: 100
+--- !u!114 &1269664541195189130
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,7 +169,7 @@ MonoBehaviour:
   stealthReductionSpeed: 2
   stealth: {fileID: -6629475735297350218, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
   hide: {fileID: 2513230095581254889, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
---- !u!114 &4559088949334786879
+--- !u!114 &7621625198901092640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -162,6 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractAction: {fileID: -5271028398806712204, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
+  m_InteractText: {fileID: 0}
 --- !u!1001 &2728433216586483887
 PrefabInstance:
   m_ObjectHideFlags: 0

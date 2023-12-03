@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "Jam-ABK-Xmas.sln"
+    "dotnet.defaultSolution": "Jam-ABK-Xmas.sln",
+    "editor.inlineSuggest.showToolbar": "onHover"
 }

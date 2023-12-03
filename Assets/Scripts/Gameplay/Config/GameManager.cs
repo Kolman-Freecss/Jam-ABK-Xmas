@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using Gameplay.GameplayObjects.Character.Player;
 using UnityEngine;
 
 #endregion
@@ -14,6 +15,10 @@ namespace Gameplay.Config
         public static GameManager Instance { get; private set; }
 
         public event Action OnGameStarted;
+        public bool IsGameStarted { get; private set; }
+
+        [HideInInspector]
+        public PlayerController m_player;
 
         #endregion
 
@@ -45,7 +50,14 @@ namespace Gameplay.Config
         public void StartGame()
         {
             SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.InGame_City);
+            IsGameStarted = true;
             OnGameStarted?.Invoke();
+        }
+
+        public void EndGame()
+        {
+            SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.EndGame);
+            IsGameStarted = false;
         }
 
         #endregion

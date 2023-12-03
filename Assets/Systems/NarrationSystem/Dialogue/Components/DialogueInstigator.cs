@@ -8,6 +8,11 @@ using UnityEngine;
 
 namespace Systems.NarrationSystem.Dialogue.Components
 {
+    /// <summary>
+    /// Instigates a dialogue when a dialogue request is received.
+    /// Component for player.
+    /// </summary>
+    [RequireComponent(typeof(FlowListener))]
     public class DialogueInstigator : MonoBehaviour
     {
         [SerializeField]
@@ -19,11 +24,14 @@ namespace Systems.NarrationSystem.Dialogue.Components
         [SerializeField]
         private FlowState m_DialogueState;
 
+        public static DialogueInstigator Instance { get; private set; }
+
         private DialogueSequencer m_DialogueSequencer;
         private FlowState m_CachedFlowState;
 
         private void Awake()
         {
+            ManageSingleton();
             m_DialogueSequencer = new DialogueSequencer();
 
             m_DialogueSequencer.OnDialogueStart += OnDialogueStart;
@@ -33,6 +41,19 @@ namespace Systems.NarrationSystem.Dialogue.Components
 
             m_DialogueChannel.OnDialogueRequested += m_DialogueSequencer.StartDialogue;
             m_DialogueChannel.OnDialogueNodeRequested += m_DialogueSequencer.StartDialogueNode;
+        }
+
+        private void ManageSingleton()
+        {
+            if (Instance != null)
+            {
+                gameObject.SetActive(false);
+                Destroy(gameObject);
+            }
+            else
+            {
+                Instance = this;
+            }
         }
 
         private void OnDestroy()
@@ -63,5 +84,19 @@ namespace Systems.NarrationSystem.Dialogue.Components
 
             m_DialogueChannel.RaiseDialogueEnd(dialogue);
         }
+
+        #region Getter & Setters
+
+        public DialogueChannel DialogueChannel
+        {
+            get => m_DialogueChannel;
+        }
+        
+        public FlowChannel FlowChannel
+        {
+            get => m_FlowChannel;
+        }
+
+        #endregion
     }
 };
