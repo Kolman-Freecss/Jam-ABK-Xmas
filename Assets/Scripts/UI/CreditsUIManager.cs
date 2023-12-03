@@ -41,7 +41,7 @@ namespace UI
 
         void OnBackButtonClicked()
         {
-            SoundManager.Instance.PlayButtonClickSound(Camera.main.transform.position);
+            SoundManager.Instance.PlayButtonClickSound();
             SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.Home);
         }
 

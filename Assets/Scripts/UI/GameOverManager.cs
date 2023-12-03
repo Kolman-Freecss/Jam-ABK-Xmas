@@ -50,13 +50,13 @@ namespace UI
 
         void OnRestartButtonClicked()
         {
-            SoundManager.Instance.PlayButtonClickSound(Camera.main.transform.position);
+            SoundManager.Instance.PlayButtonClickSound();
             GameManager.Instance.RestartGame();
         }
 
         void OnHomeButtonClicked()
         {
-            SoundManager.Instance.PlayButtonClickSound(Camera.main.transform.position);
+            SoundManager.Instance.PlayButtonClickSound();
             SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.Home);
         }
 

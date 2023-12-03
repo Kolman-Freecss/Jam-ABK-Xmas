@@ -34,11 +34,16 @@ namespace Gameplay.Config
         public List<SerializableDictionaryEntry<BackgroundMusic, AudioClip>> BackgroundMusicClips;
         public AudioClip ButtonClickSound;
 
+        [SerializeField]
+        private AudioSource backgroundAudioSources;
+
+        [SerializeField]
+        private AudioSource uiAudioSource;
+
         #endregion
 
         #region Member Variables
 
-        private AudioSource audioSource;
 
         public static SoundManager Instance { get; private set; }
 
@@ -48,7 +53,6 @@ namespace Gameplay.Config
 
         private void Awake()
         {
-            audioSource = GetComponent<AudioSource>();
             ManageSingleton();
         }
 
@@ -84,10 +88,10 @@ namespace Gameplay.Config
             AudioClip clip = BackgroundMusicClips.Find(x => x.Key == backgroundMusic).Value;
             if (clip != null)
             {
-                if (audioSource.isPlaying)
-                    audioSource.Stop();
-                audioSource.clip = clip;
-                audioSource.Play();
+                if (backgroundAudioSources.isPlaying)
+                    backgroundAudioSources.Stop();
+                backgroundAudioSources.clip = clip;
+                backgroundAudioSources.Play();
             }
             else
             {
@@ -98,21 +102,29 @@ namespace Gameplay.Config
         public void SetEffectsVolume(float volume)
         {
             EffectsAudioVolume = volume;
+            uiAudioSource.volume = volume / 100;
         }
 
         public void SetMusicVolume(float volume)
         {
-            audioSource.volume = volume / 100;
+            MusicAudioVolume = volume;
+            backgroundAudioSources.volume = volume / 100;
         }
-        
+
         public void SetMasterVolume(float volume)
         {
+            MasterAudioVolume = volume;
             AudioListener.volume = volume / 100;
         }
 
-        public void PlayButtonClickSound(Vector3 position)
+        public void PlayButtonClickSound()
         {
-            AudioSource.PlayClipAtPoint(ButtonClickSound, position, EffectsAudioVolume / 100);
+            uiAudioSource.PlayOneShot(ButtonClickSound);
+        }
+
+        public void PlayWorldEffectAtPosition(Vector3 position, AudioClip clip)
+        {
+            AudioSource.PlayClipAtPoint(clip, position, EffectsAudioVolume / 100);
         }
 
         #endregion

@@ -126,6 +126,9 @@ namespace _Utils_
                 RectTransform rectTransform = slider.GetComponent<RectTransform>();
                 rectTransform.sizeDelta = new Vector2(sliderWidthSize, sliderHeightSize);
 
+                slider.minValue = 0;
+                slider.maxValue = 100;
+
                 // Get Fill Area image
                 Image fillArea = slider.transform.GetChild(1).GetChild(0).GetComponent<Image>();
                 fillArea.color = new Color32(195, 99, 99, 255);
