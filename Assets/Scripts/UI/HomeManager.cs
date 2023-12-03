@@ -68,21 +68,25 @@ namespace UI
 
         void OnQuitButtonClicked()
         {
+            SoundManager.Instance.PlayButtonClickSound(Camera.main.transform.position);
             Application.Quit();
         }
 
         void OnPlayButtonClicked()
         {
+            SoundManager.Instance.PlayButtonClickSound(Camera.main.transform.position);
             GameManager.Instance.StartGame();
         }
 
         void OnSettingsButtonClicked()
         {
+            SoundManager.Instance.PlayButtonClickSound(Camera.main.transform.position);
             SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.Settings);
         }
 
         void OnCreditsButtonClicked()
         {
+            SoundManager.Instance.PlayButtonClickSound(Camera.main.transform.position);
             SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.Credits);
         }
 
