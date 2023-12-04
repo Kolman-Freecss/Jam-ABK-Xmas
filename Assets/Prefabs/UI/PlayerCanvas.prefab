@@ -331,6 +331,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7016441298580550591, guid: c26a878267b875b429113cc7cbc37473, type: 3}
+      propertyPath: m_SubmitAction
+      value: 
+      objectReference: {fileID: 434399273280372621, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
     - target: {fileID: 9053650932428372279, guid: c26a878267b875b429113cc7cbc37473, type: 3}
       propertyPath: m_Name
       value: DialogueTextBox

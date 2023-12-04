@@ -41,8 +41,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8121333605680163890}
-  - component: {fileID: 6291621051345385052}
-  - component: {fileID: 7400184747973324201}
   - component: {fileID: 5950118225148719192}
   - component: {fileID: 6788698238428899486}
   - component: {fileID: 8046380175751787173}
@@ -71,67 +69,6 @@ Transform:
   - {fileID: 2505925124505630217}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6291621051345385052
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6606721612878497296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c07d05f2c613e434ebff6b126811065c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_DialogueChannel: {fileID: 11400000, guid: dc1d834e834f85d41aa301171345c4dc, type: 2}
-  m_FlowChannel: {fileID: 11400000, guid: 9f30d3c2713359343b5a4612701b2e18, type: 2}
-  m_DialogueState: {fileID: 11400000, guid: 142bc2593533a4744b128d9fb59458a9, type: 2}
---- !u!114 &7400184747973324201
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6606721612878497296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bb6055e082740f94ca0ccc442cf2e1e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Channel: {fileID: 11400000, guid: 9f30d3c2713359343b5a4612701b2e18, type: 2}
-  m_Entries:
-  - m_State: {fileID: 11400000, guid: 142bc2593533a4744b128d9fb59458a9, type: 2}
-    m_Event:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Gameplay.Config.RoundManager, Assembly-CSharp
-          m_MethodName: DialogueEnded
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
-  - m_State: {fileID: 11400000, guid: 55984c67abfc5d64faeb815264779c96, type: 2}
-    m_Event:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 0}
-          m_TargetAssemblyTypeName: Gameplay.Config.RoundManager, Assembly-CSharp
-          m_MethodName: DialogueStarted
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!143 &5950118225148719192
 CharacterController:
   m_ObjectHideFlags: 0
@@ -175,6 +112,11 @@ MonoBehaviour:
   planeSpeed: 3
   sprintSpeed: 12
   crouchSpeed: 3
+  maxStamina: 100
+  currentStamina: 0
+  sprintStaminaCost: 20
+  staminaRecoveryRate: 2
+  staminaSlider: {fileID: 0}
   rotationSmoothTime: 0.12
   fallTimeout: 0.15
   gravity: -9.8
@@ -195,6 +137,7 @@ MonoBehaviour:
   orientationTarget: {fileID: 0}
   orientationMode: 1
   movementMode: 1
+  currentPlayerState: 0
 --- !u!114 &8046380175751787173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,6 +182,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_InteractAction: {fileID: -5271028398806712204, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
+  m_InteractText: {fileID: 0}
 --- !u!1001 &2728433216586483887
 PrefabInstance:
   m_ObjectHideFlags: 0
