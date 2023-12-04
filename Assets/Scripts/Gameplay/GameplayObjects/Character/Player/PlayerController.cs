@@ -44,6 +44,9 @@ namespace Gameplay.GameplayObjects.Character.Player
         [SerializeField]
         private InputActionReference crouch;
 
+        [SerializeField]
+        private InputActionReference disguise;
+
         [Header("Orientation Settings")]
         [SerializeField]
         float angularSpeed = 360f;
@@ -61,6 +64,12 @@ namespace Gameplay.GameplayObjects.Character.Player
         [Header("Stamina Settings")]
         [SerializeField]
         private PlayerState currentPlayerState = PlayerState.Walking;
+
+        [Header("Stamina Settings")]
+        [SerializeField]
+        private float coolDown;
+        [SerializeField] float abilityTime;
+        [SerializeField] GameObject[] skins;
 
         #endregion
 
@@ -89,6 +98,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             jump.action.Enable();
             sprint.action.Enable();
             crouch.action.Enable();
+            disguise.action.Enable();
         }
 
         #endregion
