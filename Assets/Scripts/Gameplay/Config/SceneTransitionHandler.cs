@@ -95,10 +95,12 @@ namespace Gameplay.Config
             if (sceneState == SceneStates.InGame_City)
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
             else
             {
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
 

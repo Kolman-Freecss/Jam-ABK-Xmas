@@ -225,5 +225,11 @@ namespace Gameplay.GameplayObjects.RoundComponents
         }
 
         #endregion
+
+        #region Getter & Setter
+
+        public Canvas HouseCanvas => m_HouseCanvas;
+
+        #endregion
     }
 }
