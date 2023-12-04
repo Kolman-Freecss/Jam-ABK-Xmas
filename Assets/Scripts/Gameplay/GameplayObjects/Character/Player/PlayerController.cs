@@ -1,8 +1,8 @@
 ﻿#region
 
+using Gameplay.Config;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 using CharacterController = Gameplay.GameplayObjects.Character._common.CharacterController;
 
 #endregion
@@ -23,6 +23,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             OrientateToMovementForward,
             OrientateToTarget
         };
+
         public enum PlayerState
         {
             Walking,
@@ -31,34 +32,57 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         #region Inspector Variables
 
-        [Header("Movement Inputs")] [SerializeField]
+        [Header("Movement Inputs")]
+        [SerializeField]
         private InputActionReference move;
 
-        [SerializeField] private InputActionReference jump;
+        [SerializeField]
+        private InputActionReference jump;
 
-        [SerializeField] private InputActionReference sprint;
+        [SerializeField]
+        private InputActionReference sprint;
 
-        [SerializeField] private InputActionReference crouch;
+        [SerializeField]
+        private InputActionReference crouch;
 
-        [Header("Orientation Settings")] [SerializeField]
+        [SerializeField]
+        private InputActionReference disguise;
+
+        [Header("Orientation Settings")]
+        [SerializeField]
         float angularSpeed = 360f;
 
-        [SerializeField] private Transform orientationTarget;
-        [SerializeField] private OrientationMode orientationMode = OrientationMode.OrientateToMovementForward;
+        [SerializeField]
+        private Transform orientationTarget;
 
-        [Header("Movement Settings")] [SerializeField]
+        [SerializeField]
+        private OrientationMode orientationMode = OrientationMode.OrientateToMovementForward;
+
+        [Header("Movement Settings")]
+        [SerializeField]
         private MovementMode movementMode = MovementMode.RelativeToCamera;
 
-        [Header("Stamina Settings")] [SerializeField]       
+        [Header("Stamina Settings")]
+        [SerializeField]
         private PlayerState currentPlayerState = PlayerState.Walking;
+
+        [Header("Stamina Settings")]
+        [SerializeField]
+        private float coolDown;
+
+        [SerializeField]
+        float abilityTime;
+
+        [SerializeField]
+        GameObject[] skins;
 
         #endregion
 
         #region Member Variables
 
+        private PlayerBehaviour m_PlayerBehaviour;
         private float verticalVelocity = 0f;
         private Vector3 velocityToApply = Vector3.zero; // World
-
         #endregion
 
         #region Init Data
@@ -72,14 +96,17 @@ namespace Gameplay.GameplayObjects.Character.Player
         protected override void GetComponentReferences()
         {
             base.GetComponentReferences();
+            TryGetComponent(out m_PlayerBehaviour);
         }
 
         private void OnEnable()
         {
+            GameManager.Instance.m_player = this;
             move.action.Enable();
             jump.action.Enable();
             sprint.action.Enable();
             crouch.action.Enable();
+            disguise.action.Enable();
         }
 
         #endregion
@@ -100,7 +127,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         #endregion
 
         #region Logic
-        
+
         private void UpdatePlayerAnimation()
         {
             base.UpdateAnimation(velocityToApply, verticalVelocity, jumpSpeed, m_isGrounded);
@@ -112,9 +139,17 @@ namespace Gameplay.GameplayObjects.Character.Player
             Vector3 xzMoveValue = (Vector3.right * rawMoveValue.x) + (Vector3.forward * rawMoveValue.y);
             bool shouldSprint = sprint.action.ReadValue<float>() > 0.5f;
             if (shouldSprint && currentStamina > 1.5f)
-            { currentPlayerState = PlayerState.Sprinting; }
-            else if (shouldSprint && currentStamina < 0f) { currentPlayerState = PlayerState.Walking; }
-            else if (!shouldSprint) { currentPlayerState = PlayerState.Walking; }
+            {
+                currentPlayerState = PlayerState.Sprinting;
+            }
+            else if (shouldSprint && currentStamina < 0f)
+            {
+                currentPlayerState = PlayerState.Walking;
+            }
+            else if (!shouldSprint)
+            {
+                currentPlayerState = PlayerState.Walking;
+            }
 
             switch (movementMode)
             {
@@ -131,8 +166,8 @@ namespace Gameplay.GameplayObjects.Character.Player
                 Transform cameraTransform = Camera.main.transform;
                 Vector3 xzMoveValueFromCamera = cameraTransform.TransformDirection(xzMoveValue);
                 float originalMagnitude = xzMoveValueFromCamera.magnitude;
-                xzMoveValueFromCamera = Vector3.ProjectOnPlane(xzMoveValueFromCamera, Vector3.up).normalized *
-                                        originalMagnitude;
+                xzMoveValueFromCamera =
+                    Vector3.ProjectOnPlane(xzMoveValueFromCamera, Vector3.up).normalized * originalMagnitude;
                 switch (currentPlayerState)
                 {
                     case PlayerState.Sprinting:
@@ -212,6 +247,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             Quaternion rotationToApply = Quaternion.AngleAxis(angleToApply, Vector3.up);
             transform.rotation = transform.rotation * rotationToApply;
         }
+
         private void UpdateStamina()
         {
             if (currentPlayerState == PlayerState.Sprinting)
@@ -226,6 +262,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
             UpdateStaminaUI();
         }
+
         private void UpdateStaminaUI()
         {
             if (staminaSlider != null)
@@ -233,12 +270,14 @@ namespace Gameplay.GameplayObjects.Character.Player
                 staminaSlider.value = currentStamina;
             }
         }
+
         private void Sprintar(Vector3 xzMovevValue)
         {
             Vector3 velocity = xzMovevValue * sprintSpeed;
-            velocityToApply += velocity;   
+            velocityToApply += velocity;
             UpdateStamina();
         }
+
         private void Walk(Vector3 xzMovevValue)
         {
             Vector3 velocity = xzMovevValue * planeSpeed;
@@ -257,6 +296,12 @@ namespace Gameplay.GameplayObjects.Character.Player
             sprint.action.Disable();
             crouch.action.Disable();
         }
+
+        #endregion
+
+        #region Getter & Setter
+
+        public PlayerBehaviour PlayerBehaviour => m_PlayerBehaviour;
 
         #endregion
     }

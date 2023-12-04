@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay.Config;
 using Gameplay.GameplayObjects.Character;
 using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Character.Stealth._impl;
@@ -8,22 +9,31 @@ using UnityEngine.Events;
 
 public class EnemyDetection : MonoBehaviour
 {
+    #region Variables
+
     [Header("References")]
     CharacterStealthBehaviour characterStealthBehaviour;
+    EnemyStateManager enemyStateManager;
+    RoundManager roundManager;
 
     [Header("Detection")]
-    [SerializeField] float viewRadius;
-    [Tooltip("Must be higher value than viewRadius")]
-    [SerializeField] float leaveRadius;
-    [SerializeField] float viewAngle;
+    [SerializeField] UnityEvent onStartFollowing;
+
     float distanceToTarget;
+
+    public float viewRadius;
+    [Tooltip("Must be higher value than viewRadius")]
+    public float leaveRadius;
+    [SerializeField] float viewAngle;
+
+    [Range(1, 4)]
+    [SerializeField] int maxTimesDetected;
+    [HideInInspector] public int timesDetected;
 
     [SerializeField] LayerMask isPlayer, isObstacle;
     Transform player;
 
-    [SerializeField] UnityEvent onStartFollowing;
     
-
     [Header("Timer")]
     private bool hasBeenSeen = false;
     private float chaseTimer;
@@ -31,15 +41,18 @@ public class EnemyDetection : MonoBehaviour
 
     float visionTimer;
     [SerializeField] float maxVisionTimer = 2f;
+    
 
     [Header("Multipliers")]
     [SerializeField] float stealthMultiplier = 1.25f;
     [SerializeField] float hideMultiplier = 1.5f;
+    #endregion
 
     private void Awake() 
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         characterStealthBehaviour = player.GetComponent<PlayerStealthBehaviour>();
+        roundManager = RoundManager.Instance;
     }
 
     private void OnEnable() 
@@ -58,6 +71,7 @@ public class EnemyDetection : MonoBehaviour
                 chaseTimer = 0f;
                 visionTimer = 0f;
                 onStartFollowing?.Invoke();
+                Detection();
             }
         }
     }
@@ -138,6 +152,40 @@ public class EnemyDetection : MonoBehaviour
                 hasBeenSeen = true;
                 if (chaseTimer != 0f)
                     chaseTimer = 0f;
+            }
+        }
+    }
+
+    public void Detection()
+    {
+        if (!hasBeenSeen)
+        {
+            for (int i = 0; i < roundManager.enemiesInScene.Count; i++)
+            {
+                EnemyDetection enemyDetection = roundManager.enemiesInScene[i].
+                gameObject.GetComponent<EnemyDetection>();
+
+                viewRadius *= stealthMultiplier;
+                leaveRadius *= stealthMultiplier;
+
+                enemyDetection.timesDetected++;
+            }
+
+            if (timesDetected == maxTimesDetected)
+            {
+                for (int i = 0; i < roundManager.enemiesInScene.Count; i++)
+                {
+                    EnemyDetection enemyDetection = roundManager.enemiesInScene[i].
+                    gameObject.GetComponent<EnemyDetection>();
+
+                    enemyDetection.viewRadius *= stealthMultiplier;
+                    enemyDetection.leaveRadius *= stealthMultiplier;
+                }
+            }
+
+            else if (timesDetected >= maxTimesDetected)
+            {
+                //call Boss
             }
         }
     }

@@ -6,9 +6,9 @@
     /// </summary>
     public class BaseInteractableObject : Interactable
     {
-        public override void DoInteraction<BaseInteractableObject>(BaseInteractableObject obj)
+        public override void DoInteraction<TData>(TData obj)
         {
-            if (obj is _common.BaseInteractableObject)
+            if (obj is BaseInteractableObject)
             {
                 // Do something
             }

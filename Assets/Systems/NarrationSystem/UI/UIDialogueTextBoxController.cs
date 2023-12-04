@@ -5,6 +5,7 @@ using Systems.NarrationSystem.Dialogue.Data;
 using Systems.NarrationSystem.Dialogue.Data.Nodes;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 #endregion
 
@@ -27,6 +28,13 @@ namespace Systems.NarrationSystem.UI
         [SerializeField]
         private DialogueChannel m_DialogueChannel;
 
+        [SerializeField]
+        private TextMeshProUGUI m_ContinueText;
+
+        [Header("Input Actions")]
+        [SerializeField]
+        private InputActionReference m_SubmitAction;
+
         private bool m_ListenToInput = false;
         private DialogueNode m_NextNode = null;
 
@@ -39,15 +47,21 @@ namespace Systems.NarrationSystem.UI
             m_ChoicesBoxTransform.gameObject.SetActive(false);
         }
 
+        private void OnEnable()
+        {
+            m_SubmitAction.action.Enable();
+            m_SubmitAction.action.performed += OnSubmitAction;
+        }
+
         private void OnDestroy()
         {
             m_DialogueChannel.OnDialogueNodeEnd -= OnDialogueNodeEnd;
             m_DialogueChannel.OnDialogueNodeStart -= OnDialogueNodeStart;
         }
 
-        private void Update()
+        private void OnSubmitAction(InputAction.CallbackContext context)
         {
-            if (m_ListenToInput && Input.GetButtonDown("Submit"))
+            if (m_ListenToInput)
             {
                 m_DialogueChannel.RaiseRequestDialogueNode(m_NextNode);
             }
@@ -55,6 +69,15 @@ namespace Systems.NarrationSystem.UI
 
         private void OnDialogueNodeStart(DialogueNode node)
         {
+            if (node is ChoiceDialogueNode)
+            {
+                m_ContinueText.text = "Select a choice";
+            }
+            else
+            {
+                m_ContinueText.text = "Press Enter to continue";
+            }
+            m_ContinueText.gameObject.SetActive(true);
             gameObject.SetActive(true);
 
             m_DialogueText.text = node.DialogueLine.Text;
@@ -75,6 +98,7 @@ namespace Systems.NarrationSystem.UI
                 Destroy(child.gameObject);
             }
 
+            m_ContinueText.gameObject.SetActive(false);
             gameObject.SetActive(false);
             m_ChoicesBoxTransform.gameObject.SetActive(false);
         }
@@ -94,6 +118,12 @@ namespace Systems.NarrationSystem.UI
                 UIDialogueChoiceController newChoice = Instantiate(m_ChoiceControllerPrefab, m_ChoicesBoxTransform);
                 newChoice.Choice = choice;
             }
+        }
+
+        private void OnDisable()
+        {
+            m_SubmitAction.action.performed -= OnSubmitAction;
+            m_SubmitAction.action.Disable();
         }
     }
 }

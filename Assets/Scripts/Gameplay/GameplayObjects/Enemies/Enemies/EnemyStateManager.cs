@@ -1,8 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using Gameplay.Config;
 using UnityEngine;
 using UnityEngine.AI;
+
+#endregion
 
 [RequireComponent(typeof(NavMeshAgent))]
 public class EnemyStateManager : MonoBehaviour
@@ -13,12 +15,12 @@ public class EnemyStateManager : MonoBehaviour
     EnemyChaseState enemyChaseState;
     EnemyAttackState enemyAttackState;
 
-    private void Awake() 
+    private void Awake()
     {
         RoundManager.Instance.enemiesInScene.Add(this);
     }
 
-    private void Start() 
+    private void Start()
     {
         enemyIdleState = GetComponent<EnemyIdleState>();
         enemyChaseState = GetComponent<EnemyChaseState>();
@@ -26,8 +28,8 @@ public class EnemyStateManager : MonoBehaviour
 
         currentState = enemyIdleState;
     }
-    
-    private void Update() 
+
+    private void Update()
     {
         RunStateMachine();
         Debug.Log(currentState);
