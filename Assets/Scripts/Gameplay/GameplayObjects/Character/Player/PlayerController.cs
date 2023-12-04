@@ -68,8 +68,12 @@ namespace Gameplay.GameplayObjects.Character.Player
         [Header("Stamina Settings")]
         [SerializeField]
         private float coolDown;
-        [SerializeField] float abilityTime;
-        [SerializeField] GameObject[] skins;
+
+        [SerializeField]
+        float abilityTime;
+
+        [SerializeField]
+        GameObject[] skins;
 
         #endregion
 
