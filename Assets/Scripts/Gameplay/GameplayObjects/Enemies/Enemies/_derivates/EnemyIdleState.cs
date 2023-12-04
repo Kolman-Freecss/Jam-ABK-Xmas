@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using UnityEngine;
+
+#endregion
 
 public class EnemyIdleState : EnemyState
 {
@@ -10,9 +12,10 @@ public class EnemyIdleState : EnemyState
     bool playerDetected;
 
     [Header("Debug")]
-    [SerializeField] bool debugChangeState;
+    [SerializeField]
+    bool debugChangeState;
 
-    private void OnValidate() 
+    private void OnValidate()
     {
         if (debugChangeState)
         {
@@ -21,10 +24,10 @@ public class EnemyIdleState : EnemyState
         }
     }
 
-    private void Start() 
+    private void Start()
     {
         enemyChaseState = GetComponent<EnemyChaseState>();
-        enemyDetection = GetComponent<EnemyDetection>();
+        enemyDetection = GetComponentInChildren<EnemyDetection>();
     }
 
     //if player seen, change to chase, otherwise just returns idle
@@ -32,10 +35,9 @@ public class EnemyIdleState : EnemyState
     {
         if (playerDetected)
             return enemyChaseState;
-
         else
             enemyDetection.OnPlayerDetection();
-            return this;
+        return this;
     }
 
     public void OnPlayerDetected()

@@ -4415,7 +4415,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Model designer
+  m_text: 3D ARTIST
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 69dcc4cfbe3f7154ab9e601bbf9fec39, type: 2}
   m_sharedMaterial: {fileID: -466885322316925189, guid: 69dcc4cfbe3f7154ab9e601bbf9fec39, type: 2}
