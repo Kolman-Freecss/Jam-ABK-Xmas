@@ -1,5 +1,6 @@
 ﻿#region
 
+using Gameplay.Config;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using CharacterController = Gameplay.GameplayObjects.Character._common.CharacterController;
@@ -79,6 +80,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         #region Member Variables
 
+        private PlayerBehaviour m_PlayerBehaviour;
         private float verticalVelocity = 0f;
         private Vector3 velocityToApply = Vector3.zero; // World
         #endregion
@@ -94,10 +96,12 @@ namespace Gameplay.GameplayObjects.Character.Player
         protected override void GetComponentReferences()
         {
             base.GetComponentReferences();
+            TryGetComponent(out m_PlayerBehaviour);
         }
 
         private void OnEnable()
         {
+            GameManager.Instance.m_player = this;
             move.action.Enable();
             jump.action.Enable();
             sprint.action.Enable();
@@ -292,6 +296,12 @@ namespace Gameplay.GameplayObjects.Character.Player
             sprint.action.Disable();
             crouch.action.Disable();
         }
+
+        #endregion
+
+        #region Getter & Setter
+
+        public PlayerBehaviour PlayerBehaviour => m_PlayerBehaviour;
 
         #endregion
     }

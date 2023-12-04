@@ -110,12 +110,14 @@ namespace Gameplay.Config
         public void OnPlayerEnterHouse(HouseController houseController)
         {
             m_CurrentHouse = houseController;
+            GameManager.Instance.m_player.PlayerBehaviour.OnPlayerEnterHouse(houseController);
             Debug.Log("Player entered house");
         }
 
         public void OnPlayerExitHouse(HouseController houseController)
         {
             m_CurrentHouse = null;
+            GameManager.Instance.m_player.PlayerBehaviour.OnPlayerExitHouse(houseController);
             Debug.Log("Player exited house");
         }
 
