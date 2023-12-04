@@ -101,12 +101,16 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private void OnEnable()
         {
-            GameManager.Instance.m_player = this;
             move.action.Enable();
             jump.action.Enable();
             sprint.action.Enable();
             crouch.action.Enable();
             disguise.action.Enable();
+        }
+
+        private void Start()
+        {
+            GameManager.Instance.m_player = this;
         }
 
         #endregion
