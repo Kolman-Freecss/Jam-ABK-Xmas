@@ -151,7 +151,7 @@ Transform:
   m_GameObject: {fileID: 1923344924149031744}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -326,6 +326,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.x
       value: 200
       objectReference: {fileID: 0}
+    - target: {fileID: 5950118225148719192, guid: 4975230f328267541b30f630a0375708, type: 3}
+      propertyPath: m_Center.y
+      value: 0.9
+      objectReference: {fileID: 0}
     - target: {fileID: 6277922348495824643, guid: 4975230f328267541b30f630a0375708, type: 3}
       propertyPath: m_fontSize
       value: 50
@@ -341,10 +345,6 @@ PrefabInstance:
     - target: {fileID: 6606721612878497296, guid: 4975230f328267541b30f630a0375708, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 6788698238428899486, guid: 4975230f328267541b30f630a0375708, type: 3}
-      propertyPath: groundedOffset
-      value: 0.62
       objectReference: {fileID: 0}
     - target: {fileID: 6919442206098593169, guid: 4975230f328267541b30f630a0375708, type: 3}
       propertyPath: m_fontAsset
@@ -485,7 +485,7 @@ MonoBehaviour:
   cameraZoom: {fileID: 0}
   maxFieldOfView: 67
   scrollbar: {fileID: 6456160944137660901}
-  zoom: {fileID: 0}
+  scrollBarDefaultValue: 0.5
 --- !u!4 &6971140501100232437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8121333605680163890, guid: 4975230f328267541b30f630a0375708, type: 3}
@@ -499,6 +499,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4068851875124418818}
     m_Modifications:
+    - target: {fileID: 829582872451444282, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 4.454823
+      objectReference: {fileID: 0}
+    - target: {fileID: 829582872451444282, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -3.46442
+      objectReference: {fileID: 0}
+    - target: {fileID: 1062715909391247004, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.8850741
+      objectReference: {fileID: 0}
+    - target: {fileID: 1062715909391247004, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.550262
+      objectReference: {fileID: 0}
     - target: {fileID: 2451827029275802560, guid: f1132947612967f4aae7fec7ba353352, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -551,6 +567,22 @@ PrefabInstance:
       propertyPath: m_Follow
       value: 
       objectReference: {fileID: 6971140501100232437}
+    - target: {fileID: 6640026719876086851, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 4.454823
+      objectReference: {fileID: 0}
+    - target: {fileID: 6640026719876086851, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -3.46442
+      objectReference: {fileID: 0}
+    - target: {fileID: 9003793916478888835, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_FollowOffset.y
+      value: 4.454823
+      objectReference: {fileID: 0}
+    - target: {fileID: 9003793916478888835, guid: f1132947612967f4aae7fec7ba353352, type: 3}
+      propertyPath: m_FollowOffset.z
+      value: -3.46442
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
