@@ -45,6 +45,12 @@ namespace _Utils_
         float textFontSize = 20f;
 
         [SerializeField]
+        bool changeTextFormat = false;
+
+        [SerializeField]
+        bool changeTextBoxSize = false;
+
+        [SerializeField]
         float textWidthSize = 200f;
 
         [SerializeField]
@@ -67,11 +73,15 @@ namespace _Utils_
                     continue;
                 }
                 Undo.RecordObject(textObject, "Changed Font");
-                textObject.horizontalAlignment = HorizontalAlignmentOptions.Center;
-                textObject.verticalAlignment = VerticalAlignmentOptions.Middle;
-                textObject.fontSize = textFontSize;
-                textObject.enableAutoSizing = false;
-                textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(textWidthSize, textHeightSize);
+                if (changeTextFormat)
+                {
+                    textObject.horizontalAlignment = HorizontalAlignmentOptions.Center;
+                    textObject.verticalAlignment = VerticalAlignmentOptions.Middle;
+                    textObject.fontSize = textFontSize;
+                    textObject.enableAutoSizing = false;
+                }
+                if (changeTextBoxSize)
+                    textObject.GetComponent<RectTransform>().sizeDelta = new Vector2(textWidthSize, textHeightSize);
             }
         }
 
