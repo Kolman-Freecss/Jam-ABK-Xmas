@@ -1,5 +1,7 @@
 ﻿#region
 
+using Gameplay.GameplayObjects.RoundComponents;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using CharacterController = Gameplay.GameplayObjects.Character._common.CharacterController;
@@ -10,6 +12,7 @@ namespace Player
 {
     public class PlayerController : CharacterController
     {
+       
         public enum MovementMode
         {
             RelativeToCharacter,
@@ -18,12 +21,17 @@ namespace Player
 
         public enum OrientationMode
         {
-            OrientateToCameraForward,
-            OrientateToMovementForward,
-            OrientateToTarget
+            OrientateToCameraForward
+           
         };
 
         #region Inspector Variables
+
+
+        [Header("Checkpoint")]
+        CheckpointSystem checkpointSystem;
+        public Vector3 playerInitialPosition;
+
 
         [Header("Movement Inputs")] [SerializeField]
         private InputActionReference move;
@@ -34,11 +42,12 @@ namespace Player
 
         [SerializeField] private InputActionReference crouch;
 
+
         [Header("Orientation Settings")] [SerializeField]
         float angularSpeed = 360f;
 
-        [SerializeField] private Transform orientationTarget;
-        [SerializeField] private OrientationMode orientationMode = OrientationMode.OrientateToMovementForward;
+        
+        [SerializeField] private OrientationMode orientationMode;
 
         [Header("Movement Settings")] [SerializeField]
         private MovementMode movementMode = MovementMode.RelativeToCamera;
@@ -56,10 +65,17 @@ namespace Player
 
         private void Awake()
         {
+            playerInitialPosition = transform.position;
+
+            checkpointSystem = FindObjectOfType<CheckpointSystem>();
             base.AssignAnimationIDs();
             GetComponentReferences();
-        }
 
+        }
+        public void SetPosition(Vector3 p)
+        {
+            transform.position = p;
+        }
         protected override void GetComponentReferences()
         {
             base.GetComponentReferences();
@@ -165,16 +181,6 @@ namespace Player
                 case OrientationMode.OrientateToCameraForward:
                     desiredDirection = Camera.main.transform.forward;
                     break;
-                case OrientationMode.OrientateToMovementForward:
-                    if (velocityToApply.sqrMagnitude > 0f)
-                    {
-                        desiredDirection = velocityToApply.normalized;
-                    }
-
-                    break;
-                case OrientationMode.OrientateToTarget:
-                    desiredDirection = orientationTarget.transform.position - transform.position;
-                    break;
             }
 
             float angularDistance = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
@@ -185,6 +191,21 @@ namespace Player
             transform.rotation = transform.rotation * rotationToApply;
         }
 
+
+        #endregion
+        #region CheckPoint
+        public void ResetPlayer()
+        {
+            if (checkpointSystem.CheckpointAvailable())
+            {
+                transform.position = checkpointSystem.GetCurrentCheckpointPosition();
+            }
+            else
+            {
+                transform.position = playerInitialPosition;
+            }
+
+        }
         #endregion
 
         #region Destructor
