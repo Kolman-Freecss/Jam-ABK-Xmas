@@ -227,11 +227,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 624bcccd791d1a24db1fe57d13ae1fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  changeCamera1: {fileID: 1982512071713720078, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
-  changeCamera2: {fileID: -6212380540773152370, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
-  cameraList:
-  - {fileID: 0}
-  - {fileID: 0}
+  change: {fileID: 0}
+  listaCamaras: []
 --- !u!114 &2407507369819673457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -247,7 +244,7 @@ MonoBehaviour:
   cameraZoom: {fileID: 0}
   maxFieldOfView: 67
   scrollbar: {fileID: 5301394919158168354}
-  scrollBarDefaultValue: 0.5
+  zoom: {fileID: 0}
 --- !u!82 &5214125902373642565
 AudioSource:
   m_ObjectHideFlags: 0
