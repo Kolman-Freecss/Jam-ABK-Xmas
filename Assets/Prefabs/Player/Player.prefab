@@ -48,8 +48,6 @@ GameObject:
   - component: {fileID: 1269664541195189130}
   - component: {fileID: 7621625198901092640}
   - component: {fileID: 605851543962964762}
-  - component: {fileID: 7150389175289700209}
-  - component: {fileID: 2407507369819673457}
   - component: {fileID: 5214125902373642565}
   m_Layer: 0
   m_Name: Player
@@ -215,39 +213,6 @@ MonoBehaviour:
   m_playerCostumeEffect: {fileID: 100002, guid: c17698f595aa942cab4326f0ffaf25c2, type: 3}
   m_costumeAudioClip: {fileID: 0}
   timeToChangeCostume: 4
---- !u!114 &7150389175289700209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6606721612878497296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 624bcccd791d1a24db1fe57d13ae1fb9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  changeCamera1: {fileID: 1982512071713720078, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
-  changeCamera2: {fileID: -6212380540773152370, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
-  cameraList:
-  - {fileID: 0}
-  - {fileID: 0}
---- !u!114 &2407507369819673457
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6606721612878497296}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74886ae32235bcb4aabe73987904570c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cameraZoom: {fileID: 0}
-  maxFieldOfView: 67
-  scrollbar: {fileID: 5301394919158168354}
-  scrollBarDefaultValue: 0.5
 --- !u!82 &5214125902373642565
 AudioSource:
   m_ObjectHideFlags: 0
@@ -713,17 +678,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &5301394919158168354 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8406984267845730897, guid: 12b345776d54922429fa870cb346a4dd, type: 3}
-  m_PrefabInstance: {fileID: 4411782920579430771}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a4db7a114972834c8e4117be1d82ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!223 &6965819449874990519 stripped
