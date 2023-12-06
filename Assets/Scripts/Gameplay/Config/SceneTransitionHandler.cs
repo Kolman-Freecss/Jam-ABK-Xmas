@@ -11,7 +11,8 @@ namespace Gameplay.Config
     {
         #region Inspector Variables
 
-        [SerializeField] public SceneStates DefaultScene = SceneStates.Home;
+        [SerializeField]
+        public SceneStates DefaultScene = SceneStates.Home;
 
         #endregion
 
@@ -36,6 +37,7 @@ namespace Gameplay.Config
             InitBootstrap,
             Home,
             Home_Starting,
+            SplashScreen,
             Credits,
             Settings,
             InGame_City,
@@ -93,10 +95,12 @@ namespace Gameplay.Config
             if (sceneState == SceneStates.InGame_City)
             {
                 Cursor.lockState = CursorLockMode.Locked;
+                Cursor.visible = false;
             }
             else
             {
                 Cursor.lockState = CursorLockMode.None;
+                Cursor.visible = true;
             }
         }
 
