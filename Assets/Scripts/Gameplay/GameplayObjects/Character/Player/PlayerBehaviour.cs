@@ -3,10 +3,14 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Data.SO.ThrowableItem;
 using Entities._Utils_;
 using Gameplay.Config;
+using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
 using UnityEngine;
+using UnityEngine.Animations;
+using UnityEngine.InputSystem;
 
 #endregion
 
@@ -15,10 +19,16 @@ namespace Gameplay.GameplayObjects.Character.Player
     [RequireComponent(typeof(PlayerController))]
     public class PlayerBehaviour : MonoBehaviour
     {
-        public enum PlayerCostume
+        public enum PlayerCostumeType
         {
             Krampus,
             Santa
+        }
+
+        public enum PresentType
+        {
+            Birch,
+            Coal
         }
 
         #region Inspector Variables
@@ -27,9 +37,22 @@ namespace Gameplay.GameplayObjects.Character.Player
         [SerializeField]
         private Canvas m_PlayerCanvas;
 
+        [SerializeField]
+        private InputActionReference m_throwItemAction; // Click
+
+        [SerializeField]
+        private InputActionReference m_changeThrowItemAction; // Number key 1
+
+        [SerializeField]
+        private InputActionReference m_storeThrowItemAction; // Number key 2
+
+        [Header("Player body")]
+        [SerializeField]
+        private GameObject m_playerRightHand;
+
         [Header("Costume Settings")]
         [SerializeField]
-        private List<SerializableDictionaryEntry<PlayerCostume, GameObject>> m_playerCostumes;
+        private List<SerializableDictionaryEntry<PlayerCostumeType, GameObject>> m_playerCostumes;
 
         [SerializeField]
         private GameObject m_playerCostumeEffect;
@@ -37,7 +60,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         [SerializeField]
         private AudioClip m_costumeAudioClip;
 
-        [Obsolete("This is a dirty mockup to test the costume system, this should be placed into RoundManager")]
+        [Obsolete("This is a dirty mockup to test the costumeType system, this should be placed into RoundManager")]
         [SerializeField]
         private float timeToChangeCostume = 4f;
 
@@ -47,6 +70,11 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private GameObject m_playerCurrentCostume;
         private PlayerController m_playerController;
+        private List<ThrowableItem> m_throwableItems = new();
+        private Dictionary<PresentType, GameObject> m_presentPrefabs = new();
+        private ThrowableItem m_currentThrowableItem;
+
+        public Action<ThrowableItem> OnThrowItemAction;
 
         #endregion
 
@@ -55,21 +83,123 @@ namespace Gameplay.GameplayObjects.Character.Player
         private void Awake()
         {
             m_playerController = GetComponent<PlayerController>();
+            PresentType[] presentTypes = (PresentType[])Enum.GetValues(typeof(PresentType));
+            foreach (PresentType presentType in presentTypes)
+            {
+                m_presentPrefabs.Add(presentType, Resources.Load<GameObject>($"Prefabs/Presents/{presentType}"));
+            }
+        }
+
+        private void OnEnable()
+        {
+            m_throwItemAction.action.Enable();
+            m_changeThrowItemAction.action.Enable();
+            m_storeThrowItemAction.action.Enable();
         }
 
         private void Start()
         {
-            SetPlayerCostume(PlayerCostume.Krampus);
+            m_throwItemAction.action.performed += ctx => OnThrowItem();
+            m_changeThrowItemAction.action.performed += ctx => OnChangeThrowItem();
+            m_storeThrowItemAction.action.performed += ctx => OnStoreThrowItem();
+            SetPlayerCostume(PlayerCostumeType.Krampus);
         }
 
-        private void SetPlayerCostume(PlayerCostume costume)
+        #endregion
+
+        #region Logic
+
+        /// <summary>
+        /// Called when the player grabs a present. (This is called from the PresentInteractable)
+        /// </summary>
+        public void OnPresentGrab(PresentInteractable present)
+        {
+            // Sum the present value to the player's score
+            //RoundManager.Instance.m_playerScore += present.PresentValue;
+            Destroy(present.gameObject);
+            GameObject birch = Instantiate(
+                m_presentPrefabs.GetValueOrDefault(PresentType.Birch),
+                present.transform.position,
+                Quaternion.identity
+            );
+            //TODO: Some sound here
+        }
+
+        /// <summary>
+        /// Called when the player grabs a throwable item. (This is called from the ThrowableItemInteractable)
+        /// </summary>
+        public void OnThrowableItemGrab(ThrowableItemInteractable item)
+        {
+            m_throwableItems.Add(item.ThrowableItem);
+            Destroy(item.gameObject);
+        }
+
+        public void OnChangeThrowItem()
+        {
+            if (m_throwableItems.Count > 0)
+            {
+                ThrowableItem previous = m_currentThrowableItem;
+                m_currentThrowableItem = m_throwableItems[0];
+                m_throwableItems.RemoveAt(0);
+                m_throwableItems.Add(previous);
+                ShowThrowableItem(true);
+            }
+        }
+
+        public void OnStoreThrowItem()
+        {
+            ShowThrowableItem(false);
+            m_currentThrowableItem = null;
+        }
+
+        /// <summary>
+        /// OnThrowItem is called when the player throws an item.
+        /// This will alert the RoundManager or Enemy that the player has thrown an item.
+        /// </summary>
+        public void OnThrowItem()
+        {
+            if (m_currentThrowableItem == null)
+            {
+                return;
+            }
+            m_currentThrowableItem.ItemPrefab.GetComponent<ParentConstraint>().constraintActive = false;
+            m_currentThrowableItem.ItemPrefab.GetComponent<Rigidbody>().isKinematic = false;
+
+            OnThrowItemAction?.Invoke(m_currentThrowableItem);
+        }
+
+        private void ShowThrowableItem(bool show)
+        {
+            if (m_currentThrowableItem != null && show)
+            {
+                ParentConstraint parentConstraint = m_currentThrowableItem.ItemPrefab.GetComponent<ParentConstraint>();
+                if (parentConstraint == null)
+                {
+                    throw new Exception("PlayerBehaviour: ParentConstraint of throwable is null");
+                }
+                parentConstraint.SetTranslationOffset(0, m_playerRightHand.transform.position);
+                parentConstraint.constraintActive = true;
+                m_currentThrowableItem.ItemPrefab.SetActive(true);
+            }
+            else
+            {
+                m_currentThrowableItem.ItemPrefab.SetActive(false);
+            }
+        }
+
+        private void SetPlayerCostume(PlayerCostumeType costumeType)
         {
             if (m_playerCurrentCostume != null)
             {
                 m_playerCurrentCostume.SetActive(false);
             }
-            m_playerCurrentCostume = m_playerCostumes.Find(x => x.Key == costume).Value;
+            m_playerCurrentCostume = m_playerCostumes.Find(x => x.Key == costumeType).Value;
             m_playerCurrentCostume.SetActive(true);
+        }
+
+        public void OnPlayerCallHouse()
+        {
+            Costume(PlayerCostumeType.Santa);
         }
 
         private void HidePlayerCostume()
@@ -77,12 +207,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             m_playerCurrentCostume.SetActive(false);
         }
 
-        public void OnPlayerCallHouse()
-        {
-            Costume(PlayerCostume.Santa);
-        }
-
-        public void Costume(PlayerCostume costume)
+        private void Costume(PlayerCostumeType costumeType)
         {
             m_playerController.enabled = false;
             HidePlayerCostume();
@@ -106,13 +231,9 @@ namespace Gameplay.GameplayObjects.Character.Player
                 m_playerController.enabled = true;
                 m_playerController.EffectsAudioSource.Stop();
                 //TODO: Make some sound and animation too.
-                SetPlayerCostume(costume);
+                SetPlayerCostume(costumeType);
             }
         }
-
-        #endregion
-
-        #region Logic
 
         public void OnPlayerEnterHouse(HouseController house)
         {
@@ -124,6 +245,20 @@ namespace Gameplay.GameplayObjects.Character.Player
         {
             m_PlayerCanvas.gameObject.SetActive(true);
             house.HouseCanvas.gameObject.SetActive(false);
+        }
+
+        #endregion
+
+        #region Destructor
+
+        private void OnDisable()
+        {
+            m_throwItemAction.action.performed -= ctx => OnThrowItem();
+            m_changeThrowItemAction.action.performed -= ctx => OnChangeThrowItem();
+            m_storeThrowItemAction.action.performed -= ctx => OnStoreThrowItem();
+            m_throwItemAction.action.Disable();
+            m_changeThrowItemAction.action.Disable();
+            m_storeThrowItemAction.action.Disable();
         }
 
         #endregion
