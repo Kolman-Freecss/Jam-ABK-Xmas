@@ -85,6 +85,11 @@ namespace Gameplay.Config
 
         public void StartBackgroundMusic(BackgroundMusic backgroundMusic)
         {
+            if (backgroundAudioSources == null)
+            {
+                Debug.LogWarning("No Background Audio Source found");
+                return;
+            }
             AudioClip clip = BackgroundMusicClips.Find(x => x.Key == backgroundMusic).Value;
             if (clip != null)
             {
@@ -102,13 +107,23 @@ namespace Gameplay.Config
         public void SetEffectsVolume(float volume)
         {
             EffectsAudioVolume = volume;
-            uiAudioSource.volume = volume / 100;
+            if (uiAudioSource != null)
+                uiAudioSource.volume = volume / 100;
+            else
+            {
+                Debug.LogWarning("No UI Audio Source found");
+            }
         }
 
         public void SetMusicVolume(float volume)
         {
             MusicAudioVolume = volume;
-            backgroundAudioSources.volume = volume / 100;
+            if (backgroundAudioSources != null)
+                backgroundAudioSources.volume = volume / 100;
+            else
+            {
+                Debug.LogWarning("No Background Audio Source found");
+            }
         }
 
         public void SetMasterVolume(float volume)

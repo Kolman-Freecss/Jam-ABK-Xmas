@@ -145,20 +145,25 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
 
         private void ShowThrowableItem(bool show)
         {
-            if (m_currentThrowableItem != null && show)
+            if (m_currentThrowableItem != null)
             {
-                ParentConstraint parentConstraint = m_currentThrowableItem.ItemPrefab.GetComponent<ParentConstraint>();
-                if (parentConstraint == null)
+                if (show)
                 {
-                    throw new Exception("PlayerBehaviour: ParentConstraint of throwable is null");
+                    ParentConstraint parentConstraint = m_currentThrowableItem
+                        .ItemPrefab
+                        .GetComponent<ParentConstraint>();
+                    if (parentConstraint == null)
+                    {
+                        throw new Exception("PlayerBehaviour: ParentConstraint of throwable is null");
+                    }
+                    parentConstraint.SetTranslationOffset(0, m_playerRightHand.transform.position);
+                    parentConstraint.constraintActive = true;
+                    m_currentThrowableItem.ItemPrefab.SetActive(true);
                 }
-                parentConstraint.SetTranslationOffset(0, m_playerRightHand.transform.position);
-                parentConstraint.constraintActive = true;
-                m_currentThrowableItem.ItemPrefab.SetActive(true);
-            }
-            else
-            {
-                m_currentThrowableItem.ItemPrefab.SetActive(false);
+                else
+                {
+                    m_currentThrowableItem.ItemPrefab.SetActive(false);
+                }
             }
         }
 
