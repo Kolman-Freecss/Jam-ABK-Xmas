@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using Gameplay.Config;
 using UnityEngine;
@@ -20,8 +20,6 @@ namespace Gameplay.GameplayObjects.Character.Player
         public enum OrientationMode
         {
             OrientateToCameraForward,
-            OrientateToMovementForward,
-            OrientateToTarget
         };
 
         public enum PlayerState
@@ -56,7 +54,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         private Transform orientationTarget;
 
         [SerializeField]
-        private OrientationMode orientationMode = OrientationMode.OrientateToMovementForward;
+        private OrientationMode orientationMode;
 
         [Header("Movement Settings")]
         [SerializeField]
@@ -232,16 +230,7 @@ namespace Gameplay.GameplayObjects.Character.Player
                 case OrientationMode.OrientateToCameraForward:
                     desiredDirection = Camera.main.transform.forward;
                     break;
-                case OrientationMode.OrientateToMovementForward:
-                    if (velocityToApply.sqrMagnitude > 0f)
-                    {
-                        desiredDirection = velocityToApply.normalized;
-                    }
-
-                    break;
-                case OrientationMode.OrientateToTarget:
-                    desiredDirection = orientationTarget.transform.position - transform.position;
-                    break;
+               
             }
 
             float angularDistance = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
