@@ -2,6 +2,7 @@
 
 using UnityEngine;
 using UnityEngine.UI;
+
 #endregion
 
 namespace Gameplay.GameplayObjects.Character._common
@@ -12,31 +13,45 @@ namespace Gameplay.GameplayObjects.Character._common
     {
         #region Inspector Variables
 
-        [Header("Movement Settings")] [Tooltip("Movement speed of the player")] [SerializeField]
+        [Header("Audio Settings")]
+        [SerializeField]
+        protected AudioSource m_effectsAudioSource;
+
+        [Header("Movement Settings")]
+        [Tooltip("Movement speed of the player")]
+        [SerializeField]
         protected float planeSpeed = 3f; // m/s
 
-        [Tooltip("Sprint speed of the player")] [SerializeField]
+        [Tooltip("Sprint speed of the player")]
+        [SerializeField]
         protected float sprintSpeed = 12f;
 
-        [Tooltip("Speed crouch of the Character")] [SerializeField]
+        [Tooltip("Speed crouch of the Character")]
+        [SerializeField]
         protected float crouchSpeed = 3f;
 
-        [Tooltip ("Maximun stamina of the player")] [SerializeField] 
+        [Tooltip("Maximun stamina of the player")]
+        [SerializeField]
         protected float maxStamina = 100f;
 
-        [Tooltip("Maximun stamina of the player")] [SerializeField]
+        [Tooltip("Maximun stamina of the player")]
+        [SerializeField]
         protected float currentStamina;
 
-        [Tooltip("Stamina cost when sprinting")] [SerializeField] 
+        [Tooltip("Stamina cost when sprinting")]
+        [SerializeField]
         protected float sprintStaminaCost = 20f;
 
-        [Tooltip("Stamina recovery speed")] [SerializeField] 
+        [Tooltip("Stamina recovery speed")]
+        [SerializeField]
         protected float staminaRecoveryRate = 2f;
 
-        [Tooltip("Stamina recovery speed")] [SerializeField] 
+        [Tooltip("Stamina recovery speed")]
+        [SerializeField]
         protected Slider staminaSlider;
 
-        [Tooltip("How fast the character turns to face movement direction")] [Range(0.0f, 0.3f)]
+        [Tooltip("How fast the character turns to face movement direction")]
+        [Range(0.0f, 0.3f)]
         public float rotationSmoothTime = 0.12f;
 
         [Tooltip("Time required to pass before entering the fall state. Useful for walking down stairs")]
@@ -45,17 +60,21 @@ namespace Gameplay.GameplayObjects.Character._common
         [Tooltip("The character uses its own gravity value. The engine default is -9.81f")]
         public float gravity = -9.8f;
 
-        [Header("Player Grounded")] [Tooltip("What layers the character uses as ground")]
+        [Header("Player Grounded")]
+        [Tooltip("What layers the character uses as ground")]
         public LayerMask groundLayers;
 
-        [Tooltip("Useful for rough ground")] public float groundedOffset = -0.14f;
+        [Tooltip("Useful for rough ground")]
+        public float groundedOffset = -0.14f;
 
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float groundedRadius = 0.28f;
 
-        [Tooltip("Jump Height")] public float jumpHeight = 1.2f;
+        [Tooltip("Jump Height")]
+        public float jumpHeight = 1.2f;
 
-        [Tooltip("Jump Speed")] public float jumpSpeed = 8f;
+        [Tooltip("Jump Speed")]
+        public float jumpSpeed = 8f;
 
         [Space(10)]
         [Tooltip("Time required to pass before being able to jump again. Set to 0f to instantly jump again")]
@@ -66,7 +85,9 @@ namespace Gameplay.GameplayObjects.Character._common
         #region Member Variables
 
         protected UnityEngine.CharacterController m_characterController;
-        [HideInInspector] public float m_currentSpeed;
+
+        [HideInInspector]
+        public float m_currentSpeed;
 
         #endregion
 
@@ -98,10 +119,17 @@ namespace Gameplay.GameplayObjects.Character._common
         protected void GroundCheck()
         {
             // set sphere position, with offset
-            Vector3 spherePosition = new Vector3(transform.position.x, transform.position.y - groundedOffset,
-                transform.position.z);
-            m_isGrounded = Physics.CheckSphere(spherePosition, groundedRadius, groundLayers,
-                QueryTriggerInteraction.Ignore);
+            Vector3 spherePosition = new Vector3(
+                transform.position.x,
+                transform.position.y - groundedOffset,
+                transform.position.z
+            );
+            m_isGrounded = Physics.CheckSphere(
+                spherePosition,
+                groundedRadius,
+                groundLayers,
+                QueryTriggerInteraction.Ignore
+            );
             if (HasAnimator)
             {
                 Animator.SetBool(AnimIDIsGrounded, m_isGrounded);
@@ -114,7 +142,7 @@ namespace Gameplay.GameplayObjects.Character._common
                 StopMovement();
             else
                 ResetSpeed();
-            //TODO: Animation here 
+            //TODO: Animation here
             // if (HasAnimator)
             // {
             //     Animator.SetBool(AnimIDHide, hide);
@@ -128,7 +156,7 @@ namespace Gameplay.GameplayObjects.Character._common
             else
                 ResetSpeed();
 
-            //TODO: Animation here 
+            //TODO: Animation here
             // if (HasAnimator)
             // {
             //     Animator.SetBool(AnimIDHide, hide);
@@ -159,18 +187,23 @@ namespace Gameplay.GameplayObjects.Character._common
             Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
             Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-            if (m_isGrounded) Gizmos.color = transparentGreen;
-            else Gizmos.color = transparentRed;
+            if (m_isGrounded)
+                Gizmos.color = transparentGreen;
+            else
+                Gizmos.color = transparentRed;
 
             // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
             Gizmos.DrawSphere(
                 new Vector3(transform.position.x, transform.position.y - groundedOffset, transform.position.z),
-                groundedRadius);
+                groundedRadius
+            );
         }
 
         #endregion
 
         #region Getter & Setters
+
+        public AudioSource EffectsAudioSource => m_effectsAudioSource;
 
         #endregion
     }

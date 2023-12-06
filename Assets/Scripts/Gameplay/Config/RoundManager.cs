@@ -87,17 +87,12 @@ namespace Gameplay.Config
         {
             try
             {
-                Time.timeScale = 0f;
                 DialogueInstigator.Instance.FlowChannel.OnFlowStateChanged += OnFlowStateChanged;
                 DialogueInstigator.Instance.DialogueChannel.RaiseRequestDialogue(m_RoundStartDialogue);
             }
             catch (Exception e)
             {
                 Debug.LogError("RoundManager: Error while initializing narration round: " + e);
-            }
-            finally
-            {
-                Time.timeScale = 1f;
             }
         }
 

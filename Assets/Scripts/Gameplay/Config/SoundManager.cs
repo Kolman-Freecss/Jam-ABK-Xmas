@@ -122,6 +122,12 @@ namespace Gameplay.Config
             uiAudioSource.PlayOneShot(ButtonClickSound);
         }
 
+        public void PlayAudioSourceEffect(AudioSource audioSource)
+        {
+            audioSource.volume = EffectsAudioVolume / 100;
+            audioSource.Play();
+        }
+
         public void PlayWorldEffectAtPosition(Vector3 position, AudioClip clip)
         {
             AudioSource.PlayClipAtPoint(clip, position, EffectsAudioVolume / 100);
