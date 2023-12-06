@@ -89,8 +89,11 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
             {
                 ThrowableItem previous = m_currentThrowableItem;
                 m_currentThrowableItem = m_throwableItems[0];
-                m_throwableItems.RemoveAt(0);
-                m_throwableItems.Add(previous);
+                if (previous != null)
+                {
+                    m_throwableItems.RemoveAt(0);
+                    m_throwableItems.Add(previous);
+                }
                 ShowThrowableItem(true);
             }
         }
@@ -149,6 +152,9 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
             {
                 if (show)
                 {
+                    m_currentThrowableItem = Instantiate(m_currentThrowableItem.ItemPrefab, m_playerRightHand.transform)
+                        .gameObject
+                        .GetComponent<ThrowableItem>();
                     ParentConstraint parentConstraint = m_currentThrowableItem
                         .ItemPrefab
                         .GetComponent<ParentConstraint>();
@@ -156,13 +162,15 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
                     {
                         throw new Exception("PlayerBehaviour: ParentConstraint of throwable is null");
                     }
-                    parentConstraint.SetTranslationOffset(0, m_playerRightHand.transform.position);
+                    parentConstraint.AddSource(
+                        new ConstraintSource() { sourceTransform = m_playerRightHand.transform, weight = 1 }
+                    );
                     parentConstraint.constraintActive = true;
-                    m_currentThrowableItem.ItemPrefab.SetActive(true);
+                    parentConstraint.enabled = true;
                 }
                 else
                 {
-                    m_currentThrowableItem.ItemPrefab.SetActive(false);
+                    Destroy(m_currentThrowableItem);
                 }
             }
         }

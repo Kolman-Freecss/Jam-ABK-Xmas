@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Entities._Utils_;
 using Gameplay.Config;
 using Gameplay.GameplayObjects.Interactables._derivatives;
@@ -54,7 +55,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private GameObject m_playerCurrentCostume;
         private PlayerController m_playerController;
-        private Dictionary<PresentType, GameObject> m_presentPrefabs = new();
+        private Dictionary<PresentType, List<GameObject>> m_presentPrefabs = new();
 
         #endregion
 
@@ -64,9 +65,11 @@ namespace Gameplay.GameplayObjects.Character.Player
         {
             m_playerController = GetComponent<PlayerController>();
             PresentType[] presentTypes = (PresentType[])Enum.GetValues(typeof(PresentType));
+            string path = "";
             foreach (PresentType presentType in presentTypes)
             {
-                m_presentPrefabs.Add(presentType, Resources.Load<GameObject>($"Prefabs/Presents/{presentType}"));
+                path = "DynamicAssets/Prefabs/Presents/" + presentType;
+                m_presentPrefabs.Add(presentType, Resources.LoadAll<GameObject>(path).ToList());
             }
         }
 
@@ -88,7 +91,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             //RoundManager.Instance.m_playerScore += present.PresentValue;
             Destroy(present.gameObject);
             GameObject birch = Instantiate(
-                m_presentPrefabs.GetValueOrDefault(PresentType.Birch),
+                m_presentPrefabs.GetValueOrDefault(PresentType.Birch)[0],
                 present.transform.position,
                 Quaternion.identity
             );
