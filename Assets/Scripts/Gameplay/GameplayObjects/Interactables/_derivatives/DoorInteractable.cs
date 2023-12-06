@@ -1,6 +1,7 @@
 ﻿#region
 
 using Gameplay.GameplayObjects.Interactables._common;
+using Puzzle;
 using UnityEngine;
 
 #endregion
@@ -14,7 +15,6 @@ namespace Gameplay.GameplayObjects.Interactables._derivatives
 
         public override void DoInteraction<TData>(TData obj)
         {
-            // Audio.PlaySound("door_open");
             base.DoInteraction(obj);
         }
     }
