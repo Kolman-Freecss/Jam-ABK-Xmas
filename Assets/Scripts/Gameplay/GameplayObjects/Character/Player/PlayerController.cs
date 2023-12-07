@@ -1,4 +1,4 @@
-﻿#region
+#region
 
 using Gameplay.Config;
 using UnityEngine;
@@ -20,8 +20,6 @@ namespace Gameplay.GameplayObjects.Character.Player
         public enum OrientationMode
         {
             OrientateToCameraForward,
-            OrientateToMovementForward,
-            OrientateToTarget
         };
 
         public enum PlayerState
@@ -56,7 +54,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         private Transform orientationTarget;
 
         [SerializeField]
-        private OrientationMode orientationMode = OrientationMode.OrientateToMovementForward;
+        private OrientationMode orientationMode;
 
         [Header("Movement Settings")]
         [SerializeField]
@@ -108,9 +106,11 @@ namespace Gameplay.GameplayObjects.Character.Player
             disguise.action.Enable();
         }
 
-        private void Start()
+        protected new void Start()
         {
+            base.Start();
             GameManager.Instance.m_player = this;
+            
         }
 
         #endregion
@@ -140,8 +140,11 @@ namespace Gameplay.GameplayObjects.Character.Player
         private void UpdateMovementOnPlane()
         {
             Vector2 rawMoveValue = move.action.ReadValue<Vector2>();
+
             Vector3 xzMoveValue = (Vector3.right * rawMoveValue.x) + (Vector3.forward * rawMoveValue.y);
+
             bool shouldSprint = sprint.action.ReadValue<float>() > 0.5f;
+
             if (shouldSprint && currentStamina > 1.5f)
             {
                 currentPlayerState = PlayerState.Sprinting;
@@ -168,10 +171,13 @@ namespace Gameplay.GameplayObjects.Character.Player
             void UpdateMovementRelativeToCamera(Vector3 xzMoveValue)
             {
                 Transform cameraTransform = Camera.main.transform;
+
                 Vector3 xzMoveValueFromCamera = cameraTransform.TransformDirection(xzMoveValue);
+
                 float originalMagnitude = xzMoveValueFromCamera.magnitude;
                 xzMoveValueFromCamera =
                     Vector3.ProjectOnPlane(xzMoveValueFromCamera, Vector3.up).normalized * originalMagnitude;
+
                 switch (currentPlayerState)
                 {
                     case PlayerState.Sprinting:
@@ -216,7 +222,7 @@ namespace Gameplay.GameplayObjects.Character.Player
                 verticalVelocity = jumpSpeed;
             }
 
-            velocityToApply += Vector3.up * verticalVelocity;
+            velocityToApply += verticalVelocity * Vector3.up;
         }
 
         private void UpdateOrientation()
@@ -232,16 +238,7 @@ namespace Gameplay.GameplayObjects.Character.Player
                 case OrientationMode.OrientateToCameraForward:
                     desiredDirection = Camera.main.transform.forward;
                     break;
-                case OrientationMode.OrientateToMovementForward:
-                    if (velocityToApply.sqrMagnitude > 0f)
-                    {
-                        desiredDirection = velocityToApply.normalized;
-                    }
-
-                    break;
-                case OrientationMode.OrientateToTarget:
-                    desiredDirection = orientationTarget.transform.position - transform.position;
-                    break;
+               
             }
 
             float angularDistance = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
@@ -263,8 +260,10 @@ namespace Gameplay.GameplayObjects.Character.Player
                 currentStamina += staminaRecoveryRate * Time.deltaTime;
                 currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
             }
-
-            UpdateStaminaUI();
+            if(staminaSlider != null)
+            {
+                UpdateStaminaUI();
+            } 
         }
 
         private void UpdateStaminaUI()
@@ -284,7 +283,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private void Walk(Vector3 xzMovevValue)
         {
-            Vector3 velocity = xzMovevValue * planeSpeed;
+            Vector3 velocity = xzMovevValue * m_currentSpeed;
             velocityToApply += velocity;
             UpdateStamina();
         }
