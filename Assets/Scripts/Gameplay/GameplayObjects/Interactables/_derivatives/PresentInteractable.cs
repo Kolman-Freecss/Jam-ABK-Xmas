@@ -15,7 +15,11 @@ namespace Gameplay.GameplayObjects.Interactables._derivatives
 
         public override void DoInteraction<TData>(TData obj)
         {
-            RoundManager.Instance.CurrentHouse.OnPresentCollected(obj as PresentInteractable);
+            if (RoundManager.Instance.CurrentHouse != null)
+            {
+                RoundManager.Instance.CurrentHouse.OnPresentCollected(obj as PresentInteractable);
+                Debug.LogWarning("You are not supposed to be here, present!!");
+            }
             // Audio.PlaySound("PresentReached");
             base.DoInteraction(obj);
         }

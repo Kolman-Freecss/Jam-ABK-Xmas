@@ -87,7 +87,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeCamera1",
+                    "name": "ChangeThrowableItem",
                     "type": "Button",
                     "id": "a7d98e58-bee3-4afa-99c8-900b0a16d2ac",
                     "expectedControlType": "Button",
@@ -96,9 +96,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "ChangeCamera2",
+                    "name": "ThrowItem",
                     "type": "Button",
-                    "id": "db3ece39-691d-40e1-b7a7-df61fdac5f7e",
+                    "id": "be1cc6d9-a8a1-4716-b870-7f030cf02b8a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StoreThrowableItem",
+                    "type": "Button",
+                    "id": "b5a8ec83-b654-43fb-8f09-260aadbd6192",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -256,18 +265,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeCamera1",
+                    "action": "ChangeThrowableItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "b467cce9-86cb-40f1-90ba-bc8888d61fbd",
-                    "path": "<Keyboard>/2",
+                    "id": "18bdd26d-f258-4b0a-92b4-52b8cd29fa13",
+                    "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "ChangeCamera2",
+                    "action": "ThrowItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbf5593b-9539-48cf-9094-e17fa8ded558",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StoreThrowableItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
