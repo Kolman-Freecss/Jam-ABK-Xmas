@@ -65,7 +65,7 @@ namespace Gameplay.GameplayObjects.Character._common
         public LayerMask groundLayers;
 
         [Tooltip("Useful for rough ground")]
-        public float groundedOffset = -0.14f;
+        public float groundedOffset = -0.20f;
 
         [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
         public float groundedRadius = 0.28f;
@@ -99,7 +99,7 @@ namespace Gameplay.GameplayObjects.Character._common
 
             currentStamina = maxStamina;
 
-            if (staminaSlider != null)
+            if (!staminaSlider)
             {
                 staminaSlider.maxValue = maxStamina;
                 staminaSlider.value = currentStamina;
@@ -142,11 +142,11 @@ namespace Gameplay.GameplayObjects.Character._common
                 StopMovement();
             else
                 ResetSpeed();
-            //TODO: Animation here
-            // if (HasAnimator)
-            // {
-            //     Animator.SetBool(AnimIDHide, hide);
-            // }
+            
+             if (HasAnimator)
+             {
+                 Animator.SetBool("IsHide", hide);
+             }
         }
 
         public void Stealth(bool stealth, float speedReduction = 0f)
@@ -155,12 +155,11 @@ namespace Gameplay.GameplayObjects.Character._common
                 ReduceSpeed(speedReduction);
             else
                 ResetSpeed();
-
-            //TODO: Animation here
-            // if (HasAnimator)
-            // {
-            //     Animator.SetBool(AnimIDHide, hide);
-            // }
+ 
+            if (HasAnimator)
+             {
+                 Animator.SetBool("IsStealth", stealth);
+             }
         }
 
         public void ReduceSpeed(float reduction)
@@ -204,6 +203,7 @@ namespace Gameplay.GameplayObjects.Character._common
         #region Getter & Setters
 
         public AudioSource EffectsAudioSource => m_effectsAudioSource;
+        //public Animator animator => 
 
         #endregion
     }
