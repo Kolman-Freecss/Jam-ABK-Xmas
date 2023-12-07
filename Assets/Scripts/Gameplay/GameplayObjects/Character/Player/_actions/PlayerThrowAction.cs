@@ -117,6 +117,7 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
         {
             if (m_currentThrowableItem == null)
             {
+                Debug.Log("PlayerBehaviour: No throwable item selected");
                 return;
             }
             Vector3 throwDirection = m_aimingTarget.transform.position - m_playerRightHand.transform.position;
