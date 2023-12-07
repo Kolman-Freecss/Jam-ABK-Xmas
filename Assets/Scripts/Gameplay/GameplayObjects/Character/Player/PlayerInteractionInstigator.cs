@@ -60,6 +60,11 @@ namespace Gameplay.GameplayObjects.Character.Player
                 m_InteractText.enabled = false;
             }
         }
+        
+        public void OnDestroyInteractable(IInteractable obj)
+        {
+            m_NearbyInteractables.Remove(obj);
+        }
 
         private void OnDiscoverInteractable(IInteractable obj)
         {

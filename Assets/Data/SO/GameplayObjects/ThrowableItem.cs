@@ -20,10 +20,18 @@ namespace Data.SO.ThrowableItem
 
         [SerializeField]
         private GameObject m_ItemPrefab;
-        
+
+        private GameObject m_InstancedItemPrefab;
+
         public string ItemName => m_ItemName;
         public AudioClip ItemThrownSound => m_ItemThrownSound;
         public AudioClip ItemPickedUpSound => m_ItemPickedUpSound;
         public GameObject ItemPrefab => m_ItemPrefab;
+
+        public GameObject InstancedItemPrefab
+        {
+            get => m_InstancedItemPrefab;
+            set => m_InstancedItemPrefab = value;
+        }
     }
 }

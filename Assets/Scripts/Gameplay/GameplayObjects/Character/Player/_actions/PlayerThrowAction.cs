@@ -50,6 +50,8 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
 
         public Action<ThrowableItem> OnThrowItemAction;
 
+        private PlayerInteractionInstigator m_playerInteractionInstigator;
+
         #endregion
 
         #region Init Data
@@ -67,6 +69,7 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
             m_changeThrowItemAction.action.performed += ctx => OnChangeThrowItem();
             m_storeThrowItemAction.action.performed += ctx => OnStoreThrowItem();
             m_PlayerThrowItemsQuantityText.text = m_throwableItems.Count.ToString();
+            m_playerInteractionInstigator = GetComponent<PlayerInteractionInstigator>();
         }
 
         #endregion
@@ -80,6 +83,7 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
         {
             m_throwableItems.Add(item.ThrowableItem);
             m_PlayerThrowItemsQuantityText.text = m_throwableItems.Count.ToString();
+            m_playerInteractionInstigator.OnDestroyInteractable(item);
             Destroy(item.gameObject);
         }
 
@@ -93,6 +97,7 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
                 {
                     m_throwableItems.RemoveAt(0);
                     m_throwableItems.Add(previous);
+                    Destroy(previous.InstancedItemPrefab);
                 }
                 ShowThrowableItem(true);
             }
@@ -152,9 +157,15 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
             {
                 if (show)
                 {
-                    m_currentThrowableItem = Instantiate(m_currentThrowableItem.ItemPrefab, m_playerRightHand.transform)
-                        .gameObject
-                        .GetComponent<ThrowableItem>();
+                    m_currentThrowableItem.InstancedItemPrefab = Instantiate(
+                        m_currentThrowableItem.ItemPrefab,
+                        m_playerRightHand.transform
+                    );
+                    ThrowableItemInteractable ti = m_currentThrowableItem
+                        .InstancedItemPrefab
+                        .GetComponent<ThrowableItemInteractable>();
+                    ti.m_IsInteractable = false;
+                    ti.enabled = false;
                     ParentConstraint parentConstraint = m_currentThrowableItem
                         .ItemPrefab
                         .GetComponent<ParentConstraint>();
@@ -170,7 +181,8 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
                 }
                 else
                 {
-                    Destroy(m_currentThrowableItem);
+                    Destroy(m_currentThrowableItem.InstancedItemPrefab);
+                    m_currentThrowableItem = null;
                 }
             }
         }
