@@ -10,8 +10,8 @@ public class EnemyStateManager : MonoBehaviour
     EnemyState currentState;
 
     EnemyIdleState enemyIdleState;
-    EnemyChaseState enemyChaseState;
-    EnemyAttackState enemyAttackState;
+    
+    public string myTag = "Enemy";
 
     private void Awake() 
     {
@@ -21,8 +21,6 @@ public class EnemyStateManager : MonoBehaviour
     private void Start() 
     {
         enemyIdleState = GetComponent<EnemyIdleState>();
-        enemyChaseState = GetComponent<EnemyChaseState>();
-        enemyAttackState = GetComponent<EnemyAttackState>();
 
         currentState = enemyIdleState;
     }

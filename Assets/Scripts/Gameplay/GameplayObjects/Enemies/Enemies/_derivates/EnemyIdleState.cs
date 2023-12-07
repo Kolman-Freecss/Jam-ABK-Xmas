@@ -6,6 +6,8 @@ public class EnemyIdleState : EnemyState
 {
     EnemyDetection enemyDetection;
     EnemyChaseState enemyChaseState;
+    EnemyStateManager enemyStateManager;
+    EnemyPursueTargetState enemyPursueTargetState;
 
     bool playerDetected;
 
@@ -25,13 +27,20 @@ public class EnemyIdleState : EnemyState
     {
         enemyChaseState = GetComponent<EnemyChaseState>();
         enemyDetection = GetComponent<EnemyDetection>();
+        enemyStateManager = GetComponent<EnemyStateManager>();
+        enemyPursueTargetState = GetComponent<EnemyPursueTargetState>();
     }
 
     //if player seen, change to chase, otherwise just returns idle
     public override EnemyState RunCurrentState()
     {
-        if (playerDetected)
-            return enemyChaseState;
+        if (playerDetected && target != null)
+        {
+            if (enemyStateManager.tag == "Boss")
+                return enemyPursueTargetState;
+            else
+                return enemyChaseState;
+        }
 
         else
             enemyDetection.OnPlayerDetection();
