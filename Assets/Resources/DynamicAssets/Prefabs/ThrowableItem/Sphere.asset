@@ -15,4 +15,4 @@ MonoBehaviour:
   m_ItemName: Sphere
   m_ItemThrownSound: {fileID: 0}
   m_ItemPickedUpSound: {fileID: 0}
-  m_ItemPrefab: {fileID: 2430494666924917725, guid: c1b8ab23d7e04084e99fa8fb4fa3c723, type: 3}
+  m_ItemPrefab: {fileID: 2430494666924917725, guid: cf7c24c0c0995584b8e7658ceb22ffc2, type: 3}

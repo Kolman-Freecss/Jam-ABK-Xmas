@@ -161,13 +161,8 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
                         m_currentThrowableItem.ItemPrefab,
                         m_playerRightHand.transform
                     );
-                    ThrowableItemInteractable ti = m_currentThrowableItem
-                        .InstancedItemPrefab
-                        .GetComponent<ThrowableItemInteractable>();
-                    ti.m_IsInteractable = false;
-                    ti.enabled = false;
                     ParentConstraint parentConstraint = m_currentThrowableItem
-                        .ItemPrefab
+                        .InstancedItemPrefab
                         .GetComponent<ParentConstraint>();
                     if (parentConstraint == null)
                     {
