@@ -1,6 +1,7 @@
 ﻿#region
 
 using System;
+using System.Collections;
 using Gameplay.GameplayObjects.Character.Player;
 using UnityEngine;
 
@@ -10,6 +11,11 @@ namespace Gameplay.Config
 {
     public class GameManager : MonoBehaviour
     {
+        public enum RoundTypes
+        {
+            InGame_City,
+        }
+
         #region Member properties
 
         public static GameManager Instance { get; private set; }
@@ -57,13 +63,31 @@ namespace Gameplay.Config
 
         public void EndGame()
         {
-            SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.EndGame);
             IsGameStarted = false;
+
+            StartCoroutine(EndGameCoroutine());
+
+            IEnumerator EndGameCoroutine()
+            {
+                yield return new WaitForSeconds(4f);
+                SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.EndGame);
+                SoundManager.Instance.StartBackgroundMusic(SoundManager.BackgroundMusic.EndGame);
+            }
         }
 
         public void RestartGame()
         {
             StartGame();
+        }
+
+        public void OnPlayerEndRound(RoundTypes roundType)
+        {
+            switch (roundType)
+            {
+                case RoundTypes.InGame_City:
+                    EndGame();
+                    break;
+            }
         }
 
         #endregion

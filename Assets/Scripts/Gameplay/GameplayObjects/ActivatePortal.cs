@@ -1,65 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
+using Gameplay.Config;
+using Gameplay.GameplayObjects.Interactables._derivatives;
 using UnityEngine;
-using UnityEngine.SceneManagement;
+
+#endregion
 
 public class ActivatePortal : MonoBehaviour
 {
-    public float useDistance = 2f; // Distance at which the portal can be used
-
-    bool portalUsable = false;
-
-    void Start()
+    public void OnRoundFinished(GameManager.RoundTypes roundType)
     {
-        //Deactivates the portal by default.
-        DeactivatePortal();
-        portalUsable = false;
+        //TODO: SFX Here
     }
 
-    private void Update()
+    public void EnablePortal(bool enable)
     {
-        if (portalUsable && Input.GetKeyDown(KeyCode.E))
-        {
-            if (PortalPlayerDistance() <= useDistance)
-            {
-                UsePortal();
-            }
-        }
+        gameObject.SetActive(enable);
     }
 
-    float PortalPlayerDistance()
+    /// <summary>
+    /// Invoked when the player uses the portal.
+    /// </summary>
+    /// <param name="portalInteractable"></param>
+    public void UsePortal(PortalInteractable portalInteractable)
     {
-        // Calculates the distance betwwen the portal and the player.
-        if (portalUsable)
-        {
-            return Vector3.Distance(transform.position, GameObject.FindGameObjectWithTag("Player").transform.position);
-        }
-
-        return Mathf.Infinity;
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-        // Verifies that the player is on the use zone of the portal.
-        if (other.CompareTag("Player"))
-        {
-            portalUsable = true;
-        }
-    }
-
-    void DeactivatePortal()
-    {
-        gameObject.SetActive(false);
-    }
-
-    public void Activate()
-    {
-        // Activates the portal when it's called from presentsNeeded script.
-        gameObject.SetActive(true);
-    }
-
-    public void UsePortal()
-    {
-        SceneManager.LoadScene("Hell");
+        SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.Hell);
     }
 }

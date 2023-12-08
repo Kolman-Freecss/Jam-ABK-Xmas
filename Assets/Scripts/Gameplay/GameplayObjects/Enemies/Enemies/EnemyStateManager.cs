@@ -12,18 +12,13 @@ public class EnemyStateManager : MonoBehaviour
     EnemyState currentState;
 
     EnemyIdleState enemyIdleState;
-    
-    public string myTag = "Enemy";
 
-    private void Awake()
-    {
-        RoundManager.Instance.enemiesInScene.Add(this);
-    }
+    public string myTag = "Enemy";
 
     private void Start()
     {
+        RoundManager.Instance.enemiesInScene.Add(this);
         enemyIdleState = GetComponent<EnemyIdleState>();
-
         currentState = enemyIdleState;
     }
 

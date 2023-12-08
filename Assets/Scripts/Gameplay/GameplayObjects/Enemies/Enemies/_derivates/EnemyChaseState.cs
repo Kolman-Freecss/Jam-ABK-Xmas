@@ -1,7 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using UnityEngine;
 using UnityEngine.AI;
+
+#endregion
 
 public class EnemyChaseState : EnemyState
 {
@@ -15,9 +17,10 @@ public class EnemyChaseState : EnemyState
     bool targetIsPlayer;
 
     [Header("Debug")]
-    [SerializeField] bool debugChangeState;
+    [SerializeField]
+    bool debugChangeState;
 
-    private void OnValidate() 
+    private void OnValidate()
     {
         if (debugChangeState)
         {
@@ -25,7 +28,7 @@ public class EnemyChaseState : EnemyState
         }
     }
 
-    private void Awake() 
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
 
@@ -34,8 +37,22 @@ public class EnemyChaseState : EnemyState
         enemyCatchRange = GetComponent<EnemyCatchRange>();
         enemyLookLastPos = GetComponent<EnemyLookLastTargetPosState>();
 
-        enemyDetection.onStartFollowing.AddListener(TargetAsignation);
-        enemyLookLastPos.onPerceivePosition.AddListener(OnLastPerceivedPositionReached);
+        if (!enemyDetection)
+        {
+            Debug.LogError("EnemyDetection not found in children");
+        }
+        else
+        {
+            enemyDetection.onStartFollowing.AddListener(TargetAsignation);
+        }
+        if (!enemyLookLastPos)
+        {
+            Debug.LogError("EnemyLookLastTargetPosState not found");
+        }
+        else
+        {
+            enemyLookLastPos.onPerceivePosition.AddListener(OnLastPerceivedPositionReached);
+        }
     }
 
     //if player in catch range, change to attack
@@ -51,28 +68,25 @@ public class EnemyChaseState : EnemyState
 
         if (enemyCatchRange.IsInCatchRange() || debugChangeState)
             return enemyAttackState;
-
         else if (!enemyCatchRange.IsInCatchRange() && !target)
         {
             if (hasLastPerceivedPosition)
             {
                 enemyLookLastPos.lastPerceivedPos = this.lastPerceivedPos;
                 return enemyLookLastPos;
-                
             }
             else
             {
                 return this;
             }
         }
-
         else
         {
             ChaseLogic();
             return this;
         }
     }
-    
+
     private void TargetAsignation()
     {
         if (!targetIsPlayer)

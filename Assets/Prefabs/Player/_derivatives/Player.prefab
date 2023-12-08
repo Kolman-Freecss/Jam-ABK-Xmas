@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 605851543962964762}
   - component: {fileID: 5214125902373642565}
   - component: {fileID: 1921061665314591360}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -206,6 +206,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_PlayerCanvas: {fileID: 6965819449874990519}
+  m_IncrementScoreText: {fileID: 2010563839435485521}
+  m_PresentsScoreText: {fileID: 6277922348495824643}
   m_playerCostumes:
   - Key: 0
     Value: {fileID: 5521818762501746404}
@@ -537,6 +539,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2010563839435485521 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2801019176905967650, guid: 12b345776d54922429fa870cb346a4dd, type: 3}
+  m_PrefabInstance: {fileID: 4411782920579430771}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &4408939746051521421 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6331434239640318, guid: 12b345776d54922429fa870cb346a4dd, type: 3}
@@ -546,6 +559,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 67db9e8f0e2ae9c40bc1e2b64352a6b4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &6277922348495824643 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7648911158263537264, guid: 12b345776d54922429fa870cb346a4dd, type: 3}
+  m_PrefabInstance: {fileID: 4411782920579430771}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!223 &6965819449874990519 stripped
