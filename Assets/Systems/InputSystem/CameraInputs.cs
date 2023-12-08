@@ -44,6 +44,24 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""RotateCamera"",
+                    ""type"": ""Value"",
+                    ""id"": ""75c97ff4-2d26-4468-bfc8-77edea0c0616"",
+                    ""expectedControlType"": ""Delta"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""EnableRotation"",
+                    ""type"": ""Button"",
+                    ""id"": ""5876da2e-a4e6-42e1-a383-2fd95b590dfe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -68,6 +86,28 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Zoom"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1e65c44b-47e1-4caf-9d40-c30505ee7625"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""RotateCamera"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""77144756-63b3-49a1-adaa-13a3c2aca6d5"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Hold"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""EnableRotation"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -78,6 +118,8 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
         m_Camera_ResetZoom = m_Camera.FindAction("ResetZoom", throwIfNotFound: true);
         m_Camera_Zoom = m_Camera.FindAction("Zoom", throwIfNotFound: true);
+        m_Camera_RotateCamera = m_Camera.FindAction("RotateCamera", throwIfNotFound: true);
+        m_Camera_EnableRotation = m_Camera.FindAction("EnableRotation", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -141,12 +183,16 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
     private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
     private readonly InputAction m_Camera_ResetZoom;
     private readonly InputAction m_Camera_Zoom;
+    private readonly InputAction m_Camera_RotateCamera;
+    private readonly InputAction m_Camera_EnableRotation;
     public struct CameraActions
     {
         private @CameraInputs m_Wrapper;
         public CameraActions(@CameraInputs wrapper) { m_Wrapper = wrapper; }
         public InputAction @ResetZoom => m_Wrapper.m_Camera_ResetZoom;
         public InputAction @Zoom => m_Wrapper.m_Camera_Zoom;
+        public InputAction @RotateCamera => m_Wrapper.m_Camera_RotateCamera;
+        public InputAction @EnableRotation => m_Wrapper.m_Camera_EnableRotation;
         public InputActionMap Get() { return m_Wrapper.m_Camera; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -162,6 +208,12 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
             @Zoom.started += instance.OnZoom;
             @Zoom.performed += instance.OnZoom;
             @Zoom.canceled += instance.OnZoom;
+            @RotateCamera.started += instance.OnRotateCamera;
+            @RotateCamera.performed += instance.OnRotateCamera;
+            @RotateCamera.canceled += instance.OnRotateCamera;
+            @EnableRotation.started += instance.OnEnableRotation;
+            @EnableRotation.performed += instance.OnEnableRotation;
+            @EnableRotation.canceled += instance.OnEnableRotation;
         }
 
         private void UnregisterCallbacks(ICameraActions instance)
@@ -172,6 +224,12 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
             @Zoom.started -= instance.OnZoom;
             @Zoom.performed -= instance.OnZoom;
             @Zoom.canceled -= instance.OnZoom;
+            @RotateCamera.started -= instance.OnRotateCamera;
+            @RotateCamera.performed -= instance.OnRotateCamera;
+            @RotateCamera.canceled -= instance.OnRotateCamera;
+            @EnableRotation.started -= instance.OnEnableRotation;
+            @EnableRotation.performed -= instance.OnEnableRotation;
+            @EnableRotation.canceled -= instance.OnEnableRotation;
         }
 
         public void RemoveCallbacks(ICameraActions instance)
@@ -193,5 +251,7 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
     {
         void OnResetZoom(InputAction.CallbackContext context);
         void OnZoom(InputAction.CallbackContext context);
+        void OnRotateCamera(InputAction.CallbackContext context);
+        void OnEnableRotation(InputAction.CallbackContext context);
     }
 }
