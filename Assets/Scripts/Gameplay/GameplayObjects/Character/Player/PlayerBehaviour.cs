@@ -84,6 +84,8 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private void Start()
         {
+            m_PresentsScoreText.text =
+                RoundManager.Instance.PresentsScore.ToString() + "/" + RoundManager.Instance.PresentsToFinishRound;
             SetPlayerCostume(PlayerCostumeType.Krampus);
             m_IncrementScoreText.gameObject.SetActive(false);
         }

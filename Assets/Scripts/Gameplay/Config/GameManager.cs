@@ -65,7 +65,9 @@ namespace Gameplay.Config
         {
             IsGameStarted = false;
 
-            IEnumerable EndGameCoroutine()
+            StartCoroutine(EndGameCoroutine());
+
+            IEnumerator EndGameCoroutine()
             {
                 yield return new WaitForSeconds(4f);
                 SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.EndGame);
