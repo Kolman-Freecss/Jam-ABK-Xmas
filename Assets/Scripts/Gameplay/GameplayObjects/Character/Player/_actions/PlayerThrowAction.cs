@@ -86,7 +86,6 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
         {
             m_throwableItems.Add(item.ThrowableItem);
             m_PlayerThrowItemsQuantityText.text = m_throwableItems.Count.ToString();
-            m_playerInteractionInstigator.OnDestroyInteractable(item);
             Destroy(item.gameObject);
         }
 

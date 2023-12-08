@@ -8,6 +8,7 @@ using Entities._Utils_;
 using Gameplay.Config;
 using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
+using TMPro;
 using UnityEngine;
 
 #endregion
@@ -35,6 +36,12 @@ namespace Gameplay.GameplayObjects.Character.Player
         [SerializeField]
         private Canvas m_PlayerCanvas;
 
+        [SerializeField]
+        private TextMeshProUGUI m_IncrementScoreText;
+
+        [SerializeField]
+        private TextMeshProUGUI m_PresentsScoreText;
+
         [Header("Costume Settings")]
         [SerializeField]
         private List<SerializableDictionaryEntry<PlayerCostumeType, GameObject>> m_playerCostumes;
@@ -56,6 +63,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         private GameObject m_playerCurrentCostume;
         private PlayerController m_playerController;
         private Dictionary<PresentType, List<GameObject>> m_presentPrefabs = new();
+        private PlayerInteractionInstigator m_playerInteractionInstigator;
 
         #endregion
 
@@ -64,6 +72,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         private void Awake()
         {
             m_playerController = GetComponent<PlayerController>();
+            m_playerInteractionInstigator = GetComponent<PlayerInteractionInstigator>();
             PresentType[] presentTypes = (PresentType[])Enum.GetValues(typeof(PresentType));
             string path = "";
             foreach (PresentType presentType in presentTypes)
@@ -76,6 +85,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         private void Start()
         {
             SetPlayerCostume(PlayerCostumeType.Krampus);
+            m_IncrementScoreText.gameObject.SetActive(false);
         }
 
         #endregion
@@ -87,15 +97,34 @@ namespace Gameplay.GameplayObjects.Character.Player
         /// </summary>
         public void OnPresentGrab(PresentInteractable present)
         {
-            // Sum the present value to the player's score
-            //RoundManager.Instance.m_playerScore += present.PresentValue;
-            Destroy(present.gameObject);
-            GameObject birch = Instantiate(
-                m_presentPrefabs.GetValueOrDefault(PresentType.Birch)[0],
-                present.transform.position,
-                Quaternion.identity
-            );
-            //TODO: Some sound here
+            try
+            {
+                // Sum the present value to the player's score
+                RoundManager.Instance.OnPresentGrabbed(present);
+                m_PresentsScoreText.text =
+                    RoundManager.Instance.PresentsScore.ToString() + "/" + RoundManager.Instance.PresentsToFinishRound;
+                m_IncrementScoreText.gameObject.SetActive(true);
+                //RoundManager.Instance.m_playerScore += present.PresentValue;
+                Destroy(present);
+                GameObject birch = Instantiate(
+                    m_presentPrefabs.GetValueOrDefault(PresentType.Birch)[0],
+                    present.transform.position,
+                    Quaternion.identity
+                );
+
+                StartCoroutine(IncrementScore());
+                //TODO: Some sound here
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error Grabbing Present -> " + e);
+            }
+
+            IEnumerator IncrementScore()
+            {
+                yield return new WaitForSeconds(1f);
+                m_IncrementScoreText.gameObject.SetActive(false);
+            }
         }
 
         #endregion
