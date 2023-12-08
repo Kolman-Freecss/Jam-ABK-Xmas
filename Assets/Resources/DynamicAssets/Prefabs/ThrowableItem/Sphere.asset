@@ -15,4 +15,5 @@ MonoBehaviour:
   m_ItemName: Sphere
   m_ItemThrownSound: {fileID: 0}
   m_ItemPickedUpSound: {fileID: 0}
+  m_ItemThrownParticle: {fileID: 19800000, guid: 163dc7399e3280944854a3be2af8523e, type: 3}
   m_ItemPrefab: {fileID: 2430494666924917725, guid: cf7c24c0c0995584b8e7658ceb22ffc2, type: 3}
