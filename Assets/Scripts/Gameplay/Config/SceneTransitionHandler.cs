@@ -52,6 +52,7 @@ namespace Gameplay.Config
             Credits,
             Settings,
             InGame_City,
+            Hell,
             EndGame
         }
 

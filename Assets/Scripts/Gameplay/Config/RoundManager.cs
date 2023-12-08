@@ -37,6 +37,9 @@ namespace Gameplay.Config
         public List<EnemyStateManager> enemiesInScene = new();
 
         [SerializeField]
+        private ActivatePortal m_ActivatePortal;
+
+        [SerializeField]
         private Dialogue m_RoundStartDialogue;
 
         [Header("Presents Settings")]
@@ -101,6 +104,7 @@ namespace Gameplay.Config
         private void InitRoundData()
         {
             presentsScore = 0;
+            m_ActivatePortal.EnablePortal(false);
         }
 
         #endregion
@@ -196,7 +200,8 @@ namespace Gameplay.Config
         public void EndRound()
         {
             m_CurrentRoundState = RoundState.Ended;
-            GameManager.Instance.OnPlayerEndRound(roundType);
+            m_ActivatePortal.EnablePortal(true);
+            m_ActivatePortal.OnRoundFinished(roundType);
         }
 
         #endregion
