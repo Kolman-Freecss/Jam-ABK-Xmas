@@ -37,7 +37,7 @@ namespace Gameplay.GameplayObjects.Character._common
 
         protected virtual void GetComponentReferences()
         {
-            TryGetComponent(out m_animator);
+            m_animator = GetComponentInChildren<Animator>();
             m_hasAnimator = m_animator != null;
         }
 
