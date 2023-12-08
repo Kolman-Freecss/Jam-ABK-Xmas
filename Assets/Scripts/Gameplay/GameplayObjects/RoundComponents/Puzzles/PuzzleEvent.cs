@@ -14,6 +14,7 @@ namespace Puzzle
         public event Action OnPuzzleInit;
         public event Action OnPuzzleSolved;
         public event Action OnPuzzleFailed;
+        public event Action OnPuzzleOnProgress;
 
         public void InitPuzzle()
         {
@@ -28,6 +29,11 @@ namespace Puzzle
         public void PuzzleFailed()
         {
             OnPuzzleFailed?.Invoke();
+        }
+
+        public void PuzzleInProgress()
+        {
+            OnPuzzleOnProgress?.Invoke();
         }
     }
 }

@@ -90,17 +90,12 @@ namespace Gameplay.Config
         {
             try
             {
-                Time.timeScale = 0f;
                 DialogueInstigator.Instance.FlowChannel.OnFlowStateChanged += OnFlowStateChanged;
                 DialogueInstigator.Instance.DialogueChannel.RaiseRequestDialogue(m_RoundStartDialogue);
             }
             catch (Exception e)
             {
                 Debug.LogError("RoundManager: Error while initializing narration round: " + e);
-            }
-            finally
-            {
-                Time.timeScale = 1f;
             }
         }
 
@@ -113,12 +108,14 @@ namespace Gameplay.Config
         public void OnPlayerEnterHouse(HouseController houseController)
         {
             m_CurrentHouse = houseController;
+            GameManager.Instance.m_player.PlayerBehaviour.OnPlayerEnterHouse(houseController);
             Debug.Log("Player entered house");
         }
 
         public void OnPlayerExitHouse(HouseController houseController)
         {
             m_CurrentHouse = null;
+            GameManager.Instance.m_player.PlayerBehaviour.OnPlayerExitHouse(houseController);
             Debug.Log("Player exited house");
         }
 
@@ -166,6 +163,11 @@ namespace Gameplay.Config
         public void EndRound()
         {
             m_CurrentRoundState = RoundState.Ended;
+        }
+
+        public void OnGameOver()
+        {
+            GameManager.Instance.EndGame();
         }
 
         #endregion

@@ -85,6 +85,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "ChangeThrowableItem",
+                    "type": "Button",
+                    "id": "a7d98e58-bee3-4afa-99c8-900b0a16d2ac",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "ThrowItem",
+                    "type": "Button",
+                    "id": "be1cc6d9-a8a1-4716-b870-7f030cf02b8a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "StoreThrowableItem",
+                    "type": "Button",
+                    "id": "b5a8ec83-b654-43fb-8f09-260aadbd6192",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -228,6 +255,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Disguise",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "47f3941c-6b69-4154-88a0-ea4bdd3c946d",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ChangeThrowableItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "18bdd26d-f258-4b0a-92b4-52b8cd29fa13",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ThrowItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bbf5593b-9539-48cf-9094-e17fa8ded558",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "StoreThrowableItem",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
