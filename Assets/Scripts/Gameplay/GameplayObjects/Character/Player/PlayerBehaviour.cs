@@ -3,8 +3,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Entities._Utils_;
 using Gameplay.Config;
+using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
 using UnityEngine;
 
@@ -15,10 +17,16 @@ namespace Gameplay.GameplayObjects.Character.Player
     [RequireComponent(typeof(PlayerController))]
     public class PlayerBehaviour : MonoBehaviour
     {
-        public enum PlayerCostume
+        public enum PlayerCostumeType
         {
             Krampus,
             Santa
+        }
+
+        public enum PresentType
+        {
+            Birch,
+            Coal
         }
 
         #region Inspector Variables
@@ -29,7 +37,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         [Header("Costume Settings")]
         [SerializeField]
-        private List<SerializableDictionaryEntry<PlayerCostume, GameObject>> m_playerCostumes;
+        private List<SerializableDictionaryEntry<PlayerCostumeType, GameObject>> m_playerCostumes;
 
         [SerializeField]
         private GameObject m_playerCostumeEffect;
@@ -37,7 +45,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         [SerializeField]
         private AudioClip m_costumeAudioClip;
 
-        [Obsolete("This is a dirty mockup to test the costume system, this should be placed into RoundManager")]
+        [Obsolete("This is a dirty mockup to test the costumeType system, this should be placed into RoundManager")]
         [SerializeField]
         private float timeToChangeCostume = 4f;
 
@@ -47,6 +55,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private GameObject m_playerCurrentCostume;
         private PlayerController m_playerController;
+        private Dictionary<PresentType, List<GameObject>> m_presentPrefabs = new();
 
         #endregion
 
@@ -55,21 +64,57 @@ namespace Gameplay.GameplayObjects.Character.Player
         private void Awake()
         {
             m_playerController = GetComponent<PlayerController>();
+            PresentType[] presentTypes = (PresentType[])Enum.GetValues(typeof(PresentType));
+            string path = "";
+            foreach (PresentType presentType in presentTypes)
+            {
+                path = "DynamicAssets/Prefabs/Presents/" + presentType;
+                m_presentPrefabs.Add(presentType, Resources.LoadAll<GameObject>(path).ToList());
+            }
         }
 
         private void Start()
         {
-            SetPlayerCostume(PlayerCostume.Krampus);
+            SetPlayerCostume(PlayerCostumeType.Krampus);
         }
 
-        private void SetPlayerCostume(PlayerCostume costume)
+        #endregion
+
+        #region Grab Present Logic
+
+        /// <summary>
+        /// Called when the player grabs a present. (This is called from the PresentInteractable)
+        /// </summary>
+        public void OnPresentGrab(PresentInteractable present)
+        {
+            // Sum the present value to the player's score
+            //RoundManager.Instance.m_playerScore += present.PresentValue;
+            Destroy(present.gameObject);
+            GameObject birch = Instantiate(
+                m_presentPrefabs.GetValueOrDefault(PresentType.Birch)[0],
+                present.transform.position,
+                Quaternion.identity
+            );
+            //TODO: Some sound here
+        }
+
+        #endregion
+
+        #region Costume Logic
+
+        private void SetPlayerCostume(PlayerCostumeType costumeType)
         {
             if (m_playerCurrentCostume != null)
             {
                 m_playerCurrentCostume.SetActive(false);
             }
-            m_playerCurrentCostume = m_playerCostumes.Find(x => x.Key == costume).Value;
+            m_playerCurrentCostume = m_playerCostumes.Find(x => x.Key == costumeType).Value;
             m_playerCurrentCostume.SetActive(true);
+        }
+
+        public void OnPlayerCallHouse()
+        {
+            Costume(PlayerCostumeType.Santa);
         }
 
         private void HidePlayerCostume()
@@ -77,12 +122,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             m_playerCurrentCostume.SetActive(false);
         }
 
-        public void OnPlayerCallHouse()
-        {
-            Costume(PlayerCostume.Santa);
-        }
-
-        public void Costume(PlayerCostume costume)
+        private void Costume(PlayerCostumeType costumeType)
         {
             m_playerController.enabled = false;
             HidePlayerCostume();
@@ -106,13 +146,9 @@ namespace Gameplay.GameplayObjects.Character.Player
                 m_playerController.enabled = true;
                 m_playerController.EffectsAudioSource.Stop();
                 //TODO: Make some sound and animation too.
-                SetPlayerCostume(costume);
+                SetPlayerCostume(costumeType);
             }
         }
-
-        #endregion
-
-        #region Logic
 
         public void OnPlayerEnterHouse(HouseController house)
         {

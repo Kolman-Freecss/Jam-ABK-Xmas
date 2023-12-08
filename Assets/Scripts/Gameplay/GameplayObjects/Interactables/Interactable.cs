@@ -17,6 +17,9 @@ namespace Gameplay.GameplayObjects.Interactables
         [SerializeField]
         protected UnityEvent<object> m_OnInteraction;
 
+        [HideInInspector]
+        public bool m_IsInteractable = true;
+
         #endregion
 
         public virtual void DoInteraction<TObject>(TObject obj)

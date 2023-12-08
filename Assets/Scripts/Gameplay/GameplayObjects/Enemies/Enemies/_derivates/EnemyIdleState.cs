@@ -1,21 +1,20 @@
-#region
-
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-
-#endregion
 
 public class EnemyIdleState : EnemyState
 {
     EnemyDetection enemyDetection;
     EnemyChaseState enemyChaseState;
+    EnemyStateManager enemyStateManager;
+    EnemyPursueTargetState enemyPursueTargetState;
 
     bool playerDetected;
 
     [Header("Debug")]
-    [SerializeField]
-    bool debugChangeState;
+    [SerializeField] bool debugChangeState;
 
-    private void OnValidate()
+    private void OnValidate() 
     {
         if (debugChangeState)
         {
@@ -24,20 +23,28 @@ public class EnemyIdleState : EnemyState
         }
     }
 
-    private void Start()
+    private void Start() 
     {
         enemyChaseState = GetComponent<EnemyChaseState>();
         enemyDetection = GetComponentInChildren<EnemyDetection>();
+        enemyStateManager = GetComponent<EnemyStateManager>();
+        enemyPursueTargetState = GetComponent<EnemyPursueTargetState>();
     }
 
     //if player seen, change to chase, otherwise just returns idle
     public override EnemyState RunCurrentState()
     {
-        if (playerDetected)
-            return enemyChaseState;
+        if (playerDetected && target != null)
+        {
+            if (enemyStateManager.tag == "Boss")
+                return enemyPursueTargetState;
+            else
+                return enemyChaseState;
+        }
+
         else
             enemyDetection.OnPlayerDetection();
-        return this;
+            return this;
     }
 
     public void OnPlayerDetected()

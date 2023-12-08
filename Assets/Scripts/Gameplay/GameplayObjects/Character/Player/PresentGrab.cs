@@ -44,8 +44,8 @@ public class PresentGrab : MonoBehaviour
         // Release the grabbed object
         if (grabbedPresent != null)
         {
-            // Check if the released object has the "Present" tag
-            if (grabbedPresent.CompareTag("Present"))
+            // Check if the released object has the "PresentType" tag
+            if (grabbedPresent.CompareTag("PresentType"))
             {
                 // Check if the released object is colliding with a cylinder with the "ContainerPresent" tag
                 Collider[] colliders = Physics.OverlapBox(grabbedPresent.transform.position, grabbedPresent.transform.localScale / 2f);

@@ -13,11 +13,11 @@ public class EnemyDetection : MonoBehaviour
 
     [Header("References")]
     CharacterStealthBehaviour characterStealthBehaviour;
-    EnemyStateManager enemyStateManager;
+    EnemyIdleState enemyIdleState;
     RoundManager roundManager;
 
     [Header("Detection")]
-    [SerializeField] UnityEvent onStartFollowing;
+    public UnityEvent onStartFollowing;
 
     float distanceToTarget;
 
@@ -53,6 +53,7 @@ public class EnemyDetection : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         characterStealthBehaviour = player.GetComponent<PlayerStealthBehaviour>();
         roundManager = RoundManager.Instance;
+        enemyIdleState = GetComponentInParent<EnemyIdleState>();
     }
 
     private void OnEnable() 
@@ -92,10 +93,11 @@ public class EnemyDetection : MonoBehaviour
             {
                 Debug.Log("inside vision range");
                 //if there isnt an obstacle between enemy vision and player, enemy is seeing the player
-                if (Physics2D.Raycast(transform.position, playerTarget, distanceToTarget, isObstacle) == false)
+                if (Physics.Raycast(transform.position, playerTarget, distanceToTarget, isObstacle) == false)
                 {
                     Debug.Log("seen");
                     hasBeenSeen = true;
+                    
 
                     if (visionTimer >= maxVisionTimer)
                         onStartFollowing?.Invoke();
@@ -150,6 +152,7 @@ public class EnemyDetection : MonoBehaviour
             else if (visionTimer >= maxVisionTimer)
             {
                 hasBeenSeen = true;
+                enemyIdleState.target = player;
                 if (chaseTimer != 0f)
                     chaseTimer = 0f;
             }
@@ -185,7 +188,7 @@ public class EnemyDetection : MonoBehaviour
 
             else if (timesDetected >= maxTimesDetected)
             {
-                //call Boss
+                roundManager.BossCall();
             }
         }
     }
