@@ -142,7 +142,7 @@ MonoBehaviour:
   disguise: {fileID: -2342535094489940478, guid: 1a9e629eb31154342913de9f70c35f12, type: 3}
   angularSpeed: 360
   orientationTarget: {fileID: 0}
-  orientationMode: 1
+  orientationMode: 0
   movementMode: 1
   currentPlayerState: 0
   coolDown: 0
@@ -329,6 +329,7 @@ MonoBehaviour:
   m_playerRightHand: {fileID: 7336285146590215860}
   throwRange: 10
   m_aimingTarget: {fileID: 0}
+  TempWrapper: {fileID: 0}
 --- !u!1001 &1720644018298286093
 PrefabInstance:
   m_ObjectHideFlags: 0
