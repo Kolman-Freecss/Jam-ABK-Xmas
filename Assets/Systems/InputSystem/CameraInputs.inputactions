@@ -1,0 +1,54 @@
+{
+    "name": "CameraInputs",
+    "maps": [
+        {
+            "name": "Camera",
+            "id": "a736957f-ce1e-4cd6-a871-19c0c5225dac",
+            "actions": [
+                {
+                    "name": "ResetZoom",
+                    "type": "Button",
+                    "id": "e1d868eb-eab7-4620-8562-994eaab78f30",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Zoom",
+                    "type": "Value",
+                    "id": "c28dcf57-649c-467d-a1ed-01226992e532",
+                    "expectedControlType": "Delta",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "54869da4-dbff-47aa-9ed5-62227459c501",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "ResetZoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "78e4ddbe-ecf7-492f-9d17-936169b905b3",
+                    "path": "<Mouse>/scroll",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Zoom",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}

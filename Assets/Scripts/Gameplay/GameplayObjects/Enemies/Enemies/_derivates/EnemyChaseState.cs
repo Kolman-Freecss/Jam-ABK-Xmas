@@ -29,7 +29,7 @@ public class EnemyChaseState : EnemyState
     {
         agent = GetComponent<NavMeshAgent>();
 
-        enemyDetection = GetComponent<EnemyDetection>();
+        enemyDetection = GetComponentInChildren<EnemyDetection>();
         enemyAttackState = GetComponent<EnemyAttackState>();
         enemyCatchRange = GetComponent<EnemyCatchRange>();
         enemyLookLastPos = GetComponent<EnemyLookLastTargetPosState>();

@@ -26,7 +26,7 @@ public class EnemyIdleState : EnemyState
     private void Start() 
     {
         enemyChaseState = GetComponent<EnemyChaseState>();
-        enemyDetection = GetComponent<EnemyDetection>();
+        enemyDetection = GetComponentInChildren<EnemyDetection>();
         enemyStateManager = GetComponent<EnemyStateManager>();
         enemyPursueTargetState = GetComponent<EnemyPursueTargetState>();
     }
