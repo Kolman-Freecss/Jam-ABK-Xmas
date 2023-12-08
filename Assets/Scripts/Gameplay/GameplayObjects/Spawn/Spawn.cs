@@ -29,7 +29,7 @@ public abstract class Spawn : MonoBehaviour
     /// instantiated.</param>
     /// <param name="yPosition">The yPosition parameter is the desired y-coordinate of the instantiated
     /// object. It determines at what height the object will be placed in the scene.</param>
-    protected void NewInstance(Dictionary<string,float> points, List<GameObject> prefabs, float yPosition)
+    protected GameObject NewInstance(Dictionary<string,float> points, List<GameObject> prefabs, float yPosition)
     {
         float randomX = Random.Range(points["minX"], points["maxX"]);
         float randomZ = Random.Range(points["minZ"], points["maxZ"]);
@@ -37,7 +37,7 @@ public abstract class Spawn : MonoBehaviour
         Vector3 randomPosition = new Vector3(randomX, yPosition, randomZ);
         int randomPrefabIndex = Random.Range(0, prefabs.Count);
         
-        Instantiate(prefabs[randomPrefabIndex], randomPosition, prefabs[0].transform.rotation);
+        return Instantiate(prefabs[randomPrefabIndex], randomPosition, prefabs[0].transform.rotation);
     }
     
     
