@@ -7,6 +7,7 @@ using Systems.NarrationSystem.Dialogue.Components;
 using Systems.NarrationSystem.Dialogue.Data;
 using Systems.NarrationSystem.Flow;
 using UnityEngine;
+using UnityEngine.Events;
 
 #endregion
 
@@ -24,6 +25,8 @@ namespace Gameplay.Config
             Started,
             Ended
         }
+
+        [HideInInspector] public UnityEvent bossCall = new UnityEvent();
 
         #region Inspector Variables
 
@@ -168,6 +171,11 @@ namespace Gameplay.Config
         }
 
         #endregion
+
+        public void BossCall()
+        {
+            bossCall?.Invoke();
+        }
 
         #region Getter & Setters
 

@@ -15,7 +15,7 @@ public class EnemyCatchRange : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
     }
 
-    //comunicate neither player is in catch range to EnemyChaseState
+    //comunicate wheither player is in catch range to EnemyChaseState
     public bool IsInCatchRange()
     {
         return Vector3.Distance(transform.position, player.transform.position) <= catchRange;
