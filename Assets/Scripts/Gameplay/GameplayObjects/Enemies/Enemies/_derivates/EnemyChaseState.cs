@@ -8,7 +8,7 @@ using UnityEngine.AI;
 public class EnemyChaseState : EnemyState
 {
     EnemyDetection enemyDetection;
-    EnemyAttackState enemyAttackState;
+    EnemyCatchState enemyCatchState;
     EnemyLookLastTargetPosState enemyLookLastPos;
     EnemyCatchRange enemyCatchRange;
 
@@ -33,7 +33,7 @@ public class EnemyChaseState : EnemyState
         agent = GetComponent<NavMeshAgent>();
 
         enemyDetection = GetComponentInChildren<EnemyDetection>();
-        enemyAttackState = GetComponent<EnemyAttackState>();
+        enemyCatchState = GetComponent<EnemyCatchState>();
         enemyCatchRange = GetComponent<EnemyCatchRange>();
         enemyLookLastPos = GetComponent<EnemyLookLastTargetPosState>();
 
@@ -67,7 +67,7 @@ public class EnemyChaseState : EnemyState
         hasLastPerceivedPosition = true;
 
         if (enemyCatchRange.IsInCatchRange() || debugChangeState)
-            return enemyAttackState;
+            return enemyCatchState;
         else if (!enemyCatchRange.IsInCatchRange() && !target)
         {
             if (hasLastPerceivedPosition)

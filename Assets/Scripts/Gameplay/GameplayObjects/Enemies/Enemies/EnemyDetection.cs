@@ -1,11 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using Gameplay.Config;
 using Gameplay.GameplayObjects.Character;
 using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Character.Stealth._impl;
 using UnityEngine;
 using UnityEngine.Events;
+
+#endregion
 
 public class EnemyDetection : MonoBehaviour
 {
@@ -14,7 +16,6 @@ public class EnemyDetection : MonoBehaviour
     [Header("References")]
     CharacterStealthBehaviour characterStealthBehaviour;
     EnemyIdleState enemyIdleState;
-    RoundManager roundManager;
 
     [Header("Detection")]
     public UnityEvent onStartFollowing;
@@ -22,46 +23,58 @@ public class EnemyDetection : MonoBehaviour
     float distanceToTarget;
 
     public float viewRadius;
+
     [Tooltip("Must be higher value than viewRadius")]
     public float leaveRadius;
-    [SerializeField] float viewAngle;
+
+    [SerializeField]
+    float viewAngle;
 
     [Range(1, 4)]
-    [SerializeField] int maxTimesDetected;
-    [HideInInspector] public int timesDetected;
+    [SerializeField]
+    int maxTimesDetected;
 
-    [SerializeField] LayerMask isPlayer, isObstacle;
+    [HideInInspector]
+    public int timesDetected;
+
+    [SerializeField]
+    LayerMask isPlayer,
+        isObstacle;
     Transform player;
 
-    
     [Header("Timer")]
     private bool hasBeenSeen = false;
     private float chaseTimer;
-    [SerializeField] float chaseTimerMax = 3f;
+
+    [SerializeField]
+    float chaseTimerMax = 3f;
 
     float visionTimer;
-    [SerializeField] float maxVisionTimer = 2f;
-    
+
+    [SerializeField]
+    float maxVisionTimer = 2f;
 
     [Header("Multipliers")]
-    [SerializeField] float stealthMultiplier = 1.25f;
-    [SerializeField] float hideMultiplier = 1.5f;
+    [SerializeField]
+    float stealthMultiplier = 1.25f;
+
+    [SerializeField]
+    float hideMultiplier = 1.5f;
     #endregion
 
-    private void Awake() 
+    private void Awake()
     {
         player = GameObject.FindGameObjectWithTag("Player").transform;
         characterStealthBehaviour = player.GetComponent<PlayerStealthBehaviour>();
-        roundManager = RoundManager.Instance;
         enemyIdleState = GetComponentInParent<EnemyIdleState>();
     }
 
-    private void OnEnable() 
+    private void OnEnable()
     {
         characterStealthBehaviour.onStealthStatusChanged.AddListener(PlayerStateChange);
     }
 
-    private void Update() 
+    private void Update()
     {
         Timer();
         if (!hasBeenSeen)
@@ -83,7 +96,7 @@ public class EnemyDetection : MonoBehaviour
         Vector3 playerTarget = (player.position - transform.position).normalized;
 
         //if player is inside the fov
-        if(Vector3.Angle(transform.forward, playerTarget) < viewAngle / 2)
+        if (Vector3.Angle(transform.forward, playerTarget) < viewAngle / 2)
         {
             Debug.Log("inside vision angle");
             distanceToTarget = Vector3.Distance(transform.position, player.position);
@@ -97,7 +110,6 @@ public class EnemyDetection : MonoBehaviour
                 {
                     Debug.Log("seen");
                     hasBeenSeen = true;
-                    
 
                     if (visionTimer >= maxVisionTimer)
                         onStartFollowing?.Invoke();
@@ -112,22 +124,22 @@ public class EnemyDetection : MonoBehaviour
         {
             default:
             case NormalState:
-            chaseTimerMax = 3f;
-            maxVisionTimer = 2f;
+                chaseTimerMax = 3f;
+                maxVisionTimer = 2f;
 
-            break;
+                break;
 
             case StealthState:
-            chaseTimerMax *= stealthMultiplier;
-            maxVisionTimer *= -stealthMultiplier;
+                chaseTimerMax *= stealthMultiplier;
+                maxVisionTimer *= -stealthMultiplier;
 
-            break;
+                break;
 
             case HideState:
-            chaseTimerMax *= hideMultiplier;
-            maxVisionTimer *= -hideMultiplier;
+                chaseTimerMax *= hideMultiplier;
+                maxVisionTimer *= -hideMultiplier;
 
-            break;
+                break;
         }
     }
 
@@ -141,13 +153,11 @@ public class EnemyDetection : MonoBehaviour
             else
                 hasBeenSeen = false;
         }
-
         else if (distanceToTarget < viewRadius && hasBeenSeen)
         {
             //timer so they dont get the agro instantly, they gotta keep watching you for some time
             if (visionTimer < maxVisionTimer)
-                    visionTimer += Time.deltaTime;
-
+                visionTimer += Time.deltaTime;
             //reseting the timer when entering back again
             else if (visionTimer >= maxVisionTimer)
             {
@@ -163,10 +173,13 @@ public class EnemyDetection : MonoBehaviour
     {
         if (!hasBeenSeen)
         {
-            for (int i = 0; i < roundManager.enemiesInScene.Count; i++)
+            for (int i = 0; i < RoundManager.Instance.enemiesInScene.Count; i++)
             {
-                EnemyDetection enemyDetection = roundManager.enemiesInScene[i].
-                gameObject.GetComponent<EnemyDetection>();
+                EnemyDetection enemyDetection = RoundManager
+                    .Instance
+                    .enemiesInScene[i]
+                    .gameObject
+                    .GetComponent<EnemyDetection>();
 
                 viewRadius *= stealthMultiplier;
                 leaveRadius *= stealthMultiplier;
@@ -176,19 +189,21 @@ public class EnemyDetection : MonoBehaviour
 
             if (timesDetected == maxTimesDetected)
             {
-                for (int i = 0; i < roundManager.enemiesInScene.Count; i++)
+                for (int i = 0; i < RoundManager.Instance.enemiesInScene.Count; i++)
                 {
-                    EnemyDetection enemyDetection = roundManager.enemiesInScene[i].
-                    gameObject.GetComponent<EnemyDetection>();
+                    EnemyDetection enemyDetection = RoundManager
+                        .Instance
+                        .enemiesInScene[i]
+                        .gameObject
+                        .GetComponent<EnemyDetection>();
 
                     enemyDetection.viewRadius *= stealthMultiplier;
                     enemyDetection.leaveRadius *= stealthMultiplier;
                 }
             }
-
             else if (timesDetected >= maxTimesDetected)
             {
-                roundManager.BossCall();
+                RoundManager.Instance.BossCall();
             }
         }
     }

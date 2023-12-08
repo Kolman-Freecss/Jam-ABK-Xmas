@@ -1,7 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
+using Gameplay.Config;
 using UnityEngine;
 using UnityEngine.AI;
+
+#endregion
 
 public abstract class EnemyState : MonoBehaviour
 {
@@ -11,10 +14,14 @@ public abstract class EnemyState : MonoBehaviour
 
     protected float distanceFromTarget;
 
-    private void Update() 
+    private void Update()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
+        player = GameManager.Instance.m_player.transform;
+        if (target == null)
+        {
+            target = player;
+        }
         if (target != null)
         {
             distanceFromTarget = Vector3.Distance(transform.position, target.position);
@@ -24,7 +31,7 @@ public abstract class EnemyState : MonoBehaviour
             distanceFromTarget = 0;
         }
     }
-    
+
     //used in its heritage
     public abstract EnemyState RunCurrentState();
 }

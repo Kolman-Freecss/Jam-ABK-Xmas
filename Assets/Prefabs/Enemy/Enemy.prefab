@@ -130,9 +130,9 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0.5
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1
@@ -165,6 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22a7ca62dad9f9e44b3adca71eab561e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   debugChangeState: 0
 --- !u!114 &2760966404030592815
 MonoBehaviour:
@@ -178,6 +179,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40600fa2d7ec786489a633dbaee3c549, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
   debugChangeState: 0
 --- !u!114 &3156319695632462476
 MonoBehaviour:
@@ -191,6 +193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eae69932342abe348877c124d5e8a62c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  target: {fileID: 0}
 --- !u!114 &7939464918071937314
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,6 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c59f76454252f44abd297cace7bf1ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  myTag: Enemy
 --- !u!1 &6360954756284102421
 GameObject:
   m_ObjectHideFlags: 0
