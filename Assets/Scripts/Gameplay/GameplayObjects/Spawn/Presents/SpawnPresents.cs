@@ -6,26 +6,33 @@ public class SpawnPresents : Spawn
 {
     #region Variables
     /* Public Variables */
+    [SerializeField] private List<GameObject> presentPrefabs;
     [SerializeField]
-    private GameObject enemyPrefab;
-
-    [SerializeField] int secondsToSpawn = 1;
+    int secondsToSpawn = 1;
 
     /* Dictionary Variables */
-    private Dictionary<string, float> _points;
+    Dictionary<string, float> _points;
+    GameObject[] presents;
 
     #endregion
     // Start is called before the first frame update
-    void Start() { }
-    
-    // Update is called once per frame
-    void Update() { 
+    void Start() {
+        if (spawnPoints.Count != 4) return;
 
-        //TODO: Check if the player solved the puzzle
+        _points = FindSpawnPoints();
+        CanSpawn = true;
+        Debug.Log("NumberSpawn: " + NumberSpawn);
+        CanSpawn = true;
         if (NumberSpawn == 0 && CanSpawn)
         {
             StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
         }
+     }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
     }
 
     #region Overrides
@@ -40,6 +47,7 @@ public class SpawnPresents : Spawn
         CanSpawn = false;
         yield return new WaitForSeconds(time);
         createInstance(amount);
+        StartCoroutine(RemoveComponents());
         CanSpawn = true;
     }
     #endregion
@@ -51,12 +59,28 @@ public class SpawnPresents : Spawn
     /// instances to create.</param>
     public void createInstance(int amount)
     {
-
-        //TODO: Check the height depending on the layer
+        presents = new GameObject[amount];
         float height = 1.57f;
         for (var i = 0; i < amount; i++)
         {
-            NewInstance(_points, new List<GameObject> { enemyPrefab }, height);
+            presents[i] = NewInstance(_points, presentPrefabs, height);
+            NumberSpawn += 1;
+        }
+    }
+
+    /// <summary>
+    /// The function removes the Rigidbody component from a given GameObject after a delay of 1 second.
+    /// </summary>
+    /// <param name="GameObject">The parameter "present" is a reference to a GameObject.</param>
+    IEnumerator RemoveComponents()
+    {
+        Debug.Log(presents.Length);
+        foreach (GameObject present in presents)
+        {
+            yield return new WaitForSeconds(1);
+            Debug.Log("Removing components");
+            present.GetComponent<Rigidbody>().isKinematic = true;
+            present.GetComponent<Rigidbody>().useGravity = false;
         }
     }
 }

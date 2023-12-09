@@ -20,6 +20,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         public enum OrientationMode
         {
             OrientateToCameraForward,
+            OrientateToMovementForward,
         };
 
         public enum PlayerState
@@ -241,6 +242,12 @@ namespace Gameplay.GameplayObjects.Character.Player
                 case OrientationMode.OrientateToCameraForward:
                     desiredDirection = Camera.main.transform.forward;
                     break;
+
+                case OrientationMode.OrientateToMovementForward:
+                    if (velocityToApply.sqrMagnitude > 0f)
+                        desiredDirection = velocityToApply;
+
+                        break;
             }
 
             float angularDistance = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
