@@ -55,7 +55,6 @@ namespace Gameplay.Config
 
         public void StartGame()
         {
-            SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.InGame_City);
             SoundManager.Instance.StartBackgroundMusic(SoundManager.BackgroundMusic.InGame_City);
             IsGameStarted = true;
             OnGameStarted?.Invoke();
