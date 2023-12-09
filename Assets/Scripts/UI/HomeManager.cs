@@ -38,54 +38,47 @@ namespace UI
         {
             quitButton
                 .onClick
-                .AddListener(() =>
-                {
-                    OnQuitButtonClicked();
-                });
+                .AddListener(() => OnQuitButtonClicked());
             startButton
                 .onClick
-                .AddListener(() =>
-                {
-                    OnPlayButtonClicked();
-                });
+                .AddListener(() => OnPlayButtonClicked());
             settingsButton
                 .onClick
-                .AddListener(() =>
-                {
-                    OnSettingsButtonClicked();
-                });
+                .AddListener(() => OnSettingsButtonClicked());
             creditsButton
                 .onClick
-                .AddListener(() =>
-                {
-                    OnCreditsButtonClicked();
-                });
+                .AddListener(() => OnCreditsButtonClicked());
         }
 
         #endregion
 
         #region Logic
 
-        void OnQuitButtonClicked()
+        public void OnQuitButtonClicked()
         {
+            Debug.Log("Quit button clicked");
             SoundManager.Instance.PlayButtonClickSound();
             Application.Quit();
         }
 
-        void OnPlayButtonClicked()
+        public void OnPlayButtonClicked()
         {
+            Debug.Log("Play button clicked");
             SoundManager.Instance.PlayButtonClickSound();
+            SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.InGame_City);
             GameManager.Instance.StartGame();
         }
 
-        void OnSettingsButtonClicked()
+        public void OnSettingsButtonClicked()
         {
+            Debug.Log("Settings button clicked");
             SoundManager.Instance.PlayButtonClickSound();
             SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.Settings);
         }
 
-        void OnCreditsButtonClicked()
+        public void OnCreditsButtonClicked()
         {
+            Debug.Log("Credits button clicked");
             SoundManager.Instance.PlayButtonClickSound();
             SceneTransitionHandler.Instance.LoadScene(SceneTransitionHandler.SceneStates.Credits);
         }

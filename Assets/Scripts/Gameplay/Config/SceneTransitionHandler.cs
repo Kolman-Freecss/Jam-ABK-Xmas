@@ -18,7 +18,7 @@ namespace Gameplay.Config
         private float transitionTime = 1f;
 
         [SerializeField]
-        private bool Debug;
+        private bool DebugFlag = false;
 
         #endregion
 
@@ -60,7 +60,7 @@ namespace Gameplay.Config
 
         void Awake()
         {
-            m_hasAnimator = TryGetComponent(out m_SceneTransitionAnimator);
+            m_hasAnimator = TryGetComponent<Animator>(out m_SceneTransitionAnimator);
             m_SceneTransitionAnimator = GetComponent<Animator>();
             AssignAnimationIDs();
             ManageSingleton();
@@ -88,7 +88,7 @@ namespace Gameplay.Config
 
         void Start()
         {
-            if (Debug)
+            if (DebugFlag)
             {
                 return;
             }
@@ -105,8 +105,12 @@ namespace Gameplay.Config
         public void LoadScene(SceneStates sceneState)
         {
             if (m_hasAnimator)
+            {
+                Debug.Log("Triggering transition animation");
                 m_SceneTransitionAnimator.SetTrigger(m_animIDTransition);
+            }
             SceneManager.LoadSceneAsync(sceneState.ToString());
+            Debug.Log("Loading scene: " + sceneState);
             SetSceneState(sceneState);
         }
 
