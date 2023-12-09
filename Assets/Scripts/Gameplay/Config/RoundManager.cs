@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
+using Puzzle;
 using Systems.NarrationSystem.Dialogue.Components;
 using Systems.NarrationSystem.Dialogue.Data;
 using Systems.NarrationSystem.Flow;
@@ -62,6 +63,7 @@ namespace Gameplay.Config
 
         // House Settings
         private HouseController m_CurrentHouse;
+        private PuzzleController puzzleController;
 
         #endregion
 
@@ -110,7 +112,6 @@ namespace Gameplay.Config
         #endregion
 
         #region House Flow
-
         public void OnPlayerEnterHouse(HouseController houseController)
         {
             m_CurrentHouse = houseController;

@@ -15,7 +15,14 @@ public class SpawnPresents : Spawn
     GameObject[] presents;
 
     #endregion
-    // Start is called before the first frame update
+    /// <summary>
+    /// The Start function checks if there are 4 spawn points, sets CanSpawn to true, and starts
+    /// spawning objects with a delay if NumberSpawn is 0 and CanSpawn is true.
+    /// </summary>
+    /// <returns>
+    /// If the condition `spawnPoints.Count != 4` is true, then nothing is being returned and the
+    /// function will exit.
+    /// </returns>
     void Start() {
         if (spawnPoints.Count != 4) return;
 
@@ -25,7 +32,8 @@ public class SpawnPresents : Spawn
         CanSpawn = true;
         if (NumberSpawn == 0 && CanSpawn)
         {
-            StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
+            StartCoroutine(SpawnWithDelay(secondsToSpawn, 301));
+            //StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
         }
      }
 
