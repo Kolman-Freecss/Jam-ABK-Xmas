@@ -384,10 +384,6 @@ PrefabInstance:
       propertyPath: m_Lens.FieldOfView
       value: 24.99999
       objectReference: {fileID: 0}
-    - target: {fileID: 6966031952785664137, guid: 280a0cbb6296e254ab954fe6b38a4510, type: 3}
-      propertyPath: acceleration
-      value: 360
-      objectReference: {fileID: 0}
     - target: {fileID: 8230002023748739530, guid: 280a0cbb6296e254ab954fe6b38a4510, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.987017

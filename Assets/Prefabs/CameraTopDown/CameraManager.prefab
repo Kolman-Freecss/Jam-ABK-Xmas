@@ -229,4 +229,4 @@ MonoBehaviour:
   enableRotation: {fileID: -6979195188238000979, guid: e0afffd323703db41b879efd884a43f7, type: 3}
   acceleration: 1440
   maxSpeed: 720
-  deceleration: 720
+  deceleration: 1440

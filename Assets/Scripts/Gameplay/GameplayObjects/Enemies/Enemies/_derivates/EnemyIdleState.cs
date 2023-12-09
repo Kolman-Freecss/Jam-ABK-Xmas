@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using UnityEngine;
+
+#endregion
 
 public class EnemyIdleState : EnemyState
 {
@@ -8,13 +10,15 @@ public class EnemyIdleState : EnemyState
     EnemyChaseState enemyChaseState;
     EnemyStateManager enemyStateManager;
     EnemyPursueTargetState enemyPursueTargetState;
+    PatrolAI patrolAI;
 
     bool playerDetected;
 
     [Header("Debug")]
-    [SerializeField] bool debugChangeState;
+    [SerializeField]
+    bool debugChangeState;
 
-    private void OnValidate() 
+    private void OnValidate()
     {
         if (debugChangeState)
         {
@@ -23,8 +27,9 @@ public class EnemyIdleState : EnemyState
         }
     }
 
-    private void Start() 
+    private void Start()
     {
+        patrolAI = GetComponent<PatrolAI>();
         enemyChaseState = GetComponent<EnemyChaseState>();
         enemyDetection = GetComponentInChildren<EnemyDetection>();
         enemyStateManager = GetComponent<EnemyStateManager>();
@@ -36,15 +41,17 @@ public class EnemyIdleState : EnemyState
     {
         if (playerDetected && target != null)
         {
-            if (enemyStateManager.tag == "Boss")
+            if (enemyStateManager.myTag == "Boss")
                 return enemyPursueTargetState;
             else
                 return enemyChaseState;
         }
-
         else
+        {
             enemyDetection.OnPlayerDetection();
-            return this;
+            patrolAI.PatrolLogic();
+        }
+        return this;
     }
 
     public void OnPlayerDetected()
