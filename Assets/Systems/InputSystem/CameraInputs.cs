@@ -102,7 +102,7 @@ public partial class @CameraInputs: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""77144756-63b3-49a1-adaa-13a3c2aca6d5"",
                     ""path"": ""<Mouse>/rightButton"",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""EnableRotation"",

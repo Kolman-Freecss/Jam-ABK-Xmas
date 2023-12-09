@@ -22,22 +22,19 @@ public class RotateAroundCamera : MonoBehaviour
 
     private void Update() 
     {
-        Vector2 zoomValue = cameraRotation.action.ReadValue<Vector2>();
-
-        if (enableRotation.action.WasPerformedThisFrame())
+        if (enableRotation.action.IsPressed())
         {
-            if (zoomValue.x > 0)
+            Vector2 rotationValue = cameraRotation.action.ReadValue<Vector2>().normalized;
+            //Debug.Log(rotationValue.x + "rotValue X");
+            if (rotationValue.x != 0)
             {
-                currentSpeed -= acceleration * Time.deltaTime;
-                ClampMaxSpeed();
-            }
-            else if (zoomValue.x < 0)
-            {
-                currentSpeed += acceleration * Time.deltaTime;
+                currentSpeed += acceleration * rotationValue.x * Time.deltaTime;
+                Debug.Log(currentSpeed + "currentSpeed");
                 ClampMaxSpeed();
             }
             else
             {
+                //Debug.Log("else entrado");
                 float oldCurrentSpeed = currentSpeed;
                 currentSpeed += deceleration * Time.deltaTime * -Mathf.Sign(currentSpeed);
 
@@ -48,6 +45,7 @@ public class RotateAroundCamera : MonoBehaviour
         }
 
         Vector3 newEuler = transform.localEulerAngles + Vector3.up * currentSpeed * Time.deltaTime;
+        //Debug.Log(newEuler + "newEuler");
         transform.localEulerAngles = newEuler;
     }
 
