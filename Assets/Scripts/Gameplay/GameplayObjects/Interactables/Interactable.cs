@@ -47,5 +47,11 @@ namespace Gameplay.GameplayObjects.Interactables
                 GameManager.Instance.m_player.PlayerInteractionInstigator.OnDestroyInteractable(this);
             }
         }
+
+        public UnityEvent<object> OnInteraction
+        {
+            get => m_OnInteraction;
+            set => m_OnInteraction = value;
+        }
     }
 }
