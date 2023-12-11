@@ -14,6 +14,12 @@ namespace Gameplay.Config
         [SerializeField]
         public SceneStates DefaultScene = SceneStates.Home;
 
+        [SerializeField]
+        private float transitionTime = 1f;
+
+        [SerializeField]
+        private bool DebugFlag = false;
+
         #endregion
 
         #region Member properties
@@ -21,6 +27,11 @@ namespace Gameplay.Config
         public static SceneTransitionHandler Instance { get; private set; }
 
         private SceneStates m_SceneState;
+
+        private Animator m_SceneTransitionAnimator;
+
+        private bool m_hasAnimator;
+        private int m_animIDTransition = 0;
 
         #endregion
 
@@ -41,6 +52,7 @@ namespace Gameplay.Config
             Credits,
             Settings,
             InGame_City,
+            Hell,
             EndGame
         }
 
@@ -48,8 +60,16 @@ namespace Gameplay.Config
 
         void Awake()
         {
+            m_hasAnimator = TryGetComponent<Animator>(out m_SceneTransitionAnimator);
+            m_SceneTransitionAnimator = GetComponent<Animator>();
+            AssignAnimationIDs();
             ManageSingleton();
             SetSceneState(SceneStates.InitBootstrap);
+        }
+
+        private void AssignAnimationIDs()
+        {
+            m_animIDTransition = Animator.StringToHash("Transition");
         }
 
         private void ManageSingleton()
@@ -68,6 +88,10 @@ namespace Gameplay.Config
 
         void Start()
         {
+            if (DebugFlag)
+            {
+                return;
+            }
             if (m_SceneState == SceneStates.InitBootstrap)
             {
                 LoadScene(DefaultScene);
@@ -80,7 +104,13 @@ namespace Gameplay.Config
 
         public void LoadScene(SceneStates sceneState)
         {
+            if (m_hasAnimator)
+            {
+                Debug.Log("Triggering transition animation");
+                m_SceneTransitionAnimator.SetTrigger(m_animIDTransition);
+            }
             SceneManager.LoadSceneAsync(sceneState.ToString());
+            Debug.Log("Loading scene: " + sceneState);
             SetSceneState(sceneState);
         }
 

@@ -21,7 +21,7 @@ namespace Gameplay.GameplayObjects.Interactables._derivatives
                 Debug.LogWarning("You are not supposed to be here, present!!");
             }
             // Audio.PlaySound("PresentReached");
-            base.DoInteraction(obj);
+            base.DoInteraction(this);
         }
     }
 }

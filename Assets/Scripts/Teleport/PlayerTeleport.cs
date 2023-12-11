@@ -4,21 +4,24 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerTeleport : MonoBehaviour
+public class PlayerTeleport
 {
     [SerializeField] Transform player, destination;
     [SerializeField] GameObject playerPrefab;
+    
 
-    private void OnTriggerEnter(Collider other)
+    public PlayerTeleport(GameObject playerPrefab, Transform player, Transform destination)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerPrefab.SetActive(false);
-            player.position = destination.position;
-            playerPrefab.SetActive(true);
+        this.playerPrefab = playerPrefab;
+        this.player = player;   
+        this.destination = destination;
 
-
-        }
+    }
+    public void TeleportPlayer()
+    {
+        playerPrefab.SetActive(false);
+        player.position = destination.position;
+        playerPrefab.SetActive(true);
     }
 
 

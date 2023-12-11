@@ -41,6 +41,9 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
         [SerializeField]
         private PlayerAimingPlaneController m_aimingTarget;
 
+        [SerializeField]
+        private GameObject TempWrapper;
+
         #endregion
 
         #region Member Variables
@@ -83,7 +86,6 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
         {
             m_throwableItems.Add(item.ThrowableItem);
             m_PlayerThrowItemsQuantityText.text = m_throwableItems.Count.ToString();
-            m_playerInteractionInstigator.OnDestroyInteractable(item);
             Destroy(item.gameObject);
         }
 
@@ -121,8 +123,10 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
                 return;
             }
             Vector3 throwDirection = m_aimingTarget.transform.position - m_playerRightHand.transform.position;
-            Quaternion oldRotation = m_currentThrowableItem.ItemPrefab.transform.rotation;
-            transform.LookAt(m_aimingTarget.transform);
+            Vector3 playerDirection = throwDirection;
+            playerDirection.y = 0;
+            Quaternion q = Quaternion.LookRotation(playerDirection);
+            transform.rotation = q;
             Vector3 finalShotPosition = m_playerRightHand.transform.position + (throwDirection.normalized * throwRange);
             if (
                 Physics.Raycast(
@@ -138,18 +142,36 @@ namespace Gameplay.GameplayObjects.Character.Player._actions
             }
 
             ThrowItemAction(m_currentThrowableItem, finalShotPosition);
-            transform.rotation = oldRotation;
 
             OnThrowItemAction?.Invoke(m_currentThrowableItem);
 
             void ThrowItemAction(ThrowableItem throwableItem, Vector3 finalShotPosition)
             {
-                m_currentThrowableItem.ItemPrefab.GetComponent<ParentConstraint>().constraintActive = false;
-                m_currentThrowableItem.ItemPrefab.GetComponent<Rigidbody>().isKinematic = false;
+                ThrowableObject to = m_currentThrowableItem.InstancedItemPrefab.GetComponent<ThrowableObject>();
+                to.ParentConstraint.constraintActive = false;
+                to.ParentConstraint.enabled = false;
+                to.Rigidbody.isKinematic = false;
+                to.gameObject.transform.SetParent(TempWrapper.transform, true);
+
+                Vector3 forceToApply =
+                    (finalShotPosition - m_playerRightHand.transform.position).normalized * to.ThrowForce;
+                forceToApply.y += 10f;
+                to.Rigidbody.AddForce(forceToApply, ForceMode.Impulse);
+
                 m_currentThrowableItem = null;
                 m_throwableItems.Remove(throwableItem);
                 m_PlayerThrowItemsQuantityText.text = m_throwableItems.Count.ToString();
+
+                to.OnThrowableObjectImpact += OnThrowableItemImpact;
             }
+        }
+
+        public void OnThrowableItemImpact(ThrowableObject to)
+        {
+            to.Rigidbody.isKinematic = true;
+            ParticleSystem effect = to.ThrowEffect;
+            effect.Play();
+            Destroy(to.gameObject, to.ThrowEffectDuration);
         }
 
         private void ShowThrowableItem(bool show)

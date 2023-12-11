@@ -1,5 +1,6 @@
 ﻿#region
 
+using Gameplay.Config;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,6 +27,25 @@ namespace Gameplay.GameplayObjects.Interactables
             where TObject : IInteractable
         {
             m_OnInteraction.Invoke(obj);
+        }
+
+        private void OnDestroy()
+        {
+            RemoveFromPlayerInteractables();
+            m_OnInteraction.RemoveAllListeners();
+        }
+
+        private void OnDisable()
+        {
+            RemoveFromPlayerInteractables();
+        }
+
+        private void RemoveFromPlayerInteractables()
+        {
+            if (GameManager.Instance.m_player)
+            {
+                GameManager.Instance.m_player.PlayerInteractionInstigator.OnDestroyInteractable(this);
+            }
         }
     }
 }

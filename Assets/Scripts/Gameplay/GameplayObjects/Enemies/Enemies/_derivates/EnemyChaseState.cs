@@ -1,20 +1,26 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using UnityEngine;
 using UnityEngine.AI;
 
+#endregion
+
 public class EnemyChaseState : EnemyState
 {
-    NavMeshAgent agent;
-    Transform player;
-
-    EnemyAttackState enemyAttackState;
+    EnemyDetection enemyDetection;
+    EnemyCatchState enemyCatchState;
+    EnemyLookLastTargetPosState enemyLookLastPos;
     EnemyCatchRange enemyCatchRange;
 
-    [Header("Debug")]
-    [SerializeField] bool debugChangeState;
+    Vector3 lastPerceivedPos;
+    bool hasLastPerceivedPosition;
+    bool targetIsPlayer;
 
-    private void OnValidate() 
+    [Header("Debug")]
+    [SerializeField]
+    bool debugChangeState;
+
+    private void OnValidate()
     {
         if (debugChangeState)
         {
@@ -22,27 +28,83 @@ public class EnemyChaseState : EnemyState
         }
     }
 
-    private void Start() 
+    private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        enemyAttackState = GetComponent<EnemyAttackState>();
+        enemyDetection = GetComponentInChildren<EnemyDetection>();
+        enemyCatchState = GetComponent<EnemyCatchState>();
         enemyCatchRange = GetComponent<EnemyCatchRange>();
+        enemyLookLastPos = GetComponent<EnemyLookLastTargetPosState>();
+
+        if (!enemyDetection)
+        {
+            Debug.LogError("EnemyDetection not found in children");
+        }
+        else
+        {
+            enemyDetection.onStartFollowing.AddListener(TargetAsignation);
+        }
+        if (!enemyLookLastPos)
+        {
+            Debug.LogError("EnemyLookLastTargetPosState not found");
+        }
+        else
+        {
+            enemyLookLastPos.onPerceivePosition.AddListener(OnLastPerceivedPositionReached);
+        }
     }
 
     //if player in catch range, change to attack
     public override EnemyState RunCurrentState()
     {
-        if (enemyCatchRange.IsInCatchRange() || debugChangeState)
-            return enemyAttackState;
+        if (targetIsPlayer)
+            target = player;
         else
+            target = null;
+
+        lastPerceivedPos = target.position;
+        hasLastPerceivedPosition = true;
+
+        if (enemyCatchRange.IsInCatchRange() || debugChangeState)
+            return enemyCatchState;
+        else if (!enemyCatchRange.IsInCatchRange() && !target)
+        {
+            if (hasLastPerceivedPosition)
+            {
+                enemyLookLastPos.lastPerceivedPos = this.lastPerceivedPos;
+                return enemyLookLastPos;
+            }
+            else
+            {
+                return this;
+            }
+        }
+        else
+        {
             ChaseLogic();
             return this;
+        }
+    }
+
+    private void TargetAsignation()
+    {
+        if (!targetIsPlayer)
+            targetIsPlayer = true;
+        else
+            targetIsPlayer = false;
     }
 
     private void ChaseLogic()
     {
-        agent.SetDestination(player.position);
+        //agent.SetDestination(target.position);
+        NavMeshPath path = new NavMeshPath();
+        agent.CalculatePath(target.position, path);
+        agent.SetPath(path);
+    }
+
+    void OnLastPerceivedPositionReached()
+    {
+        hasLastPerceivedPosition = false;
     }
 }

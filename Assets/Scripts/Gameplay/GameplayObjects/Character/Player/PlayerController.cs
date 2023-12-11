@@ -20,6 +20,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         public enum OrientationMode
         {
             OrientateToCameraForward,
+            OrientateToMovementForward,
         };
 
         public enum PlayerState
@@ -81,6 +82,9 @@ namespace Gameplay.GameplayObjects.Character.Player
         private PlayerBehaviour m_PlayerBehaviour;
         private float verticalVelocity = 0f;
         private Vector3 velocityToApply = Vector3.zero; // World
+
+        private PlayerInteractionInstigator m_playerInteractionInstigator;
+
         #endregion
 
         #region Init Data
@@ -109,8 +113,8 @@ namespace Gameplay.GameplayObjects.Character.Player
         protected new void Start()
         {
             base.Start();
+            m_playerInteractionInstigator = GetComponent<PlayerInteractionInstigator>();
             GameManager.Instance.m_player = this;
-            
         }
 
         #endregion
@@ -238,7 +242,12 @@ namespace Gameplay.GameplayObjects.Character.Player
                 case OrientationMode.OrientateToCameraForward:
                     desiredDirection = Camera.main.transform.forward;
                     break;
-               
+
+                case OrientationMode.OrientateToMovementForward:
+                    if (velocityToApply.sqrMagnitude > 0f)
+                        desiredDirection = velocityToApply;
+
+                        break;
             }
 
             float angularDistance = Vector3.SignedAngle(transform.forward, desiredDirection, Vector3.up);
@@ -260,10 +269,10 @@ namespace Gameplay.GameplayObjects.Character.Player
                 currentStamina += staminaRecoveryRate * Time.deltaTime;
                 currentStamina = Mathf.Clamp(currentStamina, 0f, maxStamina);
             }
-            if(staminaSlider != null)
+            if (staminaSlider != null)
             {
                 UpdateStaminaUI();
-            } 
+            }
         }
 
         private void UpdateStaminaUI()
@@ -305,6 +314,7 @@ namespace Gameplay.GameplayObjects.Character.Player
         #region Getter & Setter
 
         public PlayerBehaviour PlayerBehaviour => m_PlayerBehaviour;
+        public PlayerInteractionInstigator PlayerInteractionInstigator => m_playerInteractionInstigator;
 
         #endregion
     }

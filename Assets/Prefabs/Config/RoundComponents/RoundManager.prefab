@@ -44,3 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9afc32806fa24b7e88d34af74e608df9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  roundType: 0
+  enemiesInScene: []
+  m_RoundStartDialogue: {fileID: 0}
+  presentsToFinishRound: 10
+  bossCall:
+    m_PersistentCalls:
+      m_Calls: []
