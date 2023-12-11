@@ -143,7 +143,7 @@ namespace Gameplay.GameplayObjects.Character.Player
             m_playerCurrentCostume.SetActive(true);
         }
 
-        public void OnPlayerCallHouse()
+        public void OnPlayerCallHouse(object obj)
         {
             Costume(PlayerCostumeType.Santa);
         }

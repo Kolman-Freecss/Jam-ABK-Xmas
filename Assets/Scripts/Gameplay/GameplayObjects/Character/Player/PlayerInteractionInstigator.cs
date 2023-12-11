@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using Gameplay.GameplayObjects.Interactables;
+using Gameplay.GameplayObjects.Interactables._derivatives;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -30,6 +31,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private event Action<IInteractable> m_OnDiscoverInteractable;
         private List<IInteractable> m_NearbyInteractables = new();
+        private PlayerBehaviour playerBehaviour;
 
         #endregion
 
@@ -42,6 +44,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         private void Start()
         {
+            playerBehaviour = GetComponent<PlayerBehaviour>();
             m_InteractText.enabled = false;
             m_InteractAction.action.performed += ctx => OnInteract();
             m_OnDiscoverInteractable += OnDiscoverInteractable;
@@ -60,7 +63,7 @@ namespace Gameplay.GameplayObjects.Character.Player
                 m_InteractText.enabled = false;
             }
         }
-        
+
         public void OnDestroyInteractable(IInteractable obj)
         {
             m_NearbyInteractables.Remove(obj);
@@ -79,6 +82,10 @@ namespace Gameplay.GameplayObjects.Character.Player
             IInteractable interactable = other.GetComponent<IInteractable>();
             if (interactable != null)
             {
+                if (interactable is DoorInteractable)
+                {
+                    (interactable as DoorInteractable).OnInteraction.AddListener(playerBehaviour.OnPlayerCallHouse);
+                }
                 m_InteractText.enabled = true;
                 m_NearbyInteractables.Add(interactable);
                 m_OnDiscoverInteractable?.Invoke(interactable);
@@ -90,6 +97,10 @@ namespace Gameplay.GameplayObjects.Character.Player
             IInteractable interactable = other.GetComponent<IInteractable>();
             if (interactable != null)
             {
+                if (interactable is DoorInteractable)
+                {
+                    (interactable as DoorInteractable).OnInteraction.RemoveListener(playerBehaviour.OnPlayerCallHouse);
+                }
                 m_NearbyInteractables.Remove(interactable);
                 if (!HasNearbyInteractables())
                 {

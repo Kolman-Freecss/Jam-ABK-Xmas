@@ -59,5 +59,66 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: -4550350518825358673, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5841204176272652628}
+    - targetCorrespondingSourceObject: {fileID: -4550350518825358673, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1926289488827621229}
   m_SourcePrefab: {fileID: 100100000, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+--- !u!1 &8357548507468809357 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -4550350518825358673, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+  m_PrefabInstance: {fileID: 3684527620837355042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5841204176272652628
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8357548507468809357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ed7051655df59ec4e830652b5fd462ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_OnInteraction:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11500000, guid: 0cc9c2d5ee274594af465f804bd528cd, type: 3}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_IsInteractable: 1
+  m_DoorOpenSound: {fileID: 0}
+--- !u!65 &1926289488827621229
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8357548507468809357}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 3.5186248, y: 2.5750012, z: 4.9346595}
+  m_Center: {x: 0.09870847, y: -0.7875067, z: 0.43195972}
