@@ -14,9 +14,16 @@ public class EnemyIdleState : EnemyState
 
     bool playerDetected;
 
+    [Header("Stun")]
+    //start not stunned
+    private bool stunnedTimerOn = false;
+    private float timer;
+    [SerializeField] float maxStunnedTime = 3f;
+
     [Header("Debug")]
     [SerializeField]
     bool debugChangeState;
+
 
     private void OnValidate()
     {
@@ -48,8 +55,18 @@ public class EnemyIdleState : EnemyState
         }
         else
         {
+            //if its stunned, neither patrol nor detection is called
+            if (stunnedTimerOn)
+            {
+                timer += Time.deltaTime;
+                if (timer >= maxStunnedTime)
+                {
+                    timer = 0;
+                    stunnedTimerOn = false;
+                }
+            }
             enemyDetection.OnPlayerDetection();
-            patrolAI.PatrolLogic();
+            patrolAI.PatrolLogic(); 
         }
         return this;
     }
@@ -60,5 +77,14 @@ public class EnemyIdleState : EnemyState
             playerDetected = true;
         else
             playerDetected = false;
+    }
+
+    public void SwitchTimer()
+    {
+        if (stunnedTimerOn)
+            stunnedTimerOn = false;
+
+        else
+            stunnedTimerOn = true;
     }
 }
