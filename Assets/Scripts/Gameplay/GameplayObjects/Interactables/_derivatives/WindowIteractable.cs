@@ -1,18 +1,18 @@
 using System.Collections;
 using System.Collections.Generic;
+using Gameplay.Config;
+using Gameplay.GameplayObjects.Interactables._common;
 using UnityEngine;
 
-public class WindowIteractable : MonoBehaviour
+public class WindowIteractable : BaseInteractableObject
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField]
+    private AudioClip m_chimeneySound;
+    
 
-    // Update is called once per frame
-    void Update()
+    public override void DoInteraction<TData>(TData obj)
     {
-        
+        RoundManager.Instance.OnPlayerInteractsWithPuzzle();
+        base.DoInteraction(obj);
     }
 }

@@ -63,7 +63,6 @@ namespace Gameplay.Config
 
         // House Settings
         private HouseController m_CurrentHouse;
-        private List<PuzzleController> puzzles;
 
         #endregion
 
@@ -72,7 +71,6 @@ namespace Gameplay.Config
         private void Awake()
         {
             m_CurrentRoundState = RoundState.NotStarted;
-            puzzles = new List<PuzzleController>();
             ManageSingleton();
         }
 
@@ -114,23 +112,22 @@ namespace Gameplay.Config
 
         #region House Flow
         public void OnPlayerCompletedPuzzle(HouseController houseController) { 
-            //TODO: TP to house
+            PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
+            // PlayerTeleport playerTeleport = PlayerTeleport();
         }
 
         public void OnPlayerFailedPuzzle(HouseController houseController){
-            //TODO: Close canvas
+            PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
         }
 
-        public void OnPlayerInteractsWithPuzzle(HouseController houseController){
-            GameObject puzzleRandom = PuzzleRandomManager.Instance.SelectPuzzle();
-            houseController.puzzleController = puzzleRandom.GetComponent<PuzzleController>();
-            puzzles.Add(houseController.puzzleController);
+        public void OnPlayerInteractsWithHouse(HouseController houseController){
+            m_CurrentHouse = houseController;
+            houseController.puzzle = PuzzleRandomManager.Instance.SelectPuzzle();
         }
 
 
         public void OnPlayerEnterHouse(HouseController houseController)
         {
-            m_CurrentHouse = houseController;
             GameManager.Instance.m_player.PlayerBehaviour.OnPlayerEnterHouse(houseController);
             Debug.Log("Player entered house");
         }

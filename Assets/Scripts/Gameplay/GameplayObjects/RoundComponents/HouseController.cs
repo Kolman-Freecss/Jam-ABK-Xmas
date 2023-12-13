@@ -44,7 +44,7 @@ namespace Gameplay.GameplayObjects.RoundComponents
         public int TimeToComplete = 60;
 
         public HouseConsequence m_houseConsequence;
-        public PuzzleController puzzleController;
+        public GameObject puzzle;
 
         [SerializeField]
         public string HouseName;
