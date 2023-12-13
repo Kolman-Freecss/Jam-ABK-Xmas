@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/InGame/Hell.unity
     guid: 1dc11f29b47dff54c9b0e134b503ff5b
+  - enabled: 1
+    path: Assets/{Tests}/Integration/Scenes/Temp/Ruben/InGame_Ruben_Test.unity
+    guid: 2548d1a3f97430848900895000de8f78
   m_configObjects: {}

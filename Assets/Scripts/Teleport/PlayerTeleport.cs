@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerTeleport
+public class PlayerTeleport : MonoBehaviour
 {
     [SerializeField] Transform player, destination;
     [SerializeField] GameObject playerPrefab;

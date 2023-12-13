@@ -114,20 +114,25 @@ namespace Gameplay.Config
         #endregion
 
         #region House Flow
-        public void OnPlayerCompletedPuzzle(HouseController houseController) { 
+        public void OnPlayerCompletedPuzzle(HouseController houseController)
+        {  
+            houseController.puzzle.GetComponent<PuzzleController>().OnPuzzleSolved();
             PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
-            // PlayerTeleport playerTeleport = PlayerTeleport();
+            SceneTransitionHandler.Instance.StartTransition();
+            GameManager.Instance.m_player.transform.position = houseController.m_HousePosition.position;
         }
 
-        public void OnPlayerFailedPuzzle(HouseController houseController){
+        public void OnPlayerFailedPuzzle(HouseController houseController)
+        {
+            houseController.puzzle.GetComponent<PuzzleController>().OnPuzzleFailed();
             PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
         }
 
-        public void OnPlayerInteractsWithHouse(HouseController houseController){
+        public void OnPlayerInteractsWithHouse(HouseController houseController)
+        {
             m_CurrentHouse = houseController;
             houseController.puzzle = PuzzleRandomManager.Instance.SelectPuzzle();
         }
-
 
         public void OnPlayerEnterHouse(HouseController houseController)
         {

@@ -25,7 +25,9 @@ namespace Gameplay.GameplayObjects.RoundComponents
             ParentKillers
         }
 
-        #region Inspector Variables
+        #region Inspector Variable
+        [Header("House Position")]
+        public Transform m_HousePosition;
 
         [Header("House UI")]
         [SerializeField]

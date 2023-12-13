@@ -53,6 +53,7 @@ namespace Gameplay.Config
             Settings,
             InGame_City,
             Hell,
+            InGame_Ruben_test,
             EndGame
         }
 
@@ -112,6 +113,12 @@ namespace Gameplay.Config
             SceneManager.LoadSceneAsync(sceneState.ToString());
             Debug.Log("Loading scene: " + sceneState);
             SetSceneState(sceneState);
+        }
+
+        public void StartTransition(){
+            if(m_hasAnimator){
+                m_SceneTransitionAnimator.SetTrigger(m_animIDTransition);
+            }
         }
 
         private void SetSceneState(SceneStates sceneState)
