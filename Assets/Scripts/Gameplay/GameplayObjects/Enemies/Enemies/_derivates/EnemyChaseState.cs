@@ -63,8 +63,11 @@ public class EnemyChaseState : EnemyState
         else
             target = null;
 
-        lastPerceivedPos = target.position;
-        hasLastPerceivedPosition = true;
+        if (!target)
+        {
+            lastPerceivedPos = target.position;
+            hasLastPerceivedPosition = true;
+        }
 
         if (enemyCatchRange.IsInCatchRange() || debugChangeState)
             return enemyCatchState;

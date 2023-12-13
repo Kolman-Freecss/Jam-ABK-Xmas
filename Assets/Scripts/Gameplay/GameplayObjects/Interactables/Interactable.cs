@@ -23,6 +23,13 @@ namespace Gameplay.GameplayObjects.Interactables
 
         #endregion
 
+        protected AudioSource m_AudioSource;
+
+        protected virtual void Awake()
+        {
+            m_AudioSource = GetComponent<AudioSource>();
+        }
+
         public virtual void DoInteraction<TObject>(TObject obj)
             where TObject : IInteractable
         {
@@ -46,6 +53,12 @@ namespace Gameplay.GameplayObjects.Interactables
             {
                 GameManager.Instance.m_player.PlayerInteractionInstigator.OnDestroyInteractable(this);
             }
+        }
+
+        public UnityEvent<object> OnInteraction
+        {
+            get => m_OnInteraction;
+            set => m_OnInteraction = value;
         }
     }
 }
