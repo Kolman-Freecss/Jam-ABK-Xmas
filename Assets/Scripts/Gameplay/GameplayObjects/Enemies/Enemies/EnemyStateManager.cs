@@ -1,5 +1,6 @@
 #region
 
+using Entities;
 using Gameplay.Config;
 using UnityEngine;
 using UnityEngine.AI;
@@ -13,11 +14,15 @@ public class EnemyStateManager : MonoBehaviour
 
     EnemyIdleState enemyIdleState;
 
+    [HideInInspector]
+    public EnemyObserver enemyObserver = new EnemyObserver();
+
     public string myTag = "Enemy";
 
     private void Start()
     {
         RoundManager.Instance.enemiesInScene.Add(this);
+        enemyObserver.AddObserver(RoundManager.Instance);
         enemyIdleState = GetComponent<EnemyIdleState>();
         currentState = enemyIdleState;
     }
@@ -33,7 +38,9 @@ public class EnemyStateManager : MonoBehaviour
         EnemyState nextState = currentState?.RunCurrentState();
 
         if (nextState != null)
+        {
             SwitchToNextState(nextState);
+        }
     }
 
     private void SwitchToNextState(EnemyState nextState)

@@ -1,23 +1,29 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using UnityEngine;
+
+#endregion
 
 public class EnemyCatchState : EnemyState
 {
     EnemyCatchRange enemyCatchRange;
     EnemyChaseState enemyChaseState;
+    EnemyIdleState enemyIdleState;
 
-    private void Start() 
+    private void Start()
     {
         enemyCatchRange = GetComponent<EnemyCatchRange>();
+        enemyChaseState = GetComponent<EnemyChaseState>();
     }
 
     public override EnemyState RunCurrentState()
     {
-        Debug.Log("attack");
+        Debug.Log("Catch");
         if (enemyCatchRange.IsInCatchRange())
-            //attack
-            return this;
+        {
+            enemyStateManager.enemyObserver.Notify(this);
+            return enemyIdleState;
+        }
         else
             return enemyChaseState;
     }
