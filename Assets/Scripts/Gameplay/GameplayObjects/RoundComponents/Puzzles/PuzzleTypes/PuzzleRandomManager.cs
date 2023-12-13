@@ -13,9 +13,11 @@ namespace Puzzle
         public static PuzzleRandomManager Instance { get; set; }
 
 
-        public void SelectPuzzle(){
+        public GameObject SelectPuzzle(){
             int randomIndex = Random.Range(0, puzzleList.Count);
-            puzzleActive.Add(Instantiate(puzzleList[randomIndex]));
+            GameObject puzzleRandom = Instantiate(puzzleList[randomIndex]);
+            puzzleActive.Add(puzzleRandom);
+            return puzzleRandom;
         }
 
         void Update(){

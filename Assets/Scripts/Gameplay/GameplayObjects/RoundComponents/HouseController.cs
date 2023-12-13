@@ -3,6 +3,7 @@
 using System.Collections;
 using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Interactables._derivatives;
+using Puzzle;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -43,6 +44,7 @@ namespace Gameplay.GameplayObjects.RoundComponents
         public int TimeToComplete = 60;
 
         public HouseConsequence m_houseConsequence;
+        public PuzzleController puzzleController;
 
         [SerializeField]
         public string HouseName;
@@ -51,6 +53,12 @@ namespace Gameplay.GameplayObjects.RoundComponents
         private int presentsToCollect = 5;
 
         [Header("Events")]
+        [SerializeField]
+        private UnityEvent<HouseController> onPuzzleSolved;
+
+        [SerializeField]
+        private UnityEvent<HouseController> onPuzzleFailed;
+
         [SerializeField]
         private UnityEvent<HouseController> onHouseEnter;
 
@@ -122,6 +130,17 @@ namespace Gameplay.GameplayObjects.RoundComponents
             m_HouseCanvas.enabled = show;
         }
 
+        public void OnPuzzleSolved(PuzzleController puzzle)
+        {
+            puzzle.OnPuzzleSolved();
+            onPuzzleSolved?.Invoke(this);
+        }
+
+        public void OnPuzzleFailed(PuzzleController puzzle)
+        {
+            puzzle.OnPuzzleFailed();
+            onPuzzleFailed?.Invoke(this);
+        }
         public void OnPresentCollected(PresentInteractable present)
         {
             Destroy(present);

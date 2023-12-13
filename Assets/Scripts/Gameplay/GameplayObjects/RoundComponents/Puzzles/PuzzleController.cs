@@ -43,6 +43,14 @@ namespace Puzzle
             puzzleState = new PuzzleState(state);
         }
 
+        public void OnPuzzleSolved(){
+            onPuzzleSolved?.Invoke();
+        }
+
+        public void OnPuzzleFailed(){
+            onPuzzleFailed?.Invoke();
+        }
+
         /// <summary>
         /// The function calculates the progress percentage based on the current progress and total
         /// steps.
