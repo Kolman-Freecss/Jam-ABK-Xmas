@@ -1,7 +1,10 @@
 ﻿#region
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using Entities;
+using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
 using Puzzle;
@@ -18,7 +21,7 @@ namespace Gameplay.Config
     /// <summary>
     /// Manages the round state and the round flow.
     /// </summary>
-    public class RoundManager : MonoBehaviour
+    public class RoundManager : MonoBehaviour, IEnemyObserver
     {
         public enum RoundState
         {
@@ -183,6 +186,30 @@ namespace Gameplay.Config
         #endregion
 
         #region Round Flow
+
+        public void OnEnemyStateNotify(EnemyState enemyState)
+        {
+            if (enemyState is EnemyCatchState)
+            {
+                PlayerCaught();
+            }
+        }
+
+        public void PlayerCaught()
+        {
+            //TODO: Trigger VFX and sound.
+            StartCoroutine(OnPlayerCaught());
+
+            IEnumerator OnPlayerCaught()
+            {
+                Time.timeScale = 0f;
+                yield return new WaitForSeconds(5f);
+                PlayerController player = GameManager.Instance.m_player;
+                //TODO: Temporal position. Use checkpoint system instead.
+                player.transform.position = new Vector3(151.69f, 0.28f, 7.43f);
+                Time.timeScale = 1f;
+            }
+        }
 
         /// <summary>
         /// Is called by the RoundManagerUI when the player clicks on the start round button.

@@ -11,8 +11,14 @@ public abstract class EnemyState : MonoBehaviour
     protected NavMeshAgent agent;
     protected Transform player;
     public Transform target;
+    protected EnemyStateManager enemyStateManager;
 
     protected float distanceFromTarget;
+
+    private void Start()
+    {
+        enemyStateManager = GetComponent<EnemyStateManager>();
+    }
 
     private void Update()
     {

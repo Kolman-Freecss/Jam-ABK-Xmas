@@ -8,7 +8,8 @@ public class EnemyCatchRange : MonoBehaviour
 {
     GameObject player;
 
-    [SerializeField] float catchRange;
+    [SerializeField]
+    float catchRange;
 
     private void Start()
     {
@@ -18,6 +19,9 @@ public class EnemyCatchRange : MonoBehaviour
     //comunicate wheither player is in catch range to EnemyChaseState
     public bool IsInCatchRange()
     {
-        return Vector3.Distance(transform.position, player.transform.position) <= catchRange;
+        //TODO: Temporal fix
+        Vector3 playerPos = new Vector3(player.transform.position.x, 0, player.transform.position.z);
+        Vector3 enemyPos = new Vector3(transform.position.x, 0, transform.position.z);
+        return Vector3.Distance(enemyPos, playerPos) <= catchRange;
     }
 }

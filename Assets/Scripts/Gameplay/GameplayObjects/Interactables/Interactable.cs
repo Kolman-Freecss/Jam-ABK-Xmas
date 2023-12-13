@@ -23,6 +23,13 @@ namespace Gameplay.GameplayObjects.Interactables
 
         #endregion
 
+        protected AudioSource m_AudioSource;
+
+        protected virtual void Awake()
+        {
+            m_AudioSource = GetComponent<AudioSource>();
+        }
+
         public virtual void DoInteraction<TObject>(TObject obj)
             where TObject : IInteractable
         {
