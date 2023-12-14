@@ -15,7 +15,7 @@ public abstract class EnemyState : MonoBehaviour
 
     protected float distanceFromTarget;
 
-    private void Start()
+    protected virtual void Start()
     {
         enemyStateManager = GetComponent<EnemyStateManager>();
     }
