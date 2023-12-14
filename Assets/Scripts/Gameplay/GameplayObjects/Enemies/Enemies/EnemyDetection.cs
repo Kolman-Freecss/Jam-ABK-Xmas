@@ -161,6 +161,7 @@ public class EnemyDetection : MonoBehaviour
             //reseting the timer when entering back again
             else if (visionTimer >= maxVisionTimer)
             {
+                Debug.Log("entered back to vision");
                 hasBeenSeen = true;
                 enemyIdleState.target = player;
                 if (chaseTimer != 0f)

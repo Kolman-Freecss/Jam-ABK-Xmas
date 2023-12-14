@@ -18,12 +18,13 @@ public class EnemyIdleState : EnemyState
     //start not stunned
     private bool stunnedTimerOn = false;
     private float timer;
-    [SerializeField] float maxStunnedTime = 3f;
+
+    [SerializeField]
+    float maxStunnedTime = 3f;
 
     [Header("Debug")]
     [SerializeField]
     bool debugChangeState;
-
 
     private void OnValidate()
     {
@@ -34,8 +35,9 @@ public class EnemyIdleState : EnemyState
         }
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         patrolAI = GetComponent<PatrolAI>();
         enemyChaseState = GetComponent<EnemyChaseState>();
         enemyDetection = GetComponentInChildren<EnemyDetection>();
@@ -66,7 +68,7 @@ public class EnemyIdleState : EnemyState
                 }
             }
             enemyDetection.OnPlayerDetection();
-            patrolAI.PatrolLogic(); 
+            patrolAI.PatrolLogic();
         }
         return this;
     }
@@ -83,7 +85,6 @@ public class EnemyIdleState : EnemyState
     {
         if (stunnedTimerOn)
             stunnedTimerOn = false;
-
         else
             stunnedTimerOn = true;
     }
