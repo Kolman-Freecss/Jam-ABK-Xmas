@@ -64,6 +64,8 @@ namespace Gameplay.GameplayObjects.Character.Player
         private PlayerController m_playerController;
         private Dictionary<PresentType, List<GameObject>> m_presentPrefabs = new();
         private PlayerInteractionInstigator m_playerInteractionInstigator;
+        private bool m_playerCustomizationEnabled = false;
+        public Action OnPlayerFinishedCustomization;
 
         #endregion
 
@@ -133,7 +135,7 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         #region Costume Logic
 
-        private void SetPlayerCostume(PlayerCostumeType costumeType)
+        public void SetPlayerCostume(PlayerCostumeType costumeType)
         {
             if (m_playerCurrentCostume != null)
             {
@@ -141,10 +143,13 @@ namespace Gameplay.GameplayObjects.Character.Player
             }
             m_playerCurrentCostume = m_playerCostumes.Find(x => x.Key == costumeType).Value;
             m_playerCurrentCostume.SetActive(true);
+            m_playerCustomizationEnabled = false;
+            OnPlayerFinishedCustomization?.Invoke();
         }
 
         public void OnPlayerCallHouse(object obj)
         {
+            m_playerCustomizationEnabled = true;
             Costume(PlayerCostumeType.Santa);
         }
 

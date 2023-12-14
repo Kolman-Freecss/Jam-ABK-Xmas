@@ -15,26 +15,22 @@ namespace Gameplay.GameplayObjects.Interactables._derivatives
         [SerializeField]
         private AudioClip m_DoorOpenSound;
 
+        [SerializeField]
+        private DialogueChannel m_dialogueChannel;
+
+        [SerializeField]
+        private Dialogue m_dialogue;
+
         public override void DoInteraction<TData>(TData obj)
         {
-            Time.timeScale = 0f;
-            GameManager.Instance.m_player.enabled = false;
-            m_AudioSource.clip = m_DoorOpenSound;
-            m_AudioSource.Play();
-            gameObject.SetActive(false);
-            if (obj is DialogueChannel)
+            if (m_AudioSource != null && m_DoorOpenSound != null)
             {
-                Debug.Log("DialogueChannel");
-                //((DialogueChannel)obj).OnDialogueEnd += OnDialogueEnd;
+                m_AudioSource.clip = m_DoorOpenSound;
+                m_AudioSource.Play();
             }
-            base.DoInteraction(obj);
-        }
 
-        private void OnDialogueEnd(Dialogue dialogue)
-        {
-            gameObject.SetActive(true);
-            Time.timeScale = 1f;
-            GameManager.Instance.m_player.enabled = true;
+            base.DoInteraction(obj);
+            RoundManager.Instance.OnPlayerCallHouse(m_dialogueChannel, m_dialogue, this);
         }
     }
 }

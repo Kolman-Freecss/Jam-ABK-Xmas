@@ -8,6 +8,7 @@ using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
 using Puzzle;
+using Systems.NarrationSystem.Dialogue;
 using Systems.NarrationSystem.Dialogue.Components;
 using Systems.NarrationSystem.Dialogue.Data;
 using Systems.NarrationSystem.Flow;
@@ -127,6 +128,48 @@ namespace Gameplay.Config
             PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="dialogueChannel"> The dialogue channel that raised the event. </param>
+        public void OnPlayerCallHouse(
+            DialogueChannel dialogueChannel,
+            Dialogue dialogue,
+            DoorInteractable doorInteractable
+        )
+        {
+            if (dialogueChannel != null)
+            {
+                GameManager.Instance.m_player.PlayerBehaviour.OnPlayerFinishedCustomization += StartDialogueHouse;
+                //Time.timeScale = 0f;
+                GameManager.Instance.m_player.enabled = false;
+            }
+            else
+            {
+                Debug.LogError("RoundManager: No dialogue channel set");
+            }
+
+            void StartDialogueHouse()
+            {
+                doorInteractable.gameObject.SetActive(false);
+                dialogueChannel.RaiseRequestDialogue(dialogue);
+                Debug.Log("DialogueChannel");
+                dialogueChannel.OnDialogueEnd += OnDialogueEnd;
+                GameManager.Instance.m_player.PlayerBehaviour.OnPlayerFinishedCustomization -= StartDialogueHouse;
+            }
+
+            void OnDialogueEnd(Dialogue dialogue)
+            {
+                doorInteractable.gameObject.SetActive(true);
+                //Time.timeScale = 1f;
+                PlayerController player = GameManager.Instance.m_player;
+                player.enabled = true;
+                player.PlayerBehaviour.SetPlayerCostume(PlayerBehaviour.PlayerCostumeType.Krampus);
+                //TODO: Temporal position. Use checkpoint system instead into house.
+                player.gameObject.transform.Translate(Vector3.forward * 2f);
+            }
+        }
+        
         public void OnPlayerInteractsWithHouse(HouseController houseController)
         {
             m_CurrentHouse = houseController;
