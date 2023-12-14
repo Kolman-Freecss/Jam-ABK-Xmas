@@ -133,13 +133,72 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
       insertIndex: -1
       addedObject: {fileID: 7990278408842299015}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7716852153965419994}
+    - targetCorrespondingSourceObject: {fileID: -7518424646485230522, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7298994645985774008}
   m_SourcePrefab: {fileID: 100100000, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+--- !u!1 &2633236648687866468 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: -7518424646485230522, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+  m_PrefabInstance: {fileID: 3684527620837355042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!64 &7298994645985774008
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2633236648687866468}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 5
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 4762847334705270966, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
 --- !u!4 &3794470861388204489 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
   m_PrefabInstance: {fileID: 3684527620837355042}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &4603659069778891635 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: cab40143185370948ba4bf0fed36e78f, type: 3}
+  m_PrefabInstance: {fileID: 3684527620837355042}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &7716852153965419994
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4603659069778891635}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Size: {x: 24.944765, y: 9.360083, z: 10.134457}
+  m_Center: {x: -0.23170896, y: 4.6826744, z: 0.8370175}
 --- !u!1001 &4165266206196385155
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -272,6 +331,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3794470861388204489}
     m_Modifications:
+    - target: {fileID: 816930566620343747, guid: 550b04948e185f141b5e6f347e42d7b2, type: 3}
+      propertyPath: m_Size.x
+      value: 21.223515
+      objectReference: {fileID: 0}
+    - target: {fileID: 816930566620343747, guid: 550b04948e185f141b5e6f347e42d7b2, type: 3}
+      propertyPath: m_Size.y
+      value: 5.112651
+      objectReference: {fileID: 0}
+    - target: {fileID: 816930566620343747, guid: 550b04948e185f141b5e6f347e42d7b2, type: 3}
+      propertyPath: m_Size.z
+      value: 2.3992994
+      objectReference: {fileID: 0}
+    - target: {fileID: 816930566620343747, guid: 550b04948e185f141b5e6f347e42d7b2, type: 3}
+      propertyPath: m_Center.x
+      value: 8.000006
+      objectReference: {fileID: 0}
+    - target: {fileID: 816930566620343747, guid: 550b04948e185f141b5e6f347e42d7b2, type: 3}
+      propertyPath: m_Center.y
+      value: -1.2395339
+      objectReference: {fileID: 0}
+    - target: {fileID: 816930566620343747, guid: 550b04948e185f141b5e6f347e42d7b2, type: 3}
+      propertyPath: m_Center.z
+      value: 0.24768822
+      objectReference: {fileID: 0}
     - target: {fileID: 4257262176599545187, guid: 550b04948e185f141b5e6f347e42d7b2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.604
