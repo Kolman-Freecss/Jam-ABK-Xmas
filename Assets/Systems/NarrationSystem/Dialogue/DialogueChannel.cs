@@ -11,10 +11,11 @@ namespace Systems.NarrationSystem.Dialogue
     public class DialogueChannel : ScriptableObject
     {
         public delegate void DialogueCallback(Data.Dialogue dialogue);
+        public delegate void DialogueCallbackWithPath(Data.Dialogue dialogue, bool followingRightPath);
 
         public DialogueCallback OnDialogueRequested;
         public DialogueCallback OnDialogueStart;
-        public DialogueCallback OnDialogueEnd;
+        public DialogueCallbackWithPath OnDialogueEnd;
 
         public delegate void DialogueNodeCallback(DialogueNode node);
 
@@ -32,9 +33,9 @@ namespace Systems.NarrationSystem.Dialogue
             OnDialogueStart?.Invoke(dialogue);
         }
 
-        public void RaiseDialogueEnd(Data.Dialogue dialogue)
+        public void RaiseDialogueEnd(Data.Dialogue dialogue, bool followingRightPath)
         {
-            OnDialogueEnd?.Invoke(dialogue);
+            OnDialogueEnd?.Invoke(dialogue, followingRightPath);
         }
 
         public void RaiseRequestDialogueNode(DialogueNode node)
