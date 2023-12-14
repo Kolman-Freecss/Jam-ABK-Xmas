@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using Puzzle;
 using UnityEngine;
 
@@ -9,11 +11,24 @@ public class ElectricityPuzzle : PuzzleController
     List<bool> correctSwitchPositions = new List<bool>();
     List<bool> playerSwitchPositions = new List<bool>();
 
-    public ElectricityPuzzle() : base()
+    void Awake()
     {
-        base.StepsToFail = correctSwitchPositions.Count;
-        base.TotalSteps = correctSwitchPositions.Count;
-
+        // Initialize player switch positions
+        for (int i = 0; i < correctSwitchPositions.Count; i++)
+        {
+            playerSwitchPositions.Add(false);
+        }
+        base.TotalSteps = 0;
+        for (int i = 0; i < correctSwitchPositions.Count; i++)
+        {
+            if (correctSwitchPositions[i])
+            {
+                base.TotalSteps++;
+            }
+        }
+        
+        base.StepsToFail = TotalSteps * 2;
+        Debug.Log("Puzzle steps: " + base.TotalSteps);
         // Initialize player switch positions
         for (int i = 0; i < correctSwitchPositions.Count; i++)
         {
@@ -32,6 +47,7 @@ public class ElectricityPuzzle : PuzzleController
 
     public override void PuzzleProgress(bool isStepCorrect)
     {
+        Debug.Log("Puzzle progress: " + isStepCorrect);
         base.UpdateProgress(isStepCorrect);
     }
 

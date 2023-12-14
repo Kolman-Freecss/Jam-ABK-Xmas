@@ -32,7 +32,7 @@ public class SpawnPresents : Spawn
         CanSpawn = true;
         if (NumberSpawn == 0 && CanSpawn)
         {
-            StartCoroutine(SpawnWithDelay(secondsToSpawn, 301));
+            StartCoroutine(SpawnWithDelay(secondsToSpawn, 1000));
             //StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
         }
      }

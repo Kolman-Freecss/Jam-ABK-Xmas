@@ -3,6 +3,7 @@
 using System.Collections;
 using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Interactables._derivatives;
+using Puzzle;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -24,7 +25,9 @@ namespace Gameplay.GameplayObjects.RoundComponents
             ParentKillers
         }
 
-        #region Inspector Variables
+        #region Inspector Variable
+        [Header("House Position")]
+        public Transform m_HousePosition;
 
         [Header("House UI")]
         [SerializeField]
@@ -43,6 +46,7 @@ namespace Gameplay.GameplayObjects.RoundComponents
         public int TimeToComplete = 60;
 
         public HouseConsequence m_houseConsequence;
+        public GameObject puzzle;
 
         [SerializeField]
         public string HouseName;
@@ -51,6 +55,12 @@ namespace Gameplay.GameplayObjects.RoundComponents
         private int presentsToCollect = 5;
 
         [Header("Events")]
+        [SerializeField]
+        private UnityEvent<HouseController> onPuzzleSolved;
+
+        [SerializeField]
+        private UnityEvent<HouseController> onPuzzleFailed;
+
         [SerializeField]
         private UnityEvent<HouseController> onHouseEnter;
 
@@ -122,6 +132,17 @@ namespace Gameplay.GameplayObjects.RoundComponents
             m_HouseCanvas.enabled = show;
         }
 
+        public void OnPuzzleSolved(PuzzleController puzzle)
+        {
+            puzzle.OnPuzzleSolved();
+            onPuzzleSolved?.Invoke(this);
+        }
+
+        public void OnPuzzleFailed(PuzzleController puzzle)
+        {
+            puzzle.OnPuzzleFailed();
+            onPuzzleFailed?.Invoke(this);
+        }
         public void OnPresentCollected(PresentInteractable present)
         {
             Destroy(present);
@@ -229,6 +250,12 @@ namespace Gameplay.GameplayObjects.RoundComponents
         #region Getter & Setter
 
         public Canvas HouseCanvas => m_HouseCanvas;
+
+        public void SetPuzzle (GameObject puzzle)
+        {
+            this.puzzle = puzzle;
+            this.puzzle.GetComponent<PuzzleController>().houseController = this;
+        }
 
         #endregion
     }

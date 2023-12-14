@@ -67,7 +67,6 @@ namespace Gameplay.Config
 
         // House Settings
         private HouseController m_CurrentHouse;
-        private PuzzleController puzzleController;
 
         #endregion
 
@@ -116,6 +115,18 @@ namespace Gameplay.Config
         #endregion
 
         #region House Flow
+        public void OnPlayerCompletedPuzzle(HouseController houseController)
+        {  
+            PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
+            GameManager.Instance.m_player.gameObject.SetActive(false);
+            GameManager.Instance.m_player.gameObject.transform.position = houseController.m_HousePosition.position;
+            GameManager.Instance.m_player.gameObject.SetActive(true);
+        }
+
+        public void OnPlayerFailedPuzzle(HouseController houseController)
+        {
+            PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
+        }
 
         /// <summary>
         ///
@@ -158,10 +169,17 @@ namespace Gameplay.Config
                 player.gameObject.transform.Translate(Vector3.forward * 2f);
             }
         }
+        
+        public void OnPlayerInteractsWithHouse(HouseController houseController)
+        {
+            m_CurrentHouse = houseController;
+            houseController.SetPuzzle(PuzzleRandomManager.Instance.SelectPuzzle());
+            houseController.puzzle.GetComponent<PuzzleController>().onPuzzleSolved.AddListener(OnPlayerCompletedPuzzle);
+            houseController.puzzle.GetComponent<PuzzleController>().onPuzzleFailed.AddListener(OnPlayerFailedPuzzle);
+        }
 
         public void OnPlayerEnterHouse(HouseController houseController)
         {
-            m_CurrentHouse = houseController;
             GameManager.Instance.m_player.PlayerBehaviour.OnPlayerEnterHouse(houseController);
             Debug.Log("Player entered house");
         }

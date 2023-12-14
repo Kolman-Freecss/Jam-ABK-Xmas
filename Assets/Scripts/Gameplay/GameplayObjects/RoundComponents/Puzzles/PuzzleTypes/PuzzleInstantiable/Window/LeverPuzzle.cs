@@ -11,6 +11,15 @@ public class LeverPuzzle : PuzzleController
     List<bool> correctLeverPositions = new List<bool>();
     List<bool> playerLeverPositions = new List<bool>();
 
+    void Awake()
+    {
+        // Initialize player switch positions
+        for (int i = 0; i < correctLeverPositions.Count; i++)
+        {
+            playerLeverPositions.Add(false);
+        }
+    }
+
     public LeverPuzzle() : base()
     {
         base.StepsToFail = correctLeverPositions.Count;
