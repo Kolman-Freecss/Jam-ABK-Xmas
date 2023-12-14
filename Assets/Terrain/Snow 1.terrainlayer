@@ -9,12 +9,12 @@ TerrainLayer:
   m_Name: Snow 1
   m_DiffuseTexture: {fileID: 2800000, guid: d6f04b160cbbf8e49852d244532e3dd5, type: 3}
   m_NormalMapTexture: {fileID: 2800000, guid: 5ba7d39793d2afa4a8e04fc56bf0e7a5, type: 3}
-  m_MaskMapTexture: {fileID: 2800000, guid: e8bf5255b34ea174ab9b3374e9fa2269, type: 3}
+  m_MaskMapTexture: {fileID: 0}
   m_TileSize: {x: 2, y: 2}
   m_TileOffset: {x: 0, y: 0}
   m_Specular: {r: 1, g: 1, b: 1, a: 0}
-  m_Metallic: 1
-  m_Smoothness: 1
+  m_Metallic: 0
+  m_Smoothness: 0.285
   m_NormalScale: 1
   m_DiffuseRemapMin: {x: 0, y: 0, z: 0, w: 0}
   m_DiffuseRemapMax: {x: 1, y: 1, z: 1, w: 1}
