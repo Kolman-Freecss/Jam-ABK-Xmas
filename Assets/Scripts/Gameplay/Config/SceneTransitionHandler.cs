@@ -1,5 +1,7 @@
 #region
 
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -33,6 +35,8 @@ namespace Gameplay.Config
         private bool m_hasAnimator;
         private int m_animIDTransition = 0;
 
+        public Action OnLoadingScene;
+
         #endregion
 
         #region Event Delegates
@@ -54,6 +58,7 @@ namespace Gameplay.Config
             InGame_City,
             Hell,
             InGame_Ruben_test,
+            Sergio_InGame_City,
             EndGame
         }
 
@@ -61,8 +66,8 @@ namespace Gameplay.Config
 
         void Awake()
         {
-            m_hasAnimator = TryGetComponent<Animator>(out m_SceneTransitionAnimator);
-            m_SceneTransitionAnimator = GetComponent<Animator>();
+            m_SceneTransitionAnimator = GetComponentInChildren<Animator>();
+            m_hasAnimator = m_SceneTransitionAnimator != null;
             AssignAnimationIDs();
             ManageSingleton();
             SetSceneState(SceneStates.InitBootstrap);
@@ -105,20 +110,39 @@ namespace Gameplay.Config
 
         public void LoadScene(SceneStates sceneState)
         {
-            if (m_hasAnimator)
+            OnLoadingScene += OnTransitionLoaded;
+            StartCoroutine(OnLoadNewScene());
+
+            void OnTransitionLoaded()
             {
-                Debug.Log("Triggering transition animation");
-                m_SceneTransitionAnimator.SetTrigger(m_animIDTransition);
+                SceneManager.LoadSceneAsync(sceneState.ToString());
+                Debug.Log("OnTransitionLoaded: " + sceneState);
+                SetSceneState(sceneState);
+                OnLoadingScene -= OnTransitionLoaded;
             }
-            SceneManager.LoadSceneAsync(sceneState.ToString());
-            Debug.Log("Loading scene: " + sceneState);
-            SetSceneState(sceneState);
         }
 
-        public void StartTransition(){
-            if(m_hasAnimator){
+        private IEnumerator OnLoadNewScene()
+        {
+            StartTransition();
+            yield return new WaitForSeconds(transitionTime);
+            Debug.Log("OnLoadNewScene: " + m_SceneState);
+            OnLoadingScene?.Invoke();
+        }
+
+        private void StartTransition()
+        {
+            if (m_hasAnimator)
+            {
                 m_SceneTransitionAnimator.SetTrigger(m_animIDTransition);
             }
+        }
+
+        public IEnumerator OnGameStartTransition()
+        {
+            StartTransition();
+            yield return new WaitForSeconds(transitionTime);
+            OnLoadingScene?.Invoke();
         }
 
         private void SetSceneState(SceneStates sceneState)

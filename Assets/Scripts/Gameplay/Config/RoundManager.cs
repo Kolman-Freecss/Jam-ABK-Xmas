@@ -170,13 +170,22 @@ namespace Gameplay.Config
                     //TODO: Temporal position. Use checkpoint system instead into house.
                     // Correct Path
                     Debug.Log("Correct path");
-                    player.gameObject.transform.Translate(Vector3.forward * 2f);
+                    GameManager.Instance.m_player.gameObject.SetActive(false);
+                    SceneTransitionHandler.Instance.OnLoadingScene += OnTransitionFinish;
+                    StartCoroutine(SceneTransitionHandler.Instance.OnGameStartTransition());
                 }
                 else
                 {
                     //TODO: Bad path, feedback player through sound or something.
                     Debug.Log("Bad path");
                 }
+            }
+
+            void OnTransitionFinish()
+            {
+                GameManager.Instance.m_player.gameObject.transform.position = m_CurrentHouse.m_HousePosition.position;
+                GameManager.Instance.m_player.gameObject.SetActive(true);
+                SceneTransitionHandler.Instance.OnLoadingScene -= OnTransitionFinish;
             }
         }
 
@@ -243,13 +252,13 @@ namespace Gameplay.Config
 
         public void DialogueStarted()
         {
-            Time.timeScale = 0f;
+            // Time.timeScale = 0f;
             GameManager.Instance.m_player.enabled = false;
         }
 
         public void DialogueEnded()
         {
-            Time.timeScale = 1f;
+            // Time.timeScale = 1f;
             if (GameManager.Instance.m_player == null)
                 return;
             GameManager.Instance.m_player.enabled = true;
@@ -341,7 +350,11 @@ namespace Gameplay.Config
 
         public int PresentsToFinishRound => presentsToFinishRound;
 
-        public HouseController CurrentHouse => m_CurrentHouse;
+        public HouseController CurrentHouse
+        {
+            get => m_CurrentHouse;
+            set => m_CurrentHouse = value;
+        }
 
         #endregion
     }
