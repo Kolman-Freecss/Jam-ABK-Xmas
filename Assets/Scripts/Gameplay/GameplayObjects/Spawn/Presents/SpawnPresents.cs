@@ -24,7 +24,7 @@ public class SpawnPresents : Spawn
     /// function will exit.
     /// </returns>
     void Start() {
-        if (spawnPoints.Count != 4) return;
+        /*if (spawnPoints.Count != 4) return;
 
         _points = FindSpawnPoints();
         CanSpawn = true;
@@ -32,9 +32,9 @@ public class SpawnPresents : Spawn
         CanSpawn = true;
         if (NumberSpawn == 0 && CanSpawn)
         {
-            StartCoroutine(SpawnWithDelay(secondsToSpawn, 1000));
+            StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(4,6)));
             //StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
-        }
+        }*/
      }
 
     // Update is called once per frame
@@ -60,6 +60,25 @@ public class SpawnPresents : Spawn
     }
     #endregion
 
+
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (CompareTag("Player"))
+        {
+            if (spawnPoints.Count != 4) return;
+
+            _points = FindSpawnPoints();
+            CanSpawn = true;
+            Debug.Log("NumberSpawn: " + NumberSpawn);
+            CanSpawn = true;
+            if (NumberSpawn == 0 && CanSpawn)
+            {
+                StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(4, 6)));
+                //StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
+            }
+        }
+    }
     /// <summary>
     /// The function creates a specified number of instances of an enemy prefab at a given height.
     /// </summary>
@@ -68,7 +87,7 @@ public class SpawnPresents : Spawn
     public void createInstance(int amount)
     {
         presents = new GameObject[amount];
-        float height = 1.57f;
+        float height = 4f;
         for (var i = 0; i < amount; i++)
         {
             presents[i] = NewInstance(_points, presentPrefabs, height);
