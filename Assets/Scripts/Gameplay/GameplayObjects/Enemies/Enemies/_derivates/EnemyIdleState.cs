@@ -67,7 +67,6 @@ public class EnemyIdleState : EnemyState
                     stunnedTimerOn = false;
                 }
             }
-            enemyDetection.OnPlayerDetection();
             patrolAI.PatrolLogic();
         }
         return this;
