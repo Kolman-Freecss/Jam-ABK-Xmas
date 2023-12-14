@@ -1,3 +1,4 @@
+using Gameplay.GameplayObjects.RoundComponents;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -12,11 +13,12 @@ namespace Puzzle
         public int StepsToFail { get; set; }
         public int CurrentSteps { get; set; }
         public bool isFirstStep = true;
+        public HouseController houseController;
 
         #region Events
-        public UnityEvent onPuzzleSolved = new UnityEvent();
-        public UnityEvent onPuzzleFailed = new UnityEvent();
-        public UnityEvent onPuzzleOnProgress = new UnityEvent();
+        public UnityEvent<HouseController> onPuzzleSolved;
+        public UnityEvent<HouseController> onPuzzleFailed;
+        public UnityEvent<HouseController> onPuzzleOnProgress;
         
         #endregion
 
@@ -41,6 +43,14 @@ namespace Puzzle
         public void OnPuzzleChanged(PuzzleStates state = PuzzleStates.INITIAL)
         {
             puzzleState = new PuzzleState(state);
+        }
+
+        public void OnPuzzleSolved(){
+            onPuzzleSolved?.Invoke(houseController);
+        }
+
+        public void OnPuzzleFailed(){
+            onPuzzleFailed?.Invoke(houseController);
         }
 
         /// <summary>
@@ -68,7 +78,7 @@ namespace Puzzle
             {
                 isFirstStep = false;
                 OnPuzzleChanged(PuzzleStates.ONPROGRESS);
-                onPuzzleOnProgress?.Invoke();
+                onPuzzleOnProgress?.Invoke(houseController);
             } else {
                 UpdateProgress(isStepCorrect);
             }
@@ -99,10 +109,13 @@ namespace Puzzle
         private void HandleCorrectStep()
         {
             CurrentProgress++;
+            Debug.Log("Current progress: " + CurrentProgress);
+            Debug.Log("Total steps: " + TotalSteps);
             if (CurrentProgress == TotalSteps)
             {
+                Debug.Log("Puzzle solved");
                 OnPuzzleChanged(PuzzleStates.SOLVED);
-                onPuzzleSolved?.Invoke();
+                onPuzzleSolved?.Invoke(houseController);
             }
         }
 
@@ -116,7 +129,7 @@ namespace Puzzle
             if (CurrentSteps >= StepsToFail)
             {
                 OnPuzzleChanged(PuzzleStates.UNSOLVED);
-                onPuzzleFailed?.Invoke();
+                onPuzzleFailed?.Invoke(houseController);
             }
         }
     }

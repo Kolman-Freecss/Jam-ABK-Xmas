@@ -8,6 +8,7 @@ using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
 using Puzzle;
+using Systems.NarrationSystem.Dialogue;
 using Systems.NarrationSystem.Dialogue.Components;
 using Systems.NarrationSystem.Dialogue.Data;
 using Systems.NarrationSystem.Flow;
@@ -66,7 +67,6 @@ namespace Gameplay.Config
 
         // House Settings
         private HouseController m_CurrentHouse;
-        private PuzzleController puzzleController;
 
         #endregion
 
@@ -115,9 +115,81 @@ namespace Gameplay.Config
         #endregion
 
         #region House Flow
-        public void OnPlayerEnterHouse(HouseController houseController)
+        public void OnPlayerCompletedPuzzle(HouseController houseController)
+        {
+            PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
+            GameManager.Instance.m_player.gameObject.SetActive(false);
+            GameManager.Instance.m_player.gameObject.transform.position = houseController.m_HousePosition.position;
+            GameManager.Instance.m_player.gameObject.SetActive(true);
+        }
+
+        public void OnPlayerFailedPuzzle(HouseController houseController)
+        {
+            PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="dialogueChannel"> The dialogue channel that raised the event. </param>
+        public void OnPlayerCallHouse(
+            DialogueChannel dialogueChannel,
+            Dialogue dialogue,
+            DoorInteractable doorInteractable
+        )
+        {
+            if (dialogueChannel != null)
+            {
+                GameManager.Instance.m_player.PlayerBehaviour.OnPlayerFinishedCustomization += StartDialogueHouse;
+                //Time.timeScale = 0f;
+                GameManager.Instance.m_player.enabled = false;
+            }
+            else
+            {
+                Debug.LogError("RoundManager: No dialogue channel set");
+            }
+
+            void StartDialogueHouse()
+            {
+                doorInteractable.gameObject.SetActive(false);
+                dialogueChannel.RaiseRequestDialogue(dialogue);
+                Debug.Log("DialogueChannel");
+                dialogueChannel.OnDialogueEnd += OnDialogueEnd;
+                GameManager.Instance.m_player.PlayerBehaviour.OnPlayerFinishedCustomization -= StartDialogueHouse;
+            }
+
+            void OnDialogueEnd(Dialogue dialogue, bool followingRightPath)
+            {
+                doorInteractable.gameObject.SetActive(true);
+                //Time.timeScale = 1f;
+                PlayerController player = GameManager.Instance.m_player;
+                player.enabled = true;
+                player.PlayerBehaviour.SetPlayerCostume(PlayerBehaviour.PlayerCostumeType.Krampus);
+                if (followingRightPath)
+                {
+                    //TODO: Temporal position. Use checkpoint system instead into house.
+                    // Correct Path
+                    Debug.Log("Correct path");
+                    player.gameObject.transform.Translate(Vector3.forward * 2f);
+                }
+                else
+                {
+                    //TODO: Bad path, feedback player through sound or something.
+                    Debug.Log("Bad path");
+                }
+            }
+        }
+
+        public void OnPlayerInteractsWithHouse(HouseController houseController)
         {
             m_CurrentHouse = houseController;
+            houseController.SetPuzzle(PuzzleRandomManager.Instance.SelectPuzzle());
+            houseController.puzzle.GetComponent<PuzzleController>().onPuzzleSolved.AddListener(OnPlayerCompletedPuzzle);
+            houseController.puzzle.GetComponent<PuzzleController>().onPuzzleFailed.AddListener(OnPlayerFailedPuzzle);
+        }
+
+        public void OnPlayerEnterHouse(HouseController houseController)
+        {
             GameManager.Instance.m_player.PlayerBehaviour.OnPlayerEnterHouse(houseController);
             Debug.Log("Player entered house");
         }

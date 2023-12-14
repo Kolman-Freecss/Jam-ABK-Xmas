@@ -15,5 +15,10 @@ namespace Systems.NarrationSystem.Dialogue.Data.Nodes
 
         public abstract bool CanBeFollowedByNode(DialogueNode node);
         public abstract void Accept(IDialogueNodeVisitor visitor);
+
+        public virtual bool GetFollowingRightPath()
+        {
+            return true;
+        }
     }
 }

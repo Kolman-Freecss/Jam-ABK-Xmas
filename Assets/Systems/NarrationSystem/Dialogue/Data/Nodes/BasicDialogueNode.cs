@@ -11,6 +11,9 @@ namespace Systems.NarrationSystem.Dialogue.Data.Nodes
     {
         [SerializeField]
         private DialogueNode m_NextNode;
+
+        [SerializeField]
+        private bool m_correctPath = false;
         public DialogueNode NextNode => m_NextNode;
 
         public override bool CanBeFollowedByNode(DialogueNode node)
@@ -21,6 +24,11 @@ namespace Systems.NarrationSystem.Dialogue.Data.Nodes
         public override void Accept(IDialogueNodeVisitor visitor)
         {
             visitor.Visit(this);
+        }
+
+        public override bool GetFollowingRightPath()
+        {
+            return m_correctPath;
         }
     }
 }

@@ -99,7 +99,7 @@ namespace Gameplay.GameplayObjects.Character._common
 
             currentStamina = maxStamina;
 
-            if (!staminaSlider)
+            if (staminaSlider)
             {
                 staminaSlider.maxValue = maxStamina;
                 staminaSlider.value = currentStamina;
