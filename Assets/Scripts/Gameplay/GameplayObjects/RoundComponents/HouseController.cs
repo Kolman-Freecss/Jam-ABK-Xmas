@@ -251,6 +251,12 @@ namespace Gameplay.GameplayObjects.RoundComponents
 
         public Canvas HouseCanvas => m_HouseCanvas;
 
+        public void SetPuzzle (GameObject puzzle)
+        {
+            this.puzzle = puzzle;
+            this.puzzle.GetComponent<PuzzleController>().houseController = this;
+        }
+
         #endregion
     }
 }
