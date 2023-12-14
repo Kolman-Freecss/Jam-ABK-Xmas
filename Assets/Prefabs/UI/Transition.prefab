@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2701660630725559975}
   - component: {fileID: 3354849390183808827}
   - component: {fileID: 8323087450785123322}
-  - component: {fileID: 5005864099454549040}
+  - component: {fileID: 2686682048566589339}
   m_Layer: 0
   m_Name: Transition
   m_TagString: Untagged
@@ -103,7 +103,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!95 &5005864099454549040
+--- !u!95 &2686682048566589339
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
