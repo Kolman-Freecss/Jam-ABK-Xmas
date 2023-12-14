@@ -12,8 +12,6 @@ public class EnemyStateManager : MonoBehaviour
 {
     EnemyState currentState;
 
-    EnemyIdleState enemyIdleState;
-
     [HideInInspector]
     public EnemyObserver enemyObserver = new EnemyObserver();
 
@@ -23,8 +21,7 @@ public class EnemyStateManager : MonoBehaviour
     {
         RoundManager.Instance.enemiesInScene.Add(this);
         enemyObserver.AddObserver(RoundManager.Instance);
-        enemyIdleState = GetComponent<EnemyIdleState>();
-        currentState = enemyIdleState;
+        currentState = GetComponent<EnemyIdleState>();
     }
 
     private void Update()
