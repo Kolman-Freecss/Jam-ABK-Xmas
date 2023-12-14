@@ -1,6 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
+#region
+
 using UnityEngine;
+
+#endregion
 
 public class EnemyAttackState : EnemyState
 {
@@ -12,8 +14,9 @@ public class EnemyAttackState : EnemyState
     EnemyAttackAction[] attackActions;
     EnemyAttackAction currentAttack;
 
-    private void Start() 
+    protected override void Start()
     {
+        base.Start();
         enemyCatchRange = GetComponent<EnemyCatchRange>();
         enemyManager = GetComponent<EnemyManager>();
         enemyPursueTargetState = GetComponent<EnemyPursueTargetState>();
@@ -34,8 +37,10 @@ public class EnemyAttackState : EnemyState
             }
             else if (distanceFromTarget < currentAttack.maximumAttackAngle)
             {
-                if (enemyManager.viewableAngle <= currentAttack.maximumAttackAngle && 
-                    enemyManager.viewableAngle >= currentAttack.minimumAttackAngle)
+                if (
+                    enemyManager.viewableAngle <= currentAttack.maximumAttackAngle
+                    && enemyManager.viewableAngle >= currentAttack.minimumAttackAngle
+                )
                 {
                     if (enemyManager.currentRecoveryTime <= 0 && enemyManager.isPerformingAction == false)
                     {
@@ -65,11 +70,15 @@ public class EnemyAttackState : EnemyState
         for (int i = 0; i < attackActions.Length; i++)
         {
             EnemyAttackAction enemyAttackAction = attackActions[i];
-            if (distanceFromTarget <= enemyAttackAction.maximumDistanteNeededToAttack
-                && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
+            if (
+                distanceFromTarget <= enemyAttackAction.maximumDistanteNeededToAttack
+                && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack
+            )
             {
-                if (viewableAngle <= enemyAttackAction.maximumAttackAngle && 
-                    viewableAngle >= enemyAttackAction.minimumAttackAngle)
+                if (
+                    viewableAngle <= enemyAttackAction.maximumAttackAngle
+                    && viewableAngle >= enemyAttackAction.minimumAttackAngle
+                )
                 {
                     maxScore += enemyAttackAction.attackScore;
                 }
@@ -82,15 +91,19 @@ public class EnemyAttackState : EnemyState
         for (int i = 0; i < attackActions.Length; i++)
         {
             EnemyAttackAction enemyAttackAction = attackActions[i];
-             if (distanceFromTarget <= enemyAttackAction.maximumDistanteNeededToAttack
-                && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack)
+            if (
+                distanceFromTarget <= enemyAttackAction.maximumDistanteNeededToAttack
+                && distanceFromTarget >= enemyAttackAction.minimumDistanceNeededToAttack
+            )
             {
-                if (viewableAngle <= enemyAttackAction.maximumAttackAngle && 
-                    viewableAngle >= enemyAttackAction.minimumAttackAngle)
+                if (
+                    viewableAngle <= enemyAttackAction.maximumAttackAngle
+                    && viewableAngle >= enemyAttackAction.minimumAttackAngle
+                )
                 {
                     if (currentAttack != null)
                         return;
-                    
+
                     temporaryScore += enemyAttackAction.attackScore;
 
                     if (temporaryScore > randomValue)

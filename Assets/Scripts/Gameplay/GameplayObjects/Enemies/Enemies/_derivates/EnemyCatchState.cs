@@ -10,8 +10,9 @@ public class EnemyCatchState : EnemyState
     EnemyChaseState enemyChaseState;
     EnemyIdleState enemyIdleState;
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         enemyCatchRange = GetComponent<EnemyCatchRange>();
         enemyChaseState = GetComponent<EnemyChaseState>();
     }
