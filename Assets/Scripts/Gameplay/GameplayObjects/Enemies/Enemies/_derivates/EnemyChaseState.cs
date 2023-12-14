@@ -71,6 +71,7 @@ public class EnemyChaseState : EnemyState
 
         if (enemyCatchRange.IsInCatchRange() || debugChangeState)
             return enemyCatchState;
+        
         else if (!enemyCatchRange.IsInCatchRange() && !target)
         {
             if (hasLastPerceivedPosition)

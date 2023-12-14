@@ -344,6 +344,10 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9030216292999314107, guid: 4975230f328267541b30f630a0375708, type: 3}
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 1238712055774938453, guid: 4975230f328267541b30f630a0375708, type: 3}
@@ -382,19 +386,19 @@ PrefabInstance:
       objectReference: {fileID: 6971140501100232437}
     - target: {fileID: 6639892820295937440, guid: 280a0cbb6296e254ab954fe6b38a4510, type: 3}
       propertyPath: m_Lens.FieldOfView
-      value: 24.99999
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 8230002023748739530, guid: 280a0cbb6296e254ab954fe6b38a4510, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -8.987017
+      value: -8.987032
       objectReference: {fileID: 0}
     - target: {fileID: 8230002023748739530, guid: 280a0cbb6296e254ab954fe6b38a4510, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 24.078592
+      value: 24.0786
       objectReference: {fileID: 0}
     - target: {fileID: 8230002023748739530, guid: 280a0cbb6296e254ab954fe6b38a4510, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -40.706387
+      value: -40.706425
       objectReference: {fileID: 0}
     - target: {fileID: 8616807427801208860, guid: 280a0cbb6296e254ab954fe6b38a4510, type: 3}
       propertyPath: m_LocalPosition.x

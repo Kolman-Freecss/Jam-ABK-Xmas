@@ -76,7 +76,7 @@ public class EnemyDetection : MonoBehaviour
 
     private void Update()
     {
-        Timer();
+        OnPlayerDetection();
         if (!hasBeenSeen)
         {
             if (chaseTimer != 0f || visionTimer != 0f)
@@ -85,7 +85,6 @@ public class EnemyDetection : MonoBehaviour
                 chaseTimer = 0f;
                 visionTimer = 0f;
                 onStartFollowing?.Invoke();
-                Detection();
             }
         }
     }
@@ -102,7 +101,7 @@ public class EnemyDetection : MonoBehaviour
             distanceToTarget = Vector3.Distance(transform.position, player.position);
 
             //if player is near enough
-            if (distanceToTarget <= viewRadius || hasBeenSeen)
+            if (distanceToTarget <= viewRadius)
             {
                 Debug.Log("inside vision range");
                 //if there isnt an obstacle between enemy vision and player, enemy is seeing the player
@@ -110,9 +109,8 @@ public class EnemyDetection : MonoBehaviour
                 {
                     Debug.Log("seen");
                     hasBeenSeen = true;
-
-                    if (visionTimer >= maxVisionTimer)
-                        onStartFollowing?.Invoke();
+                    
+                    onStartFollowing?.Invoke();
                 }
             }
         }
@@ -124,49 +122,19 @@ public class EnemyDetection : MonoBehaviour
         {
             default:
             case NormalState:
-                chaseTimerMax = 3f;
                 maxVisionTimer = 2f;
 
                 break;
 
             case StealthState:
-                chaseTimerMax *= stealthMultiplier;
                 maxVisionTimer *= -stealthMultiplier;
 
                 break;
 
             case HideState:
-                chaseTimerMax *= hideMultiplier;
                 maxVisionTimer *= -hideMultiplier;
 
                 break;
-        }
-    }
-
-    void Timer()
-    {
-        //some time after leaving its radius before leaving the chase
-        if (distanceToTarget > leaveRadius && hasBeenSeen)
-        {
-            if (chaseTimer < chaseTimerMax)
-                chaseTimer += Time.deltaTime;
-            else
-                hasBeenSeen = false;
-        }
-        else if (distanceToTarget < viewRadius && hasBeenSeen)
-        {
-            //timer so they dont get the agro instantly, they gotta keep watching you for some time
-            if (visionTimer < maxVisionTimer)
-                visionTimer += Time.deltaTime;
-            //reseting the timer when entering back again
-            else if (visionTimer >= maxVisionTimer)
-            {
-                Debug.Log("entered back to vision");
-                hasBeenSeen = true;
-                enemyIdleState.target = player;
-                if (chaseTimer != 0f)
-                    chaseTimer = 0f;
-            }
         }
     }
 
@@ -183,7 +151,6 @@ public class EnemyDetection : MonoBehaviour
                     .GetComponent<EnemyDetection>();
 
                 viewRadius *= stealthMultiplier;
-                leaveRadius *= stealthMultiplier;
 
                 enemyDetection.timesDetected++;
             }
@@ -199,7 +166,6 @@ public class EnemyDetection : MonoBehaviour
                         .GetComponent<EnemyDetection>();
 
                     enemyDetection.viewRadius *= stealthMultiplier;
-                    enemyDetection.leaveRadius *= stealthMultiplier;
                 }
             }
             else if (timesDetected >= maxTimesDetected)
