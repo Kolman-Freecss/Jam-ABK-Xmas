@@ -116,7 +116,7 @@ namespace Gameplay.Config
 
         #region House Flow
         public void OnPlayerCompletedPuzzle(HouseController houseController)
-        {  
+        {
             PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
             GameManager.Instance.m_player.gameObject.SetActive(false);
             GameManager.Instance.m_player.gameObject.transform.position = houseController.m_HousePosition.position;
@@ -158,18 +158,28 @@ namespace Gameplay.Config
                 GameManager.Instance.m_player.PlayerBehaviour.OnPlayerFinishedCustomization -= StartDialogueHouse;
             }
 
-            void OnDialogueEnd(Dialogue dialogue)
+            void OnDialogueEnd(Dialogue dialogue, bool followingRightPath)
             {
                 doorInteractable.gameObject.SetActive(true);
                 //Time.timeScale = 1f;
                 PlayerController player = GameManager.Instance.m_player;
                 player.enabled = true;
                 player.PlayerBehaviour.SetPlayerCostume(PlayerBehaviour.PlayerCostumeType.Krampus);
-                //TODO: Temporal position. Use checkpoint system instead into house.
-                player.gameObject.transform.Translate(Vector3.forward * 2f);
+                if (followingRightPath)
+                {
+                    //TODO: Temporal position. Use checkpoint system instead into house.
+                    // Correct Path
+                    Debug.Log("Correct path");
+                    player.gameObject.transform.Translate(Vector3.forward * 2f);
+                }
+                else
+                {
+                    //TODO: Bad path, feedback player through sound or something.
+                    Debug.Log("Bad path");
+                }
             }
         }
-        
+
         public void OnPlayerInteractsWithHouse(HouseController houseController)
         {
             m_CurrentHouse = houseController;

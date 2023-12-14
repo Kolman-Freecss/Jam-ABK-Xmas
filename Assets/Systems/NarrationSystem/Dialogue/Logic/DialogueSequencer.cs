@@ -17,15 +17,19 @@ namespace Systems.NarrationSystem.Dialogue.Logic
     {
         public delegate void DialogueCallback(Data.Dialogue dialogue);
 
+        public delegate void DialogueCallbackPath(Data.Dialogue dialogue, bool followingRightPath);
+
         public delegate void DialogueNodeCallback(DialogueNode node);
 
         public DialogueCallback OnDialogueStart;
-        public DialogueCallback OnDialogueEnd;
+        public DialogueCallbackPath OnDialogueEnd;
         public DialogueNodeCallback OnDialogueNodeStart;
         public DialogueNodeCallback OnDialogueNodeEnd;
 
         private Data.Dialogue m_CurrentDialogue;
         private DialogueNode m_CurrentNode;
+
+        private bool followingRightPath = true;
 
         public void StartDialogue(Data.Dialogue dialogue)
         {
@@ -46,7 +50,7 @@ namespace Systems.NarrationSystem.Dialogue.Logic
             if (m_CurrentDialogue == dialogue)
             {
                 StopDialogueNode(m_CurrentNode);
-                OnDialogueEnd?.Invoke(m_CurrentDialogue);
+                OnDialogueEnd?.Invoke(m_CurrentDialogue, followingRightPath); //, followingRightPath);
                 m_CurrentDialogue = null;
             }
             else
@@ -70,6 +74,7 @@ namespace Systems.NarrationSystem.Dialogue.Logic
 
                 if (m_CurrentNode != null)
                 {
+                    followingRightPath = m_CurrentNode.GetFollowingRightPath();
                     OnDialogueNodeStart?.Invoke(m_CurrentNode);
                 }
                 else
