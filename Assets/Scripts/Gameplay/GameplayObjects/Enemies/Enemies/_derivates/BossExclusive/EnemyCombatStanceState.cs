@@ -10,8 +10,9 @@ public class EnemyCombatStanceState : EnemyState
     EnemyStateManager enemyStateManager;
     EnemyCatchRange enemyCatchRange;
 
-    private void Start() 
+    protected override void Start()
     {
+        base.Start();
         attackState = GetComponent<EnemyAttackState>();
         enemyPursueTargetState = GetComponent<EnemyPursueTargetState>();
         enemyStateManager = GetComponent<EnemyStateManager>();

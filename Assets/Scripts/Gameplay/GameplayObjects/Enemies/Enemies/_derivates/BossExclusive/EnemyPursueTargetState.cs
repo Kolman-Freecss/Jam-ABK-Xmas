@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class EnemyPursueTargetState : EnemyState
 {
-    [SerializeField] float seekFactor = 1f;
-    [SerializeField] float valiantRange = 1.5f;
-    [SerializeField] float rotationSpeed = 50f;
+    [SerializeField]
+    float seekFactor = 1f;
+
+    [SerializeField]
+    float valiantRange = 1.5f;
+
+    [SerializeField]
+    float rotationSpeed = 50f;
 
     EnemyStateManager enemyStateManager;
     EnemyManager enemyManager;
     EnemyCatchRange enemyCatchRange;
     EnemyCombatStanceState enemyCombatStanceState;
 
-    private void Start() 
+    protected override void Start()
     {
+        base.Start();
         enemyStateManager = GetComponent<EnemyStateManager>();
         enemyManager = GetComponent<EnemyManager>();
         enemyCatchRange = GetComponent<EnemyCatchRange>();
@@ -45,7 +51,6 @@ public class EnemyPursueTargetState : EnemyState
             return enemyCombatStanceState;
         else
             return this;
-        
     }
 
     private void RotateTowardsCharacter()
@@ -67,10 +72,14 @@ public class EnemyPursueTargetState : EnemyState
         else
         {
             Vector3 relativeDir = transform.InverseTransformDirection(agent.desiredVelocity);
-            
+
             agent.enabled = true;
             agent.SetDestination(target.position);
-            transform.rotation = Quaternion.Slerp(transform.rotation, agent.transform.rotation, rotationSpeed / Time.deltaTime);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                agent.transform.rotation,
+                rotationSpeed / Time.deltaTime
+            );
         }
     }
 
@@ -78,7 +87,7 @@ public class EnemyPursueTargetState : EnemyState
     {
         Vector3 desiredPosition = transform.position + transform.right;
         if (Vector3.Distance(transform.position, target.position) > valiantRange)
-        { 
+        {
             Vector3 direction = target.position - transform.position;
             desiredPosition += direction.normalized * seekFactor;
         }
