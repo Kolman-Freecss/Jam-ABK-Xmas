@@ -28,10 +28,11 @@ public class MeleeAttackState : AIState
     {
         Vector3 destination = aIDecisionMaker.target? aIDecisionMaker.target.position : transform.position;
         agent.SetDestination(destination);
-        
-        anim.SetBool("IsAttacking", target? 
-        (Vector3.Distance(aIDecisionMaker.target.position, transform.position) 
-        < attackDistance) : false);
+
+        if (Vector3.Distance(transform.position, target.position) <= attackDistance)
+        {
+            
+        }
     }
 
     public override void Exit()

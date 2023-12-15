@@ -9,8 +9,9 @@ using CharacterController = Gameplay.GameplayObjects.Character._common.Character
 
 namespace Gameplay.GameplayObjects.Character.Player
 {
-    public class PlayerController : CharacterController
+    public class PlayerController : CharacterController, IVisible
     {
+        private string allegiance = "Player";
         public enum MovementMode
         {
             RelativeToCharacter,
@@ -315,6 +316,13 @@ namespace Gameplay.GameplayObjects.Character.Player
 
         public PlayerBehaviour PlayerBehaviour => m_PlayerBehaviour;
         public PlayerInteractionInstigator PlayerInteractionInstigator => m_playerInteractionInstigator;
+
+        #endregion
+
+        #region Ivisible
+
+        public Transform GetTransform(){return transform;}
+        public string GetAllegiance(){return allegiance;}
 
         #endregion
     }

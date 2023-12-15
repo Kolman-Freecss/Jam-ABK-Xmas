@@ -5,12 +5,11 @@ using UnityEngine;
 public class AIDecisionMaker : MonoBehaviour, IVisible
 {
     [SerializeField] string allegiance = "Enemy";
-    [SerializeField] float shootRange = 15f;
+    [SerializeField] float shootRange = 1f;
     private bool hasAlreadySeenPlayer;
     public float valiantRange = 5f;
 
     EntitySight entitySight;
-    EntityAudition entityAudition;
     
     [SerializeField] AIState startState;
 
@@ -43,7 +42,6 @@ public class AIDecisionMaker : MonoBehaviour, IVisible
         enemyCatchState = GetComponent<EnemyCatchState>();
 
         entitySight = GetComponentInChildren<EntitySight>();
-        entityAudition = GetComponentInChildren<EntityAudition>();
 
         perceivedPosState.onPerceivePosition.AddListener(OnLastPerceivedPositionReached);
     }
@@ -66,44 +64,24 @@ public class AIDecisionMaker : MonoBehaviour, IVisible
     {
         Transform visibleTarget = entitySight.visiblesInSight.Find(
             (x) => x.GetAllegiance() != GetAllegiance())?.GetTransform();
-
-        Transform audibleTarget =
-        entityAudition.heardAudibles.Find(
-            (x) => x.GetAllegiance() != GetAllegiance())?.audible.transform;
         
-        target = null;
-        
-        if (!visibleTarget)
-            target = audibleTarget;
-        else if (audibleTarget)
-        {
-            target = Vector3.Distance(visibleTarget.position, transform.position) <
-                Vector3.Distance(audibleTarget.position, transform.position) ? 
-                visibleTarget : audibleTarget;
-        }
-        else
-            target = visibleTarget;
+        target = visibleTarget;
 
         bool canSeeTarget = entitySight.visiblesInSight.Find(
             (x) => x.GetTransform() == target) != null;
-        
-        bool canHearTarget = entityAudition.heardAudibles.Find(
-            (x) => x.audible.transform == target) != null;
         
         gameObject.SetActive(false);
         
         if (target)
         {
-            //si es ambusher, se convierte en valiente al verte
             lastPerceivedPosition = target.position;
-            //tiene lastPerceivedPosition en el caso de que no sea guardian
             hasLastPerceivedPosition = true;
             
             if (canSeeTarget)
             {
                 if (Vector3.Distance(target.position, transform.position) < shootRange)
                 {
-                    SetState(enemyCatchState);
+                    SetState(meleeAttackState);
                 }
                 else
                 {
