@@ -2806,10 +2806,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_HousePosition: {fileID: 8854915877696451413}
-  m_HouseCanvas: {fileID: 0}
-  m_HouseNameText: {fileID: 0}
-  m_TimeRemainingText: {fileID: 0}
-  m_PresentsRemainingText: {fileID: 0}
   TimeToComplete: 60
   m_houseConsequence: 0
   puzzle: {fileID: 0}
@@ -4676,18 +4672,6 @@ PrefabInstance:
     - target: {fileID: 1031140914, guid: abc00000000014212656864115977474, type: 3}
       propertyPath: m_Name
       value: StandingLampS (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 1031140915, guid: abc00000000014212656864115977474, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1031140915, guid: abc00000000014212656864115977474, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 1031140915, guid: abc00000000014212656864115977474, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 1031140915, guid: abc00000000014212656864115977474, type: 3}
       propertyPath: m_LocalPosition.x
