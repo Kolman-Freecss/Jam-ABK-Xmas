@@ -171,7 +171,7 @@ MonoBehaviour:
   m_OnInteraction:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 605851543962964762, guid: 4975230f328267541b30f630a0375708, type: 3}
         m_TargetAssemblyTypeName: Gameplay.GameplayObjects.Character.Player.PlayerBehaviour,
           Assembly-CSharp
         m_MethodName: OnPresentGrab
