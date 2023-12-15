@@ -60,8 +60,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.362758, y: 1.9466487, z: 0.42328894}
-  m_Center: {x: -1.5898664, y: 0.47332558, z: 4.147714}
+  m_Size: {x: 1.362758, y: 1.9466487, z: 2.51}
+  m_Center: {x: -1.5898664, y: 0.47332558, z: 3.17}
 --- !u!82 &7964523404602840196
 AudioSource:
   m_ObjectHideFlags: 0
@@ -199,25 +199,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_OnInteraction:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 11400000, guid: dc1d834e834f85d41aa301171345c4dc, type: 2}
-        m_TargetAssemblyTypeName: Systems.NarrationSystem.Dialogue.DialogueChannel,
-          Assembly-CSharp
-        m_MethodName: RaiseRequestDialogue
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 11400000, guid: 3c44ef98316876048a4e099186e99e27, type: 2}
-          m_ObjectArgumentAssemblyTypeName: Systems.NarrationSystem.Dialogue.Data.Dialogue,
-            Assembly-CSharp
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_IsInteractable: 1
   m_DoorOpenSound: {fileID: 0}
-  m_dialogueChannel: {fileID: 0}
-  m_dialogue: {fileID: 0}
+  m_dialogueChannel: {fileID: 11400000, guid: dc1d834e834f85d41aa301171345c4dc, type: 2}
+  m_dialogue: {fileID: 11400000, guid: 3c44ef98316876048a4e099186e99e27, type: 2}
 --- !u!65 &3258013873205672036
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -237,8 +223,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.6699417, y: 1.9466487, z: 1.0401161}
-  m_Center: {x: -1.5213963, y: 0.47332555, z: 3.8393006}
+  m_Size: {x: 1.6699417, y: 1.9466487, z: 0.29}
+  m_Center: {x: -1.5213963, y: 0.47332555, z: 4.04}
 --- !u!1 &3271682086351650121
 GameObject:
   m_ObjectHideFlags: 0

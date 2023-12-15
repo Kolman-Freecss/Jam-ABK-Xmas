@@ -171,6 +171,7 @@ namespace Gameplay.Config
                     // Correct Path
                     Debug.Log("Correct path");
                     GameManager.Instance.m_player.gameObject.SetActive(false);
+                    //TODO: Use callbacks here
                     SceneTransitionHandler.Instance.OnLoadingScene += OnTransitionFinish;
                     StartCoroutine(SceneTransitionHandler.Instance.OnGameStartTransition());
                 }
