@@ -194,7 +194,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8632918309256800362}
         m_TargetAssemblyTypeName: SequencePuzzle, Assembly-CSharp
         m_MethodName: EnterNumber
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -546,7 +546,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6695367304495585393
 RectTransform:
   m_ObjectHideFlags: 0
@@ -619,6 +619,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFirstStep: 1
+  houseController: {fileID: 0}
   onPuzzleSolved:
     m_PersistentCalls:
       m_Calls: []
@@ -628,9 +629,10 @@ MonoBehaviour:
   onPuzzleOnProgress:
     m_PersistentCalls:
       m_Calls: []
-  totalSteps: 0
-  stepsToFail: 0
+  stepsToFail: 6
+  totalSteps: 5
   firstNumber: 0
+  text: {fileID: 6580656381312161666}
 --- !u!1 &5373194552422503549
 GameObject:
   m_ObjectHideFlags: 0
