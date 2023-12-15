@@ -60,8 +60,6 @@ public class EnemyChaseState : EnemyState
     {
         if (targetIsPlayer)
             target = player;
-        else
-            target = null;
 
         if (!target)
         {
@@ -70,8 +68,11 @@ public class EnemyChaseState : EnemyState
         }
 
         if (enemyCatchRange.IsInCatchRange() || debugChangeState)
-            return enemyCatchState;
-        
+        {
+            return this;
+        }
+            //return enemyCatchState;
+
         else if (!enemyCatchRange.IsInCatchRange() && !target)
         {
             if (hasLastPerceivedPosition)

@@ -4,30 +4,26 @@ using UnityEngine;
 
 #endregion
 
-public class EnemyCatchState : EnemyState
+public class EnemyCatchState : AIState
 {
     EnemyCatchRange enemyCatchRange;
     EnemyChaseState enemyChaseState;
     EnemyIdleState enemyIdleState;
     private EnemyDetection enemyDetection;
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
         enemyCatchRange = GetComponent<EnemyCatchRange>();
         enemyChaseState = GetComponent<EnemyChaseState>();
         enemyDetection = GetComponentInChildren<EnemyDetection>();
     }
 
-    public override EnemyState RunCurrentState()
+    private void Update()
     {
         Debug.Log("Catch");
         if (enemyCatchRange.IsInCatchRange())
         {
-            enemyStateManager.enemyObserver.Notify(this);
-            return enemyIdleState;
+            //enemyStateManager.enemyObserver.Notify(this);
         }
-        else
-            return enemyChaseState;
     }
 }

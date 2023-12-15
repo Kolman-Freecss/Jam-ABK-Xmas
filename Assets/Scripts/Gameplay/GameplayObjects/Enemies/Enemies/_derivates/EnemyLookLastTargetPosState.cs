@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class EnemyLookLastTargetPosState : EnemyState
 {
-    public UnityEvent onPerceivePosition;
+    [HideInInspector] public UnityEvent onPerceivePosition;
     public Vector3 lastPerceivedPos;
     [SerializeField] float reachingDistance;
 
@@ -14,6 +14,7 @@ public class EnemyLookLastTargetPosState : EnemyState
         agent.SetDestination(lastPerceivedPos);
         if (Vector3.Distance(lastPerceivedPos, transform.position) < reachingDistance)
         {
+            Debug.Log("lastTargetPosition");
             onPerceivePosition?.Invoke();
         }
         return this;
