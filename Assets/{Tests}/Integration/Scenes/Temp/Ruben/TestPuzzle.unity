@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -279,6 +279,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFirstStep: 1
+  houseController: {fileID: 0}
+  onPuzzleSolved:
+    m_PersistentCalls:
+      m_Calls: []
+  onPuzzleFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  onPuzzleOnProgress:
+    m_PersistentCalls:
+      m_Calls: []
   totalSteps: 5
   stepsToFail: 10
   firstNumber: -144
@@ -497,6 +507,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   puzzleList:
   - {fileID: 8910802951703906316, guid: 26cc125380a829f4baf5c645c997dddb, type: 3}
+  canvas: {fileID: 0}
 --- !u!1 &389358890
 GameObject:
   m_ObjectHideFlags: 0
@@ -708,6 +719,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFirstStep: 1
+  houseController: {fileID: 0}
+  onPuzzleSolved:
+    m_PersistentCalls:
+      m_Calls: []
+  onPuzzleFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  onPuzzleOnProgress:
+    m_PersistentCalls:
+      m_Calls: []
   totalSteps: 5
   stepsToFail: 10
   firstNumber: -144
