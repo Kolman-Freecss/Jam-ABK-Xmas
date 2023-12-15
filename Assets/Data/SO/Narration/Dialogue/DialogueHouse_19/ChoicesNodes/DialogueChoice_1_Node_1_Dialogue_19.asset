@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 676f063305c2bae4a997b5004ec9d858, type: 3}
+  m_Name: DialogueChoice_1_Node_1_Dialogue_19
+  m_EditorClassIdentifier: 
+  m_DialogueLine: {fileID: 11400000, guid: d36515ab1919bce4c8af21fb7bd731cf, type: 2}
+  m_Choices:
+  - m_ChoicePreview: Number 1
+    m_ChoiceNode: {fileID: 11400000, guid: 3f5923944b0c2f14480dd1e8db22bbd6, type: 2}
+  - m_ChoicePreview: Number 2
+    m_ChoiceNode: {fileID: 11400000, guid: 524d4761c754c24449cecefdb1a7e9a9, type: 2}
+  - m_ChoicePreview: Number 3
+    m_ChoiceNode: {fileID: 11400000, guid: 38114752a7d49ca4dad022dded238664, type: 2}

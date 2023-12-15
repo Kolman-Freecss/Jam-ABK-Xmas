@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 676f063305c2bae4a997b5004ec9d858, type: 3}
   m_Name: DialogueChoice_1_Node_1
   m_EditorClassIdentifier: 
-  m_DialogueLine: {fileID: 11400000, guid: 7bd04ef594006df4eaccc3057fd0b853, type: 2}
+  m_DialogueLine: {fileID: 11400000, guid: f737529b8a8dcf64e847880ecf2a939d, type: 2}
   m_Choices:
   - m_ChoicePreview: Number 1
     m_ChoiceNode: {fileID: 11400000, guid: b451cd183999b6d4d9aacc359176c1cb, type: 2}
   - m_ChoicePreview: Number 2
     m_ChoiceNode: {fileID: 11400000, guid: 61c54e6a430ccaa49ae51d3a9f6029fa, type: 2}
   - m_ChoicePreview: Number 3
-    m_ChoiceNode: {fileID: 11400000, guid: 61c54e6a430ccaa49ae51d3a9f6029fa, type: 2}
+    m_ChoiceNode: {fileID: 11400000, guid: 1c312a27b8ee2c34c887e2451116992c, type: 2}

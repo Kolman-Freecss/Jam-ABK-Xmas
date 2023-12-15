@@ -2,6 +2,7 @@
 
 using Gameplay.Config;
 using Gameplay.GameplayObjects.Interactables._common;
+using Gameplay.GameplayObjects.RoundComponents;
 using Systems.NarrationSystem.Dialogue;
 using Systems.NarrationSystem.Dialogue.Data;
 using UnityEngine;
@@ -15,26 +16,30 @@ namespace Gameplay.GameplayObjects.Interactables._derivatives
         [SerializeField]
         private AudioClip m_DoorOpenSound;
 
-        public override void DoInteraction<TData>(TData obj)
+        [SerializeField]
+        private DialogueChannel m_dialogueChannel;
+
+        [SerializeField]
+        private Dialogue m_dialogue;
+
+        private HouseController house;
+
+        protected override void Awake()
         {
-            Time.timeScale = 0f;
-            GameManager.Instance.m_player.enabled = false;
-            m_AudioSource.clip = m_DoorOpenSound;
-            m_AudioSource.Play();
-            gameObject.SetActive(false);
-            if (obj is DialogueChannel)
-            {
-                Debug.Log("DialogueChannel");
-                //((DialogueChannel)obj).OnDialogueEnd += OnDialogueEnd;
-            }
-            base.DoInteraction(obj);
+            base.Awake();
+            house = GetComponentInParent<HouseController>();
         }
 
-        private void OnDialogueEnd(Dialogue dialogue)
+        public override void DoInteraction<TData>(TData obj)
         {
-            gameObject.SetActive(true);
-            Time.timeScale = 1f;
-            GameManager.Instance.m_player.enabled = true;
+            if (m_AudioSource != null && m_DoorOpenSound != null)
+            {
+                m_AudioSource.clip = m_DoorOpenSound;
+                m_AudioSource.Play();
+            }
+            RoundManager.Instance.CurrentHouse = house;
+            base.DoInteraction(obj);
+            RoundManager.Instance.OnPlayerCallHouse(m_dialogueChannel, m_dialogue, this);
         }
     }
 }

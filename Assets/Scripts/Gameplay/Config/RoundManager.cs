@@ -8,6 +8,7 @@ using Gameplay.GameplayObjects.Character.Player;
 using Gameplay.GameplayObjects.Interactables._derivatives;
 using Gameplay.GameplayObjects.RoundComponents;
 using Puzzle;
+using Systems.NarrationSystem.Dialogue;
 using Systems.NarrationSystem.Dialogue.Components;
 using Systems.NarrationSystem.Dialogue.Data;
 using Systems.NarrationSystem.Flow;
@@ -115,7 +116,7 @@ namespace Gameplay.Config
 
         #region House Flow
         public void OnPlayerCompletedPuzzle(HouseController houseController)
-        {  
+        {
             PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
             GameManager.Instance.m_player.gameObject.SetActive(false);
             GameManager.Instance.m_player.gameObject.transform.position = houseController.m_HousePosition.position;
@@ -125,6 +126,67 @@ namespace Gameplay.Config
         public void OnPlayerFailedPuzzle(HouseController houseController)
         {
             PuzzleRandomManager.Instance.DestroyPuzzle(houseController.puzzle);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="dialogueChannel"> The dialogue channel that raised the event. </param>
+        public void OnPlayerCallHouse(
+            DialogueChannel dialogueChannel,
+            Dialogue dialogue,
+            DoorInteractable doorInteractable
+        )
+        {
+            if (dialogueChannel != null)
+            {
+                GameManager.Instance.m_player.PlayerBehaviour.OnPlayerFinishedCustomization += StartDialogueHouse;
+                //Time.timeScale = 0f;
+                GameManager.Instance.m_player.enabled = false;
+            }
+            else
+            {
+                Debug.LogError("RoundManager: No dialogue channel set");
+            }
+
+            void StartDialogueHouse()
+            {
+                doorInteractable.gameObject.SetActive(false);
+                dialogueChannel.RaiseRequestDialogue(dialogue);
+                Debug.Log("DialogueChannel");
+                dialogueChannel.OnDialogueEnd += OnDialogueEnd;
+                GameManager.Instance.m_player.PlayerBehaviour.OnPlayerFinishedCustomization -= StartDialogueHouse;
+            }
+
+            void OnDialogueEnd(Dialogue dialogue, bool followingRightPath)
+            {
+                doorInteractable.gameObject.SetActive(true);
+                //Time.timeScale = 1f;
+                PlayerController player = GameManager.Instance.m_player;
+                player.enabled = true;
+                player.PlayerBehaviour.SetPlayerCostume(PlayerBehaviour.PlayerCostumeType.Krampus);
+                if (followingRightPath)
+                {
+                    //TODO: Temporal position. Use checkpoint system instead into house.
+                    // Correct Path
+                    Debug.Log("Correct path");
+                    GameManager.Instance.m_player.gameObject.SetActive(false);
+                    SceneTransitionHandler.Instance.OnLoadingScene += OnTransitionFinish;
+                    StartCoroutine(SceneTransitionHandler.Instance.OnGameStartTransition());
+                }
+                else
+                {
+                    //TODO: Bad path, feedback player through sound or something.
+                    Debug.Log("Bad path");
+                }
+            }
+
+            void OnTransitionFinish()
+            {
+                GameManager.Instance.m_player.gameObject.transform.position = m_CurrentHouse.m_HousePosition.position;
+                GameManager.Instance.m_player.gameObject.SetActive(true);
+                SceneTransitionHandler.Instance.OnLoadingScene -= OnTransitionFinish;
+            }
         }
 
         public void OnPlayerInteractsWithHouse(HouseController houseController)
@@ -190,13 +252,13 @@ namespace Gameplay.Config
 
         public void DialogueStarted()
         {
-            Time.timeScale = 0f;
+            // Time.timeScale = 0f;
             GameManager.Instance.m_player.enabled = false;
         }
 
         public void DialogueEnded()
         {
-            Time.timeScale = 1f;
+            // Time.timeScale = 1f;
             if (GameManager.Instance.m_player == null)
                 return;
             GameManager.Instance.m_player.enabled = true;
@@ -288,7 +350,11 @@ namespace Gameplay.Config
 
         public int PresentsToFinishRound => presentsToFinishRound;
 
-        public HouseController CurrentHouse => m_CurrentHouse;
+        public HouseController CurrentHouse
+        {
+            get => m_CurrentHouse;
+            set => m_CurrentHouse = value;
+        }
 
         #endregion
     }

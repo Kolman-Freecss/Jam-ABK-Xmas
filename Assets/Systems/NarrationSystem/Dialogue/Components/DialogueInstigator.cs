@@ -77,12 +77,12 @@ namespace Systems.NarrationSystem.Dialogue.Components
             m_FlowChannel.RaiseFlowStateRequest(m_DialogueState);
         }
 
-        private void OnDialogueEnd(Data.Dialogue dialogue)
+        private void OnDialogueEnd(Data.Dialogue dialogue, bool followingRightPath)
         {
             m_FlowChannel.RaiseFlowStateRequest(m_CachedFlowState);
             m_CachedFlowState = null;
 
-            m_DialogueChannel.RaiseDialogueEnd(dialogue);
+            m_DialogueChannel.RaiseDialogueEnd(dialogue, followingRightPath);
         }
 
         #region Getter & Setters
@@ -91,7 +91,7 @@ namespace Systems.NarrationSystem.Dialogue.Components
         {
             get => m_DialogueChannel;
         }
-        
+
         public FlowChannel FlowChannel
         {
             get => m_FlowChannel;

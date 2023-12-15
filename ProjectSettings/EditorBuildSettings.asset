@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/{Tests}/Integration/Scenes/Temp/Ruben/InGame_Ruben_Test.unity
     guid: 2548d1a3f97430848900895000de8f78
+  - enabled: 1
+    path: Assets/{Tests}/Integration/Scenes/Temp/Sergio/Sergio_InGame_City.unity
+    guid: 134dc5480644d8f4c92509cce6194b5a
   m_configObjects: {}
