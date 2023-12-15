@@ -18,22 +18,17 @@ public class ElectricityPuzzle : PuzzleController
         {
             playerSwitchPositions.Add(false);
         }
-        base.TotalSteps = 0;
+        TotalSteps = 0;
         for (int i = 0; i < correctSwitchPositions.Count; i++)
         {
             if (correctSwitchPositions[i])
             {
-                base.TotalSteps++;
+                TotalSteps++;
             }
         }
-        
-        base.StepsToFail = TotalSteps * 2;
-        Debug.Log("Puzzle steps: " + base.TotalSteps);
-        // Initialize player switch positions
-        for (int i = 0; i < correctSwitchPositions.Count; i++)
-        {
-            playerSwitchPositions.Add(false);
-        }
+
+        StepsToFail = correctSwitchPositions.Count / 2;
+        Debug.Log("Puzzle steps: " + TotalSteps);
     }
 
     public void ToggleSwitch(int switchIndex)
@@ -48,7 +43,16 @@ public class ElectricityPuzzle : PuzzleController
     public override void PuzzleProgress(bool isStepCorrect)
     {
         Debug.Log("Puzzle progress: " + isStepCorrect);
-        base.UpdateProgress(isStepCorrect);
+        UpdateProgress(isStepCorrect);
+    }
+
+    public override void HandleCorrectStep()
+    {
+        if (correctSwitchPositions.SequenceEqual(playerSwitchPositions))
+        {
+            OnPuzzleChanged(PuzzleStates.SOLVED);
+            onPuzzleSolved?.Invoke(houseController);
+        }
     }
 
     public override void OnPuzzleInteract()
