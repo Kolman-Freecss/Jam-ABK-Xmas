@@ -23,9 +23,11 @@ public class PatrolAI : MonoBehaviour
 
     int currentWaypoint = 0;
 
+    [SerializeField] Animator animator;
     private void Start()
     {
         agent = GetComponent<NavMeshAgent>();
+        animator = GetComponentInChildren<Animator>();
     }
 
     public void PatrolLogic()
@@ -39,10 +41,14 @@ public class PatrolAI : MonoBehaviour
         if (AIPosition != waypointPosition)
         {
             agent.SetDestination(waypoints[currentWaypoint].position);
+
+           animator.SetBool("Walk", true);  
+
         }
         else if (!isWaiting)
         {
             StartCoroutine(Wait());
+            animator.SetBool("Walk", false);
         }
     }
 
