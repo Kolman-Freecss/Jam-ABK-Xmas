@@ -459,6 +459,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isFirstStep: 1
-  totalSteps: 1
+  houseController: {fileID: 0}
+  onPuzzleSolved:
+    m_PersistentCalls:
+      m_Calls: []
+  onPuzzleFailed:
+    m_PersistentCalls:
+      m_Calls: []
+  onPuzzleOnProgress:
+    m_PersistentCalls:
+      m_Calls: []
   stepsToFail: 2
   firstNumber: 1
+  text: {fileID: 542516741208814106}

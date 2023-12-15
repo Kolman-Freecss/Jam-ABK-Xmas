@@ -106,7 +106,7 @@ namespace Puzzle
         /// The function increments the current progress and checks if the puzzle is solved, then
         /// triggers events accordingly.
         /// </summary>
-        private void HandleCorrectStep()
+        public virtual void HandleCorrectStep()
         {
             CurrentProgress++;
             Debug.Log("Current progress: " + CurrentProgress);
@@ -123,10 +123,10 @@ namespace Puzzle
         /// The function increments the current steps and checks if it has reached the maximum number of
         /// steps allowed, triggering a puzzle failure if so.
         /// </summary>
-        private void HandleIncorrectStep()
+        public virtual void HandleIncorrectStep()
         {
             CurrentSteps++;
-            if (CurrentSteps >= StepsToFail)
+            if (CurrentSteps > StepsToFail)
             {
                 OnPuzzleChanged(PuzzleStates.UNSOLVED);
                 onPuzzleFailed?.Invoke(houseController);

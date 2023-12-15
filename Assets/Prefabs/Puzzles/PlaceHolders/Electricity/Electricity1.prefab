@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6017144889012480987, guid: fbe5e565f6821c648b0a469c65e410c4, type: 3}
       propertyPath: m_Name
-      value: Electricity Variant
+      value: Electricity1
       objectReference: {fileID: 0}
     - target: {fileID: 7118956026470333521, guid: fbe5e565f6821c648b0a469c65e410c4, type: 3}
       propertyPath: m_Pivot.x

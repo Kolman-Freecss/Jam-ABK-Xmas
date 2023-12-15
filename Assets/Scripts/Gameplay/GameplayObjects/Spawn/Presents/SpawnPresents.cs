@@ -1,12 +1,18 @@
+#region
+
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+#endregion
 
 public class SpawnPresents : Spawn
 {
     #region Variables
     /* Public Variables */
-    [SerializeField] private List<GameObject> presentPrefabs;
+    [SerializeField]
+    private List<GameObject> presentPrefabs;
+
     [SerializeField]
     int secondsToSpawn = 1;
 
@@ -23,8 +29,10 @@ public class SpawnPresents : Spawn
     /// If the condition `spawnPoints.Count != 4` is true, then nothing is being returned and the
     /// function will exit.
     /// </returns>
-    void Start() {
-        /*if (spawnPoints.Count != 4) return;
+    void Start()
+    {
+        if (spawnPoints.Count != 4)
+            return;
 
         _points = FindSpawnPoints();
         CanSpawn = true;
@@ -32,16 +40,13 @@ public class SpawnPresents : Spawn
         CanSpawn = true;
         if (NumberSpawn == 0 && CanSpawn)
         {
-            StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(4,6)));
+            StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(4, 6)));
             //StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
-        }*/
-     }
+        }
+    }
 
     // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    void Update() { }
 
     #region Overrides
     /// <summary>
@@ -62,23 +67,23 @@ public class SpawnPresents : Spawn
 
 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (CompareTag("Player"))
-        {
-            if (spawnPoints.Count != 4) return;
-
-            _points = FindSpawnPoints();
-            CanSpawn = true;
-            Debug.Log("NumberSpawn: " + NumberSpawn);
-            CanSpawn = true;
-            if (NumberSpawn == 0 && CanSpawn)
-            {
-                StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(4, 6)));
-                //StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
-            }
-        }
-    }
+    // private void OnTriggerEnter(Collider other)
+    // {
+    //     if (CompareTag("Player"))
+    //     {
+    //         if (spawnPoints.Count != 4) return;
+    //
+    //         _points = FindSpawnPoints();
+    //         CanSpawn = true;
+    //         Debug.Log("NumberSpawn: " + NumberSpawn);
+    //         CanSpawn = true;
+    //         if (NumberSpawn == 0 && CanSpawn)
+    //         {
+    //             StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(4, 6)));
+    //             //StartCoroutine(SpawnWithDelay(secondsToSpawn, Random.Range(3, 6)));
+    //         }
+    //     }
+    // }
     /// <summary>
     /// The function creates a specified number of instances of an enemy prefab at a given height.
     /// </summary>
