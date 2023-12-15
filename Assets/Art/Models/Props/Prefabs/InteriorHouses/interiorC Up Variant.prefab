@@ -341,7 +341,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1401,6 +1401,7 @@ MonoBehaviour:
   onParentKillers:
     m_PersistentCalls:
       m_Calls: []
+  m_currentHouseFloorType: 0
 --- !u!4 &7497454275319202458 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4394058884583258307, guid: f0e8622fffea49349afc725fe217fd07, type: 3}

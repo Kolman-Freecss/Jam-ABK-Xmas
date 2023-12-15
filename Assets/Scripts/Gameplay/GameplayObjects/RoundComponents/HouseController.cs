@@ -25,21 +25,23 @@ namespace Gameplay.GameplayObjects.RoundComponents
             ParentKillers
         }
 
+        public enum HouseFloorType
+        {
+            First,
+            Second
+        }
+
         #region Inspector Variable
         [Header("House Position")]
         public Transform m_HousePosition;
 
         [Header("House UI")]
-        [SerializeField]
         private Canvas m_HouseCanvas;
 
-        [SerializeField]
         private TextMeshProUGUI m_HouseNameText;
 
-        [SerializeField]
         private TextMeshProUGUI m_TimeRemainingText;
 
-        [SerializeField]
         private TextMeshProUGUI m_PresentsRemainingText;
 
         [Header("House Settings")]
@@ -89,6 +91,8 @@ namespace Gameplay.GameplayObjects.RoundComponents
 
         private bool m_isPlayerInside;
 
+        [HideInInspector]
+        public HouseFloorType m_currentHouseFloorType;
         #endregion
 
 
@@ -97,16 +101,23 @@ namespace Gameplay.GameplayObjects.RoundComponents
         private void OnEnable()
         {
             m_isPlayerInside = false;
-            ShowHouseUI(false);
         }
 
         private void Start()
         {
+            m_HouseCanvas = GameObject.Find("HouseCanvas").GetComponent<Canvas>();
+            m_HouseNameText = GameObject.Find("HouseNameTextHouseCanvas").GetComponent<TextMeshProUGUI>();
+            m_TimeRemainingText = GameObject.Find("TimeRemainingHouseCanvas").GetComponent<TextMeshProUGUI>();
+            m_PresentsRemainingText = GameObject.Find("PresentsRemainingHouseCanvas").GetComponent<TextMeshProUGUI>();
             m_TimeRemaining = TimeToComplete;
             m_PresentsRemaining = presentsToCollect;
-            m_TimeRemainingText.text = m_TimeRemaining.ToString();
-            m_PresentsRemainingText.text = m_PresentsRemaining.ToString();
+            if (m_TimeRemainingText != null)
+                m_TimeRemainingText.text = m_TimeRemaining.ToString();
+            if (m_PresentsRemainingText != null)
+                m_PresentsRemainingText.text = m_PresentsRemaining.ToString();
             m_HouseNameText.text = HouseName;
+            m_currentHouseFloorType = HouseFloorType.First;
+            ShowHouseUI(false);
         }
 
         #endregion
@@ -127,6 +138,14 @@ namespace Gameplay.GameplayObjects.RoundComponents
 
         #region Logic
 
+        /// <summary>
+        /// </summary>
+        /// <param name="floorType"></param>
+        public void OnChangeFloor(HouseFloorType floorType)
+        {
+            m_currentHouseFloorType = floorType;
+        }
+
         private void ShowHouseUI(bool show)
         {
             m_HouseCanvas.enabled = show;
@@ -143,6 +162,7 @@ namespace Gameplay.GameplayObjects.RoundComponents
             puzzle.OnPuzzleFailed();
             onPuzzleFailed?.Invoke(this);
         }
+
         public void OnPresentCollected(PresentInteractable present)
         {
             Destroy(present);
@@ -251,7 +271,7 @@ namespace Gameplay.GameplayObjects.RoundComponents
 
         public Canvas HouseCanvas => m_HouseCanvas;
 
-        public void SetPuzzle (GameObject puzzle)
+        public void SetPuzzle(GameObject puzzle)
         {
             this.puzzle = puzzle;
             this.puzzle.GetComponent<PuzzleController>().houseController = this;
